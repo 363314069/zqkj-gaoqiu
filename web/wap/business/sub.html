@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta content="telephone=no" name="format-detection">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+	<title></title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<link href="iTunesArtwork@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	<script type="text/javascript" src="js/flexible.js"></script>
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			height: auto;
+			overflow: hidden;
+			width: 100%;
+
+		}
+		input,button{
+			outline: none;
+		}
+		.in-app-box-well {
+			width: 7.5rem;
+			margin: 0 auto;
+			position: relative;
+			-webkit-box-align: center;
+			align-items: center;
+			text-align: center;
+		}
+		.in-app-box-bg{
+			background: url("images/share/bg.jpg") 0 0 no-repeat;
+			background-size:100% auto;
+		}
+		.in-app-top{
+			height: 3.7rem;
+		}
+		.in-app-box-sub {
+			padding: 0.4rem 0;
+		}
+		.in-app-box-sub button{
+			background: #fdd118;
+			border-radius: 0.55rem;
+			height: 1.1rem;
+			width: 100%;
+			white-space: nowrap;
+			cursor: pointer;
+			border: 0;
+			font-size: 0.38rem;
+		}
+		.in-app-box-user img {
+			width: 100%;
+			height: 100%;
+			display: block;
+			border: none;
+			border-radius: 50%;
+		}
+
+
+		.in-app-box-inp{
+			height: 0.95rem;
+			border-bottom: 0.01rem solid #ddd;
+			position: relative;
+		}
+		.in-app-box-inp input {
+			line-height: 0.95rem;
+			border: none;
+			width: 100%;
+			box-sizing: border-box;
+			padding: 0 0.2rem 0 0.9rem;
+			background: url("images/share/icons.png") no-repeat .15rem .1rem;
+			background-size: 0.6rem;
+			font-size: 0.24rem;
+		}
+		
+		.in-app-box-inp:nth-child(2) input{
+			background-position-y: -0.95rem ;
+		}
+		.in-app-box-inp:nth-child(3) input{
+			background-position-y: -2.05rem ;
+		}
+		.in-app-box-inp:nth-child(4) #code{
+			background-position-y: -3.15rem;
+		}
+		.in-app-box-content{
+			background: #fff;
+			margin: 0 0.6rem;
+			border-radius: 0.07rem;
+			box-shadow: 0 0 0.03rem 0.03rem #ddd;
+			position: relative;
+			box-sizing:border-box;
+		}
+		.in-app-box{
+			padding-top: 2.7rem;
+			margin: 0 0.6rem;
+		}
+		.in-app-box-wrap{
+			height: auto;
+			overflow: hidden;
+			min-height: 1rem;
+			position: absolute;
+			margin-top: -0.9rem;
+			width: 100%;
+		}
+		.in-app-box-user {
+			width: 1.8rem;
+			height: 1.8rem;
+			margin: 0 auto;			
+		}
+		.in-app-box-title {
+			font-size: 0.28rem;
+			line-height: 0.2rem;
+			margin-top: 0.4rem;
+			color: #bbbbbb;
+		}
+		.in-app-user-textimg img{
+			width: 2.9rem;
+			margin-top: 0.2rem;
+		}
+		.in-app-box-inp .verify{
+			width: 2rem;
+			border: 0;
+			background: none;
+			cursor: pointer;
+			position: absolute;
+			color: #2c5dab;
+			line-height: 0.95rem;
+			background: none;
+			right: 0;
+			top: 0;
+			padding: 0;
+		}
+	</style>
+</head>
+<body>
+<div class="in-app-box-well in-app-box-bg">
+	<div class="in-app-top">
+		
+	</div>
+	<div class="in-app-box-content">
+		<div class="in-app-box-wrap">
+			<div class="in-app-box-user">
+				<img src="../common/images/logo.png" alt="" id="images">
+			</div>
+			<div class="in-app-box-title">
+				邀请您加入：
+			</div>
+			<div class="in-app-user-textimg">
+				<img src="images/share/titbg.png" width="" />
+			</div>
+		</div>
+		<div class="in-app-box">
+			<div class="in-app-box-inp">
+				<input type="text" id="name" placeholder="输入姓名" >
+			</div>
+			<div class="in-app-box-inp">
+				<input type="text" id="chad" placeholder="差点" >
+			</div>
+			<div class="in-app-box-inp">
+				<input type="number" id="phoe" placeholder="输入手机号" >
+			</div>
+			<div class="in-app-box-inp in-app-box-inp-cod">
+				<input type="number" id="code" placeholder="验证码" size="6">
+				<input class="verify" id="dynamic" type="button" onclick="authCode()" value="获取验证码" ></input>
+			</div>
+			<div class="in-app-box-sub">
+				<button id="submit" onclick="submitUser()">
+					提交
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+<script type="text/javascript">
+    var userGuid = getQueryString("guid");
+    //验证码
+    var authCodeValue = "";
+    //电话号码验证
+    function isPhoneNo(phone) {
+        var pattern = /^1[34578]\d{9}$/;
+        return pattern.test(phone);
+    }
+
+    $(function () {
+		footer.hide();
+        binding();
+    });
+
+
+    //如果已经被绑定前端直接跳转列表页面不进行注册操作
+    function binding() {
+        $.ajax({
+            type : "POST",
+            url : T.serverurl + "/security/invite/binding",
+            headers : {token:T.token},
+			data : {invitedGuid:userGuid},
+            success : function(r) {
+                console.log(r);
+                if (r.code == 0) {
+                    if(r.data > 0){
+                        //location.href = "buy.html?guid=03d54bac-e7db-4ce3-a1b8-fd87e748e127";
+						location.href = "panicBuying_list.html";
+					}else{
+                        $.ajax({
+                            type : "POST",
+                            url : T.serverurl + "/security/user/info",
+                            headers : {token:T.token},
+                            data : {guid:userGuid},
+                            success : function(r) {
+                                console.log(r);
+                                if (r.code == 0) {
+                                    $("#images").attr("src",r.data.image);
+                                    $(".in-app-box-title").html(r.data.name +"  邀请您加入：");
+                                }
+                            }
+                        });
+					}
+                }
+            }
+        });
+    }
+
+
+
+    //发送短信验证码
+    function authCode() {
+        var phoe  = $("#phoe").val();
+        if(!isNull(phoe)){
+            layer.open({
+                content: '手机号不能为空',
+                style: 'background:rgba(0,0,0,0.6); color:#fff; border:none;',
+                time:100
+            });
+            return false;
+        }else if(isPhoneNo(phoe) == false){
+            layer.open({
+                content: '请输入正确手机号',
+                style: 'background:rgba(0,0,0,0.6); color:#fff; border:none;',
+                time:3
+            });
+            return false;
+        }else {
+            $.ajax({
+                type : "POST",
+                url : T.serverebusiness + "/security/wxoauth/authcode",
+                headers : {token:T.token},
+                data : {phone:phoe},
+                success : function(r) {
+                    console.log(r);
+                    if (r.code == 0) {
+                        authCodeValue = r.msg;
+                        var Time = 60;
+                        var TimeDown = setInterval(timedown,1000);
+                        //倒计时
+                        function timedown(){
+                            $("#dynamic").attr("disabled", true);
+                            $("#dynamic").val(""+ Time + "s");
+                            if(Time == 0){
+                                $("#dynamic").val("重新获取").removeAttr("disabled");
+                                clearInterval(TimeDown);
+                            }
+                            Time--;
+                        }
+                    } else {
+                        $("#dynamic").val("重新获取").removeAttr("disabled");
+                        alert(r.msg);
+                    }
+                }
+            });
+        }
+    }
+
+
+    //注册
+    function submitUser(){
+        $.ajax({
+            type : "POST",
+            url : T.serverebusiness + "/security/wxoauth/acceptregister",
+            headers : {token:T.token},
+			/*dataType: "json",
+			 contentType : 'application/json;charset=utf-8',*/
+            data : {name:$("#name").val(),chad:$("#chad").val(),phone:$("#phoe").val(),authCode:$("#code").val(),inviterGuid:userGuid},
+            success : function(r) {
+                console.log(r);
+                if (r.code == 0) {
+                    alert("注册成功！");
+                    //location.href = "buy.html?guid=03d54bac-e7db-4ce3-a1b8-fd87e748e127";
+					location.href = "my_info.html?footer=3";
+                } else if(r.code == 500){
+                    alert("提交失败！");
+                }else{
+                    alert(r.msg);
+				}
+            }
+        });
+    }
+</script>

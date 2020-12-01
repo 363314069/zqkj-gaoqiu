@@ -1,0 +1,489 @@
+<html><head>
+        <meta charset="UTF-8">
+        <title>订单详情</title>
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport">
+        <meta content="yes" name="apple-mobile-web-app-capable">
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+        <meta content="telephone=no" name="format-detection">
+    <!-- 弹出层 -->
+    <link rel="stylesheet" type="text/css" href="css/popups.css">
+    <link href="css/order_details.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <section class="aui-flexView">
+            <!--<header class="aui-navBar aui-navBar-fixed">
+                <a href="javascript:history.go(-1);" class="aui-navBar-item">
+                    <i class="icon icon-return"></i>
+                    订单详情
+                </a>
+                <div class="aui-center">
+                    <span class="aui-center-title"></span>
+                </div>
+                <a href="javascript:;" class="aui-navBar-item">
+                    <i class="icon icon-more"></i>
+                </a>
+            </header>-->
+            <section class="aui-scrollView">
+                <!--<div class="aui-pay-change">
+                    <div class="aui-flex">
+                        <div class="aui-flex-box">
+                            <h3>等待买家付款</h3>
+                            <p>剩余23小时59分自动关闭</p>
+                        </div>
+                        <div class="aui-pay-zfb">
+                            <img src="images/icon-zfb.png" alt="">
+                        </div>
+                    </div>
+                </div>-->
+                <div class="aui-flex">
+                    <div class="aui-flex-add">
+                        <!--<img src="images/icon-add.png" alt="">-->
+                    </div>
+                    <div class="aui-flex-box">
+                        <h3 id="userName">
+
+                        </h3>
+                        <!--<p>北京 北京市 海淀区 新城街道 北五环中路48号 时代索引大厦B座6层</p>-->
+                    </div>
+                </div>
+                <div class="divHeight"></div>
+                <!-- <div class="aui-flex">
+                    <div class="aui-shop-item">
+                        <img src="images/logo-item.png" alt="">
+                    </div>
+                    <div class="aui-shop-item-arrow">京东商城自营旗舰店
+                    </div>
+                </div>-->
+                <div class="aui-commodity-bg">
+                    <div class="aui-flex">
+                        <div class="aui-commodity-img">
+                            <img id="introductionImg" src="https://res.bookingtee.com/club/91/base/3c9896b74cb96535_s.jpg">
+                        </div>
+                        <div class="aui-flex-box">
+                            <h4 id="introductionName"></h4>
+                            <!--<p>黑色 (5.5iphone8 plus)</p>-->
+                            <!--<span class="aui-barter-time">七天退换</span>-->
+                        </div>
+                        <div>
+                            <h5 id="introductionPrice"></h5>
+                            <p class="aui-sml-text">X1</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="aui-flex aui-insurance-box b-line">
+                    <div class="aui-insurance-img">
+                        <img src="images/icon-bx.png" alt="">
+                    </div>
+                    <div class="aui-flex-box">
+                        <h4>运费险</h4>
+                        <h5>确认收货前退货可理赔</h5>
+                    </div>
+                    <div>
+                        <h5>￥00.00</h5>
+                        <p class="aui-sml-text">X00</p>
+                    </div>
+                </div>-->
+                <div class="aui-cp-edu b-line">
+                    <div class="aui-san-sml"></div>
+                    <div class="aui-flex aui-flex-ed">
+                        <div class="aui-flex-box" id="goodsPrice">
+
+                        </div>
+                    </div>
+                    <div class="aui-flex aui-flex-ed">
+                        <div class="aui-flex-box" id="date">
+                            <!--日期  <em>￥69.99</em>-->
+                        </div>
+                    </div>
+                    <div class="aui-flex aui-flex-ed">
+                        <div class="aui-flex-box" id="time">
+                            <!--运费险(卖家赠送)  <em>￥69.99</em>-->
+                        </div>
+                    </div>
+                    <div class="aui-flex aui-flex-ed">
+                        <div class="aui-flex-box" style="color:#333; font-size:15px;" id="orderPrice">
+							
+                        </div>
+                    </div>
+                    <div id="test">
+
+                    </div>
+                </div>
+                <div class="divHeight b-line"></div>
+                <!--<div class="aui-flex aui-flex-text-sml b-line">
+                    <div class="aui-flex-box">
+                        <p>
+                            <em>商品积分:</em>
+                            可以获得30积分
+                        </p>
+                        <p>
+                            <em>订单编号:</em>
+                            120848234387344378734
+                        </p>
+                        <p>
+                            <em>交易编号:</em>
+                            2018090886654545233444
+                        </p>
+                        <p>
+                            <em>下单时间:</em>
+                            2018-08-22 02:12:22
+                        </p>
+                    </div>
+                    <div class="aui-btn-copy">复制
+                    </div>
+                </div>-->
+                <!--<div class="aui-confirm-flex">
+                    <a href="javascript:;" class="aui-modify-btn modify">
+                        <i class="icon icon-kf"></i>
+                        联系客服
+                    </a>
+                    <a href="javascript:;" class="aui-modify-btn delete">
+                        <i class="icon icon-dh"></i>
+                        拨打电话
+                    </a>
+                </div>-->
+            </section>
+            <footer class="aui-footer aui-footer-fixed">
+                <div class="aui-footer-text-info">
+                    <!-- <a href="javascript:;">朋友代付</a>
+                    <a href="javascript:;">取消订单</a> -->
+                    <!--<a href="javascript:submitOrdersInfo();" class="aui-payment">预定</a>-->
+                    <a href="javascript:test();" class="aui-payment">支付</a>
+                </div>
+            </footer>
+        </section>
+
+        <!-- 弹出层   start -->
+
+        <div class="box">
+            <div id="dialogBg"></div>
+            <div  id="dialog" class="">
+                <div class="dialogTop">
+                    <a href="javascript:;" class="claseDialogBtn">关闭</a>
+                </div>
+                <form id="ajaxForm" class="login-wrap">
+                    <ul>
+                        <li>
+                            <label for="">姓名 :</label>
+                            <input type="text" id="name" class="name">
+                        </li>
+                        <li>
+                            <label for="">差点 :</label>
+                            <input type="text" id="chad" class="pass">
+                        </li>
+                        <li>
+                            <label for="">手机 :</label>
+                            <input type="text" id="phoe" class="mobile">
+                        </li>
+                        <li>
+                            <label for="">验证码 :</label>
+                            <input type="text" name="" class="code" id="code">
+                            <!--<input type="button" value="获取验证码" class="verify">-->
+                            <input class="verify" id="dynamic" type="button" onclick="authCodess()" value="获取验证码"></input>
+                        </li>
+                        <li>
+                            <label for=""></label>
+                            <input type="button" class="submit " onclick="submitUser()" value="提交">
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+        <!-- 弹出层   end -->
+</body>
+</html>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/cookie/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+
+<link rel="stylesheet" href="../pay/css/weui.min.css">
+<link rel="stylesheet" href="../pay/css/pay.css">
+<link rel="stylesheet" href="../pay/css/wepayui.min.css">
+<link rel="stylesheet" href="../pay/css/jquery-weui.min.css">
+
+<script type="text/javascript" src="../pay/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../pay/layer/layer.js"></script>
+<script type="text/javascript" src="../pay/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript" src="../pay/js/common-pay.js"></script>
+<script type="application/javascript">
+    //弹出层   start
+    var w,h;
+    function getSrceenWH(){
+        w = $(window).width();
+        h = $(window).height();
+        $('#dialogBg').width(w).height(h);
+    }
+    window.onresize = function(){
+        getSrceenWH();
+    };
+    $(window).resize();
+    //弹出层   end
+    $(document).ready(function(){
+        $(".more").click(function(){
+            $(".all_text").toggle();
+        });
+        //弹出层   start
+        getSrceenWH();
+        //关闭弹窗
+        $('.claseDialogBtn').click(function(){
+            $('#dialogBg').hide();
+            $('#dialog').hide();
+        });
+        //弹出层   end
+    });
+
+
+    var orderGuid = getQueryString('orderGuid');
+    var introductionGuid = getQueryString('guid');
+    var date = getQueryString('date');
+    var time = getQueryString('time');
+    var price = getQueryString('price');
+    $("#date").append('日期  <em>'+date+'</em>');
+    $("#time").append('时间  <em>'+time+'</em>');
+    $("#orderPrice").append('订单总价<em style="color:#333">￥'+price+'</em>');
+    $("#goodsPrice").append('商品总价 <em>￥'+price+'</em>');
+    $("#introductionPrice").html(price);
+
+    $.ajax({
+        type: "POST",
+        url: T.serverurl + "/security/oauth/info",
+        headers: {token: T.token},
+        success: function(r) {
+            if (r.code == 0) {
+                $("#userName").append(r.data.userName)
+            } else {
+                alert(r.msg);
+            }
+        }
+    });
+
+    //选择场地信息
+    $.ajax({
+        type: "POST",
+        url: T.serverurl + "/business/introduction/info",
+        headers: {token: T.token},
+        data: {"guid": introductionGuid},
+        async : false,
+        success: function(r) {
+            $("#introductionName").append(r.data.name);
+            $("#introductionImg").attr("src",T.serverurl+r.data.img);
+            if(r.code == 0){
+                if(r.data.preferential == "1"){
+                    //加载该场地可用的优惠券
+
+                    $.ajax({
+                        type: "POST",
+                        url: T.serverurl + "/business/couponsuser/couponsUserAct",
+                        headers: {token: T.token},
+                        traditional: true,
+                        data: {"actGuid":r.data.guid},
+                        async : false,
+                        success: function(r) {
+                            if(r.code == 0){
+                                console.log(r.data)
+                                $.each(r.data,function (i, obj) {
+                                    $("#test").append('<input type="checkbox" name="test" id="userCoupGuid-'+obj.couponsGuid+'" value="'+obj.guid+'" faceValue="'+obj.couponsEntity.faceValue+'">'+obj.couponsEntity.name+'：'+obj.couponsEntity.faceValue/100+'元');
+                                })
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    });
+
+    //判断手机号是否为空
+    function submitOrdersInfo() {
+        $.ajax({
+            type : "GET",
+            url : T.serverepay + "/security/user/selectUserMessage",
+            headers : {token:T.token},
+            success : function(res) {
+                if (res.code == 0) {
+                    var data = res.data;
+                    if(!isNull(data.phone)){
+                        //手机号为空 进入到完善页面
+                        $('#dialogBg').fadeIn(100);
+                        $('#dialog').removeAttr('class').addClass('animated').fadeIn();
+                    }else{
+                        //不为空直接提交订单
+                        introductionSub();
+                    }
+                } else {
+                    location.reload();
+                }
+            }
+        });
+    }
+    //验证码
+    var authCodeValue = "";
+    //电话号码验证
+    function isPhoneNo(phone) {
+        var pattern = /^1[34578]\d{9}$/;
+        return pattern.test(phone);
+    }
+    //发送短信
+    function authCodess() {
+        var phoe  = $("#phoe").val();
+        if(!isNull(phoe)){
+            alert('手机号不能为空');
+            return false;
+        }else if(isPhoneNo(phoe) == false){
+            alert('请输入正确手机号');
+            return false;
+        }else {
+            $.ajax({
+                type : "POST",
+                url : T.serverebusiness + "/security/wxoauth/authcode",
+                headers : {token:T.token},
+                data : {phone:phoe},
+                success : function(r) {
+                    console.log(r);
+                    if (r.code == 0) {
+                        authCodeValue = r.msg;
+                        var Time = 60;
+                        var TimeDown = setInterval(timedown,1000);
+                        //倒计时
+                        function timedown(){
+                            $("#dynamic").attr("disabled", true);
+                            $("#dynamic").val(""+ Time + "s");
+                            if(Time == 0){
+                                $("#dynamic").val("重新获取").removeAttr("disabled");
+                                clearInterval(TimeDown);
+                            }
+                            Time--;
+                        }
+                    } else {
+                        $("#dynamic").val("重新获取").removeAttr("disabled");
+                        alert(r.msg);
+                    }
+                }
+            });
+        }
+    }
+    //完善信息
+    function submitUser(){
+        $.ajax({
+            type : "POST",
+            url : T.serverebusiness + "/security/wxoauth/register",
+            headers : {token:T.token},
+            /*dataType: "json",
+             contentType : 'application/json;charset=utf-8',*/
+            async: false,
+            data : {name:$("#name").val(),chad:$("#chad").val(),phone:$("#phoe").val(),authCode:$("#code").val()},
+            success : function(r) {
+                $('#dialogBg').hide();
+                $('#dialog').hide();
+                if (r.code == 0) {
+                    introductionSub();
+                } else {
+                    alert(r.msg);
+                }
+            }
+        });
+    }
+
+    function introductionSub() {
+        $.showLoading("正在加载...");
+        $.ajax({
+            type : "POST",
+            url : T.serverepay + "/pay/order/addintroductionorder",
+            headers : {token:T.token},
+            data : {introductionGuid:introductionGuid,date:date,time:time,price:price*100},
+            success : function(res) {
+                $.hideLoading();
+                if (res.code == 0) {
+                    var data = $.parseJSON(res.msg);
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady',
+                                onBridgeReady(data), false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady',
+                                onBridgeReady(data));
+                            document.attachEvent('onWeixinJSBridgeReady',
+                                onBridgeReady(data));
+                        }
+                    } else {
+                        onBridgeReady(data);
+                    }
+                } else if (res.code == 500) {
+                    alert("提交订单失败！请重试");
+                }else{
+                    alert(res.msg);
+                }
+            }
+        });
+    }
+
+
+
+    function orderSub() {
+        $.showLoading("正在加载...");
+        $.ajax({
+            type : "POST",
+            url : T.serverepay + "/pay/order/addintroductionorder",
+            headers : {token:T.token},
+            data : {introductionGuid:introductionGuid,date:date,time:time,price:price*100},
+            success : function(res) {
+                $.hideLoading();
+                if (res.code == 0) {
+                    location.href = "order_process.1.html?guid="+ res.data.guid;
+                } else if (res.code == 500) {
+                    alert("提交订单失败！请重试");
+                }else{
+                    alert(res.msg);
+                }
+            }
+        });
+    }
+
+
+
+    function test() {
+        $.showLoading("正在加载...");
+        var aarr = new Array();
+        var faceValue = 0;
+        $('input[name="test"]:checked').each(function(){
+            aarr.push($(this).val());//向数组中添加元素
+            faceValue += parseInt($(this).attr("faceValue"));
+        });
+        console.log(faceValue);
+        console.log(aarr);
+        console.log(orderGuid);
+        if(faceValue > price*100){
+            alert("优惠券使用金额不能大于订单金额");
+        }else{
+            $.ajax({
+             type : "POST",
+             url : T.serverepay + "/pay/order/payintroductionorder",
+             headers : {token:T.token},
+             traditional: true,
+             data : {orderGuid:orderGuid,couponsUserGuid:aarr},
+             success : function(res) {
+                 $.hideLoading();
+                 if (res.code == 0) {
+                     var data = $.parseJSON(res.msg);
+                     if (typeof WeixinJSBridge == "undefined") {
+                         if (document.addEventListener) {
+                             document.addEventListener('WeixinJSBridgeReady',
+                                 onBridgeReady(data), false);
+                         } else if (document.attachEvent) {
+                             document.attachEvent('WeixinJSBridgeReady',
+                                 onBridgeReady(data));
+                             document.attachEvent('onWeixinJSBridgeReady',
+                                 onBridgeReady(data));
+                         }
+                     } else {
+                         onBridgeReady(data);
+                     }
+                 } else if (res.code == 500) {
+                     alert("提交订单失败！请重试");
+                 }else{
+                     alert(res.msg);
+                 }
+             }
+         });
+        }
+    }
+</script>

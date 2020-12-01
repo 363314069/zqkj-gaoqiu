@@ -1,0 +1,112 @@
+package com.zqkj.controller;
+
+import com.zqkj.bean.CouponsExchangeBean;
+import com.zqkj.utils.Content;
+import com.zqkj.utils.R;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.zqkj.entity.CouponsuserEntity;
+import com.zqkj.service.CouponsuserService;
+
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+/**
+ * 
+ * 优惠券用户关联
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-03-23 14:30:22
+ */
+@Controller
+@RequestMapping("/business/couponsuser")
+@Api(value = "", tags = { "business/couponsuser " })
+public class CouponsuserController extends BaseController<CouponsuserService, CouponsuserEntity> {
+
+    @ResponseBody
+    @RequestMapping(value = "/orderbindingcoupons", method = {RequestMethod.POST})
+    @ApiOperation(value = "支付订单绑定优惠券", notes = "参数为json字符串")
+    public R payOrderBindingCoupons(@RequestBody String jsonStr) {
+        return service.payOrderBindingCoupons(jsonStr);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/couponsUserAct", method = {RequestMethod.POST})
+    @ApiOperation(value = "查询用户在某个商品中可以使用的优惠券", notes = "参数为json字符串")
+    public R selectCouponsUserAct(String actGuid,String userGuid) {
+        return R.ok().putData(service.selectCouponsUserAct(actGuid,userGuid));
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/usercouponsact", method = {RequestMethod.POST})
+    @ApiOperation(value = "阳江会员验证后使用优惠券，查询个人优惠券（临时使用）", notes = "参数为json字符串")
+    public R selectUserCouponsList(String actGuid,String userGuid) {
+        return R.ok().putData(service.selectUserCouponsList(actGuid,userGuid));
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/cancelordercoupons", method = {RequestMethod.POST})
+    @ApiOperation(value = "取消订单，取消该订单绑定的优惠券", notes = "订单guid")
+    public R cancelOrderCoupons(@RequestBody String orderGuid) {
+        return service.cancelOrderCoupons(orderGuid);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/activitycallback", method = {RequestMethod.POST,RequestMethod.GET})
+    @ApiOperation(value = "抢购优惠券回调", notes = "userGuid activityGuid")
+    public R activityCallback(String creator, String goodsGuid, String orderGuid, Integer sum) {
+        Integer count = service.activityCallback(creator,goodsGuid,orderGuid,sum);
+        return R.ok().putData(count);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/selectusercoupons", method = {RequestMethod.POST,RequestMethod.GET})
+    @ApiOperation(value = "查询用户的优惠券")
+    public R selectUserCoupons(Integer state,String vipCardGuid,String userGuid) {
+        return R.ok().putData(service.selectUserCoupons(state,vipCardGuid,userGuid));
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "/membersbin", method = { RequestMethod.POST})
+    @ApiOperation(value = "用户验证后进行绑定优惠券", notes = "参数为对像的变量,如{id:1,guid:\"ssssss-ssss-sss\"}")
+    public R membersBin(@RequestBody String jsonStr){
+        int count = service.membersBin(jsonStr);
+        if(count > 0){
+            return R.ok().putData(count);
+        }else{
+            return R.error(Content.STATUS_CODE_5005,"批量插入失败");
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/addusercoupons", method = {RequestMethod.POST,RequestMethod.GET})
+    @ApiOperation(value = "添加用户的优惠券")
+    public R addUserCoupons(CouponsuserEntity couponsuserEntity) {
+        return R.ok().putData(service.addUserCoupons(couponsuserEntity));
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/usercouponsexchange", method = {RequestMethod.POST,RequestMethod.GET})
+    @ApiOperation(value = "用户优惠券兑换")
+    public R userCouponseExchange(CouponsExchangeBean couponsExchangeBean) {
+        int nRet = service.userCouponseExchange(couponsExchangeBean);
+        if(nRet > 0){
+            return R.ok().putData(nRet);
+        }else{
+            return R.error(Content.STATUS_CODE_5007,"兑换失败！");
+        }
+    }
+
+}

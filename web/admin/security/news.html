@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>新闻管理</title>
+	<link rel="stylesheet" href="../common/js/layui/css/layui.css">
+	<link rel="stylesheet" href="../common/css/common.css">
+	<link rel="stylesheet" href="../common/js/zTree_v3-3.5.33/css/zTreeStyle/zTreeStyle.css" />
+	<link rel="stylesheet" href="../common/fonts/font-yinfu/iconfont.css" />
+	<link rel="stylesheet" href="../common/js/yfplugin.css" />
+	<script src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.core.min.js" ></script>
+	<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.exedit.js"></script>
+	<script src="../common/js/common.js"></script>
+	<script src="../common/js/yfplugin.js"></script>
+	<script src="assets/js/news.js"></script>
+</head>
+<body>
+	<div class="wrap">
+	<fieldset class="layui-elem-field">
+	  <legend>新闻管理</legend>
+	  <div class="layui-elem-field-margin">
+	    <a class="layui-btn" href="news_form.html" yf-opt="add"><i class="layui-icon">&#xe61f;</i>添加 </a>
+  		<a class="layui-btn" id="del" yf-opt="batchdel"><i class="layui-icon">&#xe640;</i>删除 </a>
+	  </div>
+	</fieldset>
+	<table class="layui-hide" id="table" lay-filter="default"></table>
+	<script type="text/html" id="tabbtn">
+  		<a class="layui-btn layui-btn-primary layui-btn-xs layui-icon" lay-event="detail" yf-opt="detail">&#xe615;</a>
+  		<a class="layui-btn layui-btn-xs layui-icon" lay-event="edit" yf-opt="edit">&#xe642;</a>
+  		<a class="layui-btn layui-btn-danger layui-btn-xs layui-icon" lay-event="del" yf-opt="del">&#xe640;</a>
+	</script>
+	</div>
+</body>
+</html>

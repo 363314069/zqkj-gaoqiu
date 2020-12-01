@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>我的卡包</title>
+		<script type="text/javascript" src="./../../res/js/flexible.js"></script>
+		<script type="text/javascript" src="./../../res/js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/cookie/js.cookie.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/mobile/layer.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/laydate/laydate.js"></script>
+		<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<link href="./../../res/fonts/font-zqkj-1.1/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="./../../res/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		
+		<link href="./../css/default-1.1.css?v=2" rel="stylesheet" type="text/css">
+		<script src="./../js/zqkj/common-1.1.js?v=1"></script>
+		<script src="./../js/zqkj/load-1.1.js"></script>
+		<script src="./../js/zqkj/wx_api-1.0.js"></script>
+		<!--
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=Eo0EMvydXBWKhzAX40eUjN7eOIx0ISxV"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=E7JBZ-5UO3R-NIJWJ-WXGP5-P2R5V-IKFZY"></script>
+		-->
+	</head>
+	<style>
+		.main-head .top .c{padding-right: 1rem;}
+		.card li{margin: .3rem; border-radius: .3rem; box-shadow: 1px 1px 5px #888888;}
+		.card li div{overflow: hidden;}
+		.card .card-img{border-radius: .3rem; overflow: hidden; box-shadow: 1px 1px 5px #888888;}
+		.card .card-msg{padding: .1rem .3rem;}
+		.card .card-date{float: left;}
+		.card .card-btn{float: right; color: #2790aa;}
+	</style>
+	<body>
+		<div class="main-head">
+			<ul class="top">
+				<li class="l"><a id="back" href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">
+					<a>我的卡包</a>
+				</li>
+				<li class="r"></li>
+			</ul>
+		</div>
+		<div class="wrap">
+			<ul class="card">
+				<!--<li>
+					<div><img class="card-img" src="../images/vip/card.svg"></div>
+					<div class="card-msg"><span class="card-date">到期：2022-04-30</span><span class="card-btn">会员权益</span></div>
+				</li>-->
+			</ul>
+			
+		<div id="footer"></div>
+	</body>
+</html>
+<script>
+	$(function () {
+		//扩展表信息查询，查询会员卡列表
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/integral/userextend/selectlist",
+			headers : {token:T.token},
+			data : {"type":6,"userGUID":T.usermsg.guid},
+			success : function(r) {
+				if(r.code == 0 && r.data){
+					var vipGuids = new Array();
+					$.each(r.data,function (i, obj) {
+						vipGuids.push(obj.extStr);
+					})
+					if(vipGuids.length > 0){
+						$.ajax({
+							type: "POST",
+							traditional: true,
+							url: T.serverurl + "/security/vipcard/listByGuids",
+							data : {"guids":vipGuids},
+							success : function(r) {
+								if (r.code == 0) {
+									$.each(r.data,function (v, vobj) {
+										if(vobj.svgPath){
+											var li = $('<li onclick="linkeCoupons(\''+vobj.guid+'\')">');
+											var li_div = $('<div><img class="card-img" src="../images/vip/card.svg"></div>');
+											var li_div1 = $('<div class="card-msg"><span class="card-date">到期：'+formatDate(new Date(vobj.endTime.replace(/\-/g, '/')))+'</span><span class="card-btn">会员权益</span></div>');
+											li.append(li_div).append(li_div1);
+											$(".card").append(li);
+										}
+									})
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	});
+
+	function linkeCoupons(guid) {
+		jump.to("my_coupons?vipCardGuid=" + guid);
+	}
+
+	//时间格式化
+	var formatDate = function (date) {
+		var y = date.getFullYear();
+		var m = date.getMonth() + 1;
+		m = m < 10 ? ('0' + m) : m;
+		var d = date.getDate();
+		d = d < 10 ? ('0' + d) : d;
+		var h = date.getHours();
+		var minute = date.getMinutes();
+		minute = minute < 10 ? ('0' + minute) : minute;
+		var second= date.getSeconds();
+		second = minute < 10 ? ('0' + second) : second;
+		//return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;
+		return y + '-' + m + '-' + d;
+	};
+</script>

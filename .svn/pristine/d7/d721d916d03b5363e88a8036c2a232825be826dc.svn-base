@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.ReservationdateDao">
+	<resultMap id="BaseResultMap" type="com.zqkj.entity.ReservationdateEntity">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="GUID" property="guid" jdbcType="VARCHAR" />
+		<result column="OrganizationGuid" property="organizationGuid" jdbcType="VARCHAR" />
+		<result column="ReservationGuid" property="reservationGuid" jdbcType="VARCHAR" />
+		<result column="IntroductionGuid" property="introductionGuid" jdbcType="VARCHAR" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="Phone" property="phone" jdbcType="VARCHAR" />
+		<result column="Content" property="content" jdbcType="VARCHAR" />
+		<result column="Img" property="img" jdbcType="VARCHAR" />
+		<result column="CostPrice" property="costPrice" jdbcType="INTEGER" />
+		<result column="Price" property="price" jdbcType="INTEGER" />
+		<result column="Discount" property="discount" jdbcType="VARCHAR" />
+		<result column="TimeJson" property="timeJson" jdbcType="VARCHAR" />
+		<result column="Type" property="type" jdbcType="INTEGER" />
+		<result column="State" property="state" jdbcType="INTEGER" />
+		<result column="Preferential" property="preferential" jdbcType="INTEGER" />
+		<result column="CallbackUrl" property="callbackUrl" jdbcType="VARCHAR" />
+		<result column="Date" property="date" jdbcType="VARCHAR" />
+		<result column="Remark" property="remark" jdbcType="VARCHAR" />
+		<result column="Creator" property="creator" jdbcType="VARCHAR" />
+		<result column="CreateTime" property="createTime" jdbcType="VARCHAR" />
+		<result column="CheckUser" property="checkUser" jdbcType="VARCHAR" />
+		<result column="CheckTime" property="checkTime" jdbcType="VARCHAR" />
+		<result column="ExtInt" property="extInt" jdbcType="INTEGER" />
+		<result column="ExtStr" property="extStr" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID AS id,
+		GUID AS guid,
+		OrganizationGuid AS organizationGuid,
+		ReservationGuid AS reservationGuid,
+		IntroductionGuid AS introductionGuid,
+		Name AS name,
+		Phone AS phone,
+		Img AS img,
+		CostPrice AS costPrice,
+		Price AS price,
+		Discount AS discount,
+		TimeJson AS timeJson,
+		Type AS type,
+		State AS state,
+		Preferential AS preferential,
+		CallbackUrl AS callbackUrl,
+		Date AS date,
+		Remark AS remark,
+		Creator AS creator,
+		CreateTime AS createTime,
+		CheckUser AS checkUser,
+		CheckTime AS checkTime,
+		ExtInt AS extInt,
+		ExtStr AS extStr
+	</sql>
+
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGuid != null">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="reservationGuid != null">
+				and ReservationGuid = #{reservationGuid}
+			</if>
+			<if test="introductionGuid != null">
+				and IntroductionGuid = #{introductionGuid}
+			</if>
+			<if test="name != null">
+				and Name = #{name}
+			</if>
+			<if test="phone != null">
+				and Phone = #{phone}
+			</if>
+			<if test="content != null">
+				and Content = #{content}
+			</if>
+			<if test="img != null">
+				and Img = #{img}
+			</if>
+		<if test="costPrice != null">
+			and CostPrice = #{costPrice}
+		</if>
+			<if test="price != null">
+				and Price = #{price}
+			</if>
+			<if test="discount != null">
+				and Discount = #{discount}
+			</if>
+			<if test="timeJson != null">
+				and TimeJson = #{timeJson}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="preferential != null">
+				and Preferential = #{preferential}
+			</if>
+
+		<if test="startTime != null and startTime != ''">
+			and Date &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and Date &lt;= #{endTime}
+		</if>
+
+			<if test="callbackUrl != null">
+				and CallbackUrl = #{callbackUrl}
+			</if>
+			<if test="date != null">
+				and Date = #{date}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+	<select id="selectReservationdateList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from reservationdatetab
+		<where>
+			<include refid="where"/>
+		</where>
+	</select>
+</mapper>

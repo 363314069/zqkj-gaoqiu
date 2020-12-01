@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>九洲高尔夫球场预订</title>
+		<script type="text/javascript" src="./../../res/js/flexible.js"></script>
+		<script type="text/javascript" src="./../../res/js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/cookie/js.cookie.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/mobile/layer.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/laydate/laydate.js"></script>
+		<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+		<script type="text/javascript" src="./../../res/js/zqkj/util-1.1.0.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<link href="./../../res/fonts/font-zqkj-1.1/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="./../../res/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		
+		<link href="./../css/default-1.1.css?v=1" rel="stylesheet" type="text/css">
+		<script src="./../js/zqkj/common-1.1.js?v=1"></script>
+		<script src="./../js/zqkj/load-1.1.js"></script>
+		<script src="./../js/zqkj/wx_api-1.0.js"></script>
+		<!--
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=Eo0EMvydXBWKhzAX40eUjN7eOIx0ISxV"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=E7JBZ-5UO3R-NIJWJ-WXGP5-P2R5V-IKFZY"></script>
+		-->
+	</head>
+	<style>
+		body{padding: 0 0 1.8rem 0; text-align: left; background-color: #eeeeee; background-image: none;}
+		.banner{
+			width: 100%;
+			height: 3.4rem;
+			background: url(./../images/head.jpg) no-repeat center center;
+			background-size: cover;
+			position: relative;
+		}
+		.banner .title{
+			position: absolute; 
+			bottom: 0; 
+			left: 0; 
+			padding: 0 1rem 0 .2rem; 
+			text-align: left; 
+			width: 100%; 
+			height: .88rem; 
+			background-color: #00000066; 
+			overflow: hidden; 
+			color: #fff; 
+			line-height: .88rem;
+		}
+		.sort{
+			margin-bottom: .2rem;
+			padding: .1rem .48rem; 
+			background-color: #fff; 
+			line-height: .8rem;
+			box-shadow: 0 0 .1rem #00000033;
+		}
+		.sort li{height: .8rem; overflow: hidden; font-size: .28rem; }
+		.sort li .iconfont{font-size: .4rem; color: #999;vertical-align: middle;}
+		.sort li p{display: inline; margin-left: .2rem;}
+		.sort li p span{display: inline-block; margin-right: .2rem;}
+		.sort li:nth-child(n + 2){border-top: 1px dotted #999; color: #00aaee;}
+		.sortpd0{padding: .1rem 0; }
+		.sortpd0 .vip{background-image: linear-gradient(to right, #fff7a4, #e5c564);padding: 0 .2rem; line-height: .6rem; height: .6rem; color: #685002;}
+		.sortpd0 li:nth-child(n + 2){border-top: 1px dotted #999; color: #00aaee; padding: 0 .48rem; }
+		.sortpd0 .coupon{color: #f86300;}
+		.list{
+			margin-bottom: .2rem;
+			padding: .1rem .24rem; 
+			background-color: #fff; 
+			line-height: .4rem;
+			box-shadow: 0 0 .1rem #00000033;
+		}
+		.list li{
+			overflow: hidden; 
+			font-size: .28rem;
+			display: -webkit-flex;/* Safari */
+			display: flex;
+			justify-content:space-between;
+			text-align: center;
+			padding: .2rem .24rem;
+			border-top: 1px solid #ccc;
+		}
+		.list h1{ font-size: .28rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+		.list p{font-size: .24rem; color: #999; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+		.list .head{padding: .2rem 0; border-top:none;}
+		.list .head div{
+			flex: 1;
+		}
+		.list .head div:nth-child(n + 2){
+			border-left: 1px solid #ccc;
+		}
+		.list .head h1{font-size: .32rem; color: #999;}
+		.list .head h1 span{margin-left: .2rem;}
+		.list .head h1 .iconfont{font-size: .4rem;}
+		.list .head p{font-size: .24rem; color: #00aaee;}
+		.list .head p span{margin: 0 .1rem;}
+		
+		.list .title{width: calc(100% - 3.5rem); text-align: left;}
+		.list .price{width: 2rem; padding: 0 .2rem; text-align: right;}
+		.list .price h1{color: #ff0000;}
+		.list .btn{width: 1.5rem; text-align: center;}
+		.list .btn a{display: block; margin: 0 .1rem; border: 2px solid #ccc; border-radius: .1rem;}
+		.list .btn h1{color: #333;}
+		.list .btn-1 a{border: 2px solid #00de83;background-image: linear-gradient(#00de83 .4rem, #ffffff00 .4rem);}
+		.list .btn-1 h1{color: #fff;}
+		.list .btn-1 p{color: #00de83;}
+		.list .btn-2 a{border: 2px solid #eb6100; background-image: linear-gradient(#eb6100 .4rem, #ffffff00 .4rem);}
+		.list .btn-2 h1{ color: #fff;}
+		.list .btn-2 p{color: #eb6100;}
+		#contentbox{
+			display: none; 
+			position: fixed; 
+			background-color: #00000066;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			padding: 1.2rem 0;
+			z-index: 999999;
+		}
+		#contentbox .close{
+			display: block;
+			position: absolute;
+			width: .6rem;
+			height: .6rem;
+			background-color: #00000099;
+			color: #fff;
+			top: 1.2rem;
+			left: calc(50% + 2.9rem);
+			border-radius: 50%;
+			line-height: .6rem;
+			text-align: center;
+		}
+		#contentbox .content{
+			margin: 0 auto;
+			width: 7rem;
+			height: 100%;
+			overflow-y: scroll;
+			background-color: #fff;
+			padding: .2rem;
+			border-radius: .3rem;
+		}
+	</style>
+	<body>
+		<a class="main-back" href="booking"><i class="iconfont">&#xe663;</i></a>
+		<div class="wrap">
+			<div class="banner" id="banner">
+				<div class="title" id="title" title="河北曹妃甸湿地公园高尔夫（Caofeidian Wellands Golf Club）">河北曹妃甸湿地公园高尔夫（Caofeidian Wellands Golf Club）</div>
+			</div>
+			<ul class="sort">
+				<li><i class="iconfont">&#xe6ae;</i><p id="address" title="地址">河北曹妃甸湿地公园高尔夫河北曹妃甸湿地公园高尔夫</p></li>
+				<li><i class="iconfont">&#xe625;</i><p id="phone" title="联系电话">188888888888</p></li>
+			</ul>
+			<ul class="sort">
+				<li><i class="iconfont">&#xe675;</i><p id="types" title="场地类型"><span>山地球场</span><span>27杆108洞</span></p></li>
+				<li><i class="iconfont">&#xe664;</i><p id="projects" title="包含项目"><span>球童</span><span>球车</span><span>洗浴间</span></p></li>
+			</ul>
+			<ul class="sort sortpd0" style="display: none;">
+				<li class="vip"><p id="vip" title="VIP/续费">现在续费/开通VIP，订场优惠与尊贵服务</p></li>
+				<li><i class="iconfont">&#xe6b0;</i><p id="coupon" class="coupon" title="优惠卷">优惠卷</li>
+			</ul>
+			<ul class="list">
+				<li class="head">
+					<div onclick="openLocation()">
+						<h1><i class="iconfont">&#xe6a9;</i><span>到球场去</span></h1>
+					</div>
+					<div onclick="openmsg()">
+						<h1><i class="iconfont">&#xe665;</i><span>球场介绍</span></h1>
+					</div>
+					<!--
+					<div>
+						<h1><i class="iconfont">&#xe633;</i><span>今天日期</span></h1>
+						<p name="date">
+							<span>07-16</span><span>周四</span>
+						</p>
+					</div>
+					<div>
+						<h1><i class="iconfont">&#xe61d;</i><span>球场</span></h1>
+						<p name="time"><span>07:30</span><span>13:30</span></p>
+					</div>
+					<div>
+						<h1><i class="iconfont">&#xe6ba;</i><span>球场信息</span></h1>
+						<p name="msg"><span>27洞</span><span>108杆</span></p>
+					</div>
+					-->
+				</li>
+			</ul>
+		</div>
+		<div id="contentbox">
+			<div class="close iconfont" onclick="$(this).parent().hide()">&#xe632;</div>
+			<div id="content" class="content"></div>
+		</div>
+		<div id="footer"></div>
+		<script type="text/html" id="list_li">
+			<li>
+				<div class="title">
+					<h1>河北曹妃甸湿地公园高尔夫河北曹妃甸湿地公园高尔夫</h1>
+					<p><span>27洞</span><span>果/僮/车/浴</span></p>
+				</div>
+				<div class="price">
+					<h1>￥580</h1>
+					<p>VIP ￥480</p>
+				</div>
+				<div class="btn btn-1">
+					<a>
+						<h1>预定</h1>
+						<p>全额预定</p>
+					</a>
+				</div>
+			</li>
+		</script>
+	</body>
+</html>
+<script>
+	var reservationGuid = T.p('guid'); //获取球场guid
+	var root = {
+		//参数
+		paramData: {
+			data: null,
+			init:function(){
+				var that = this;
+				$.ajax({
+					type : "post",
+					async:false,
+					url : T.serverurl + "security/param/list",
+					success : function(res) {
+						that.data = res.data;
+						root.introductionList.init();
+					}
+				});
+			}
+		},
+		
+		//加载球场数据
+		reservationInfo: {
+			data: null,
+			show: function(){
+				if(!this.data){
+					alert("数据异常！");
+					return;
+				}
+				if(util.isEmpty(this.data.img)){
+					$("#banner").css("background-image","url("+T.serverurl + this.data.img.replace(/\\/g, '/')+")");
+				}
+				$("#title").html(this.data.name);
+				$("#address").html(this.data.address);
+				$("#phone").html(this.data.phone);
+				$("#types").html('<span>' + this.data.resType + '</span>' + '<span>' + this.data.resData + '</span>');
+				$("#projects").html(this.data.resLength);
+				//$("#reservationMsg").html("球洞数："+r.data.numberHoles);
+			},
+			init:function(){
+				var that = this;
+				$.ajax({
+					type: "GET",
+					url: T.serverurl + "/business/reservation/info",
+					headers: {
+						token: T.token
+					},
+					data: {
+						"guid": reservationGuid
+					},
+					success: function(r) {
+						if (r.code == 0) {
+							that.data = r.data;
+							that.show();
+						}
+					}
+				});
+			}
+		},
+		
+		//加载所有订场数据
+		introductionList: {
+			data: null,
+			show: function(){
+				if(!this.data){
+					alert("数据异常！");
+					return;
+				}
+				var list = $(".list");
+				list.children("li:nth-child(n + 2)").remove();
+				var lilist = $("#list_li");
+				$.each(this.data, function(i, obj) {
+					obj.timeJson = JSON.parse(obj.timeJson);
+					var li = $(lilist.html());
+					li.find(".title").find("h1").text(obj.name);
+					var guids = obj.priceInclude.split(",");
+					var priceInclude = new Array();
+					$.each(guids, function(i, guid) {
+						$.each(root.paramData.data, function(j, param) {
+							if(guid == param.guid) {
+								priceInclude.push(param.name);
+							}
+						})
+					})
+					
+					li.find(".title").find("p").text(priceInclude.join("/"));
+					li.find(".price").find("h1").text("￥" + obj.price / 100);
+					if(obj.timeJson instanceof Array && obj.timeJson.length > 0){
+						li.find(".price").find("p").text("原价￥" + obj.timeJson[0].costPrice / 100);
+					} else {
+						li.find(".price").find("p").text("");
+					}
+					if(obj.integralSum && obj.integralSum > 0){
+						li.find(".price").find("p").text("预定送" + obj.integralSum + "积分");
+					}
+					if(obj.type == 1){
+						li.find(".btn").addClass("btn-1");
+					} else {
+						//li.find(".btn").find("h1").text("拼团");
+						li.find(".btn").find("p").text("特惠预定");
+						li.find(".btn").addClass("btn-2");
+					}
+					li.find(".btn").find("a").attr("href", "introduction_pay?guid=" + obj.guid);
+					list.append(li);
+				});
+			},
+			init:function(){
+				var that = this;
+				$.ajax({
+					type : "POST",
+					url : T.serverurl + "/business/introduction/list",
+					data : {ReservationGuid:reservationGuid,state:1},
+					traditional: true,
+					success : function(r) {
+						if (r.code == 0) {
+							that.data = r.data;
+							that.show();
+						}
+					}
+				});
+			}
+		}
+	}
+
+	$(function() {
+		//加载参数表数据  费用包含
+		root.paramData.init();
+		root.reservationInfo.init();
+		$(".list").children(".head").find("[name='date']").html(util.getDate(new Date(), "<span>MM-dd</span><span>周week</span>"));
+		//单个属性变化监听
+		Object.defineProperty(root.reservationInfo,"data", {
+			get: function() {
+				//console.log('get：' + data);
+				return data;
+			},
+			set: function(value) {
+				data = value;
+				$(".list").children(".head").find("[name='msg']").html('<span>' + value.resData + '</span>');
+				//console.log('set:' + data);
+				
+			}
+		});
+	});
+
+	function openLocation(){
+		var coordinates = root.reservationInfo.data.coordinate.split(",");
+		wx.openLocation({
+		  latitude: coordinates[0], // 纬度，浮点数，范围为90 ~ -90
+		  longitude: coordinates[1], // 经度，浮点数，范围为180 ~ -180。
+		  name: root.reservationInfo.data.name, // 位置名
+		  address: root.reservationInfo.data.address, // 地址详情说明
+		  scale: 15, // 地图缩放级别,整形值,范围从1~28。默认为最大
+		  infoUrl: location.href // 在查看位置界面底部显示的超链接,可点击跳转
+		});
+	}
+	
+	function openmsg(){
+		//alert(root.reservationInfo.content);
+		$("#content").html(root.reservationInfo.data.content + root.reservationInfo.data.content + root.reservationInfo.data.content);
+		$("#contentbox").show();
+	}
+	//计算距离
+	function distanceMethods(coordinate){
+		if(userCode != null && coordinate != null){
+			var coordinates = coordinate.split(",");
+			return parseInt((coordtransform.getDisance(userCode.result.location.lng,userCode.result.location.lat, coordinates[1], coordinates[0])/1000));
+		}
+		return 0;
+	}
+</script>

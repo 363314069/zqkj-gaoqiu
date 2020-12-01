@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>机构IP管理</title>
+	<link rel="stylesheet" href="../common/js/layui/css/layui.css">
+	<link rel="stylesheet" href="../common/css/common.css">
+	<link rel="stylesheet" href="../common/js/zTree_v3-3.5.33/css/zTreeStyle/zTreeStyle.css" />
+	<link rel="stylesheet" href="../common/fonts/font-yinfu/iconfont.css" />
+	<script src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.core.min.js" ></script>
+	<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.exedit.js"></script>
+	<script src="../common/js/common.js"></script>
+	<script src="../common/js/yfplugin.js"></script>
+	<script src="assets/js/ip_form.js"></script>
+	<style>
+		.layui-textarea{height: 400px;}
+	</style>
+</head>
+<body>
+<div class="wrap">
+<fieldset id="rrapp" class="layui-elem-field">
+	<legend>机构IP管理</legend>
+	<form class="layui-form layui-elem-field-margin" lay-filter="form">
+		<input type="hidden" name="id">
+		<input type="hidden" name="guid">
+		<input type="hidden" name="organizationGuid">
+		<div id="editinput">
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">起始ip</label>
+			   	<div class="layui-input-block">
+			      <input type="text" class="layui-input" name="startIp" placeholder="起始ip"/>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">结束IP</label>
+			   	<div class="layui-input-block">
+			      <input type="text" class="layui-input" name="endIp" placeholder="结束IP"/>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">掩码</label>
+			   	<div class="layui-input-block">
+			      <input type="text" class="layui-input" name="mask" placeholder="掩码"/>
+			    </div>
+			</div>
+		</div>
+		<div id="addinput">
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">ip</label>
+			   	<div class="layui-input-block">
+			      <textarea class="layui-textarea" name="allIp" placeholder="ip"></textarea>
+			    </div>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+			</div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-input-block">
+		    	<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+		    	<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>
+		    </div>
+		</div>
+	</form>
+</fieldset>
+</div>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.CouponsuserDao">
+	<sql id="insert_field">
+		`GUID`,`OrganizationGuid`,`UserGuid`,`CouponsGuid`,`IfUse`,`OrderGuid`,`Type`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_field">
+		`ID`,`GUID`,`OrganizationGuid`,`UserGuid`,`CouponsGuid`,`IfUse`,`OrderGuid`,`Type`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_list_field">
+		`ID`,`GUID`,`OrganizationGuid`,`UserGuid`,`CouponsGuid`,`IfUse`,`OrderGuid`,`Type`,`State`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`
+	</sql>
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGuid != null">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="userGuid != null">
+				and UserGuid = #{userGuid}
+			</if>
+			<if test="couponsGuid != null">
+				and CouponsGuid = #{couponsGuid}
+			</if>
+			<if test="ifUse != null">
+				and IfUse = #{ifUse}
+			</if>
+			<if test="orderGuid != null">
+				and OrderGuid = #{orderGuid}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+
+	<sql id="whereUserCoupons">
+		<!-- 0未使用：优惠券不能过期 -->
+		<if test="userGuid != null">
+			and u.userGuid = #{userGuid}
+		</if>
+		<!-- 0未使用：优惠券不能过期 -->
+		<if test="ifUse != null and ifUse == 0">
+			and u.IfUse = #{ifUse} and c.EndTime &gt;= now()
+		</if>
+		<!-- 1已使用 -->
+		<if test="ifUse != null and ifUse == 1">
+			and u.IfUse = #{ifUse}
+		</if>
+		<!-- 2已过期(已过期查询未使用的优惠券，然后选出已过期的数据) -->
+		<if test="ifUse != null and ifUse == 2">
+			and u.IfUse = 0 and c.EndTime &lt;= now()
+		</if>
+		<!-- 优惠券绑定那个会员卡 -->
+		<if test="vipCardGuid != null and vipCardGuid != ''">
+			and c.VipCardGuid = #{vipCardGuid}
+		</if>
+	</sql>
+
+	<select id="selectCouponsGroupBy" resultType="CouponsEntity" parameterType="java.util.Map">
+		SELECT count(u.ID) as countUserCoupons,c.*,u.userGuid
+		FROM `couponsusertab` u LEFT JOIN couponstab c on c.guid = u.couponsGuid
+		<where>
+			<include refid="whereUserCoupons" />
+		</where>
+		GROUP BY u.CouponsGuid
+	</select>
+</mapper>

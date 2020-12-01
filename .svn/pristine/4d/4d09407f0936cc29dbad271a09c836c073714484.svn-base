@@ -1,0 +1,46 @@
+package com.zqkj.service.impl;
+
+import org.springframework.stereotype.Service;
+
+import com.zqkj.dao.mapper.ReservationdateDao;
+import com.zqkj.entity.ReservationdateEntity;
+import com.zqkj.service.ReservationdateService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+/**
+ * 
+ * 
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-01-14 11:09:36
+ */
+@Service("reservationdateService")
+public class ReservationdateServiceImpl extends BaseServiceImpl<ReservationdateDao, ReservationdateEntity> implements ReservationdateService {
+
+    @Override
+    public List<ReservationdateEntity> selectReservationdateList(ReservationdateEntity reservationdateEntity) {
+        return dao.selectReservationdateList(reservationdateEntity);
+    }
+
+    @Override
+    public List<ReservationdateEntity> updateReservationdateList(List<ReservationdateEntity> reservationdateList) {
+        List<ReservationdateEntity> list = new ArrayList<>();
+        for(ReservationdateEntity reservationdate : reservationdateList){
+            if(reservationdate.getId() != null){
+                int updateInt = updateByPrimaryKeySelective(reservationdate);
+                if(updateInt <= 0){
+                    list.add(reservationdate);
+                }
+            }else{
+                int insertInt = insertSelective(reservationdate);
+                if(insertInt <= 0){
+                    list.add(reservationdate);
+                }
+            }
+        }
+        return list;
+    }
+}

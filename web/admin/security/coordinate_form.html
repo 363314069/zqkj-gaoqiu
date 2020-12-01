@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>机构坐标管理</title>
+<link rel="stylesheet" href="../css/normalize.css" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../js/layui/css/layui.css">
+<script  src="../js/jquery/jquery-1.8.0.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="js/common.js"></script>
+<script src="js/common_form.js"></script>
+<script src="js/coordinate_form.js"></script>
+</head>
+<body>
+<div class="wrap">
+<fieldset id="rrapp" class="layui-elem-field">
+	<legend>机构坐标管理</legend>
+	<form class="layui-form layui-elem-field-margin" lay-filter="form">
+		<input type="hidden" name="id">
+		<input type="hidden" name="guid">
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">机构GUID</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="organizationGUID" placeholder="机构GUID"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">起始经度</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="startLongitude" placeholder="起始经度"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">起始纬度</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="startLatitude" placeholder="起始纬度"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">结束经度</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="endLongitude" placeholder="结束经度"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">结束纬度</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="endLatitude" placeholder="结束纬度"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">类型</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="type" placeholder="类型"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<textarea class="layui-textarea" name="remark" placeholder="备注"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">创建者</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="creator" placeholder="创建者"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">创建时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="createTime" placeholder="创建时间"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">审核用户</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="checkUser" placeholder="审核用户"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">审核时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="checkTime" placeholder="审核时间"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-input-block">
+		    	<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+		    	<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>
+		    </div>
+		</div>
+	</form>
+</fieldset>
+</div>
+</body>
+</html>

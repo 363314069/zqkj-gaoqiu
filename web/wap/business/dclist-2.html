@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title></title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+		<!--
+		<script type="text/javascript" src="js/common.js"></script>
+		-->
+		<script type="text/javascript" src="js/common.js"></script>
+		<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default.css" rel="stylesheet" type="text/css">
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<script src="js/wx_api.js"></script>
+	</head>
+	<style>
+		.wrap{padding-bottom: 1.2rem; min-height: 100%; }
+		.bottom{
+			width: 100%;
+			font-size: 0.36rem;
+			position:fixed; 
+			left:0; 
+			bottom:0; 
+			border: none; 
+			background-color: #fdcf5f;
+			line-height: 1.2rem;
+			color: #fff;
+		}
+		
+		.banner{}
+		.banner img{width: 100%;}
+		.info, .nav, .price{
+			margin: 0.2rem;
+			border-radius: 0.3rem;
+			background-color: #fff;
+		}
+		.info{
+			text-align: left;
+		}
+		.info::after{
+			content: "";
+			display: block;
+			clear: both;
+		}
+		.info li{
+			line-height: 1.2rem;
+			font-size: .32rem;
+			height: 1.2rem;
+			position: relative;
+		}
+		.info > li:nth-child(n + 2){
+			border-top: 1px solid #e7e7e7;
+		}
+		.info li a{margin-left: 0.4rem;}
+		.info .introduction, .info li a{ color: #2d9de7; }
+		.info > li > ul{position: relative; left: 0; top: 0; background-color: #fff; z-index: 1000;}
+		.info > li > ul > li{padding: 0 0.4rem;}
+		.info > li > a::before{
+			content: ""; 
+			font-family: "iconfont" !important;
+			font-size: .32rem;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			padding: 0.01rem;
+		}
+		.info > li::after{
+			content: ""; 
+			font-family: "iconfont" !important;
+			font-size: .32rem;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			padding: 0.01rem;
+		}
+		.info .introduction > a::before{
+			content: "\e6a9";
+		}
+		
+		.nav{
+			display: -webkit-flex;/* Safari */
+			display: flex;
+			justify-content: space-around;
+			text-align: center;
+			height: 1.2rem;
+			border-bottom: 1px solid #e7e7e7;
+			color: #2d9de7; 
+		}
+		
+		.nav a{color: #2d9de7; }
+		.nav > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			line-height: 1.2rem;
+			font-size: .32rem;
+		}
+		.nav > li::before{
+			content: ""; 
+			font-family: "iconfont" !important;
+			font-size: .32rem;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			padding: 0.01rem;
+		}
+		.nav > li::after{
+			content: ""; 
+			font-family: "iconfont" !important;
+			font-size: .32rem;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			padding: 0.01rem;
+		}
+		.nav .introduction::before{
+			content: "\e6a9";
+		}
+		.nav .date::before{
+			content: "\e633";
+		}
+		.nav .time::before{
+			content: "\e691";
+		}
+		.nav .introduction{
+			position: relative;
+		}
+		.introduction ul{ 
+			position: relative;
+			left: 0;
+			top: 0;
+			display: none;
+			background-color: #fff;
+			border: 1px solid #e7e7e7;
+		}
+		.introduction ul li:nth-child(n+2){
+			border-top: 1px solid #e7e7e7;
+		}
+		.time ul{
+			position: absolute;
+			width: 100%;
+			left: 0;
+			top: 0;
+			background-color: #fff;
+			z-index: 10001;
+			line-height: 0.88rem;
+			min-height: 100%;
+		}
+		.time ul::after{
+			content: "";
+			display: block;
+			clear: both;
+		}
+		.time ul li{
+			font-size: 0;
+			border-bottom: 1px solid #e7e7e7;
+		}
+		.time ul li div:first-child{
+			text-align: center;
+			font-size: 0.32rem;
+			line-height: 0.88rem;
+			background-color: #e7e7e7;
+		}
+		.time ul li div:last-child{
+			text-align: left;
+			font-size: 0;
+			padding: 0.2rem;
+			
+		}
+		.time ul li div a{
+			display: inline-block;
+			width: 20%;
+			/*border: 1px solid #999;
+			border-radius: 0.05rem;*/
+			padding: 0.1rem 0;
+			font-size: 0.32rem;
+			text-align: center;
+			box-sizing: content-box;
+		}
+		.time ul li div a span{
+			/*display: block;*/
+		}
+		.time ul li div a span:last-child{
+			display: none;
+		}
+		.time .title{
+			height: .88rem;
+			position: relative;
+			line-height: .88rem;
+			font-size: 0.36rem;
+			color: #999;
+		}
+		.time .title a{
+			line-height: .88rem;
+			font-size: 0.32rem;
+			position: absolute;
+			left: 0.4rem;
+			top: 0;
+			color: #999;
+		}
+		.price {
+			display: -webkit-flex;/* Safari */
+			display: flex;
+			justify-content: space-around;
+			text-align: center;
+			height: 1.2rem;
+			border-bottom: 1px solid #e7e7e7;
+			padding: 0 0.4rem;
+		}
+		.price > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			line-height: 1.2rem;
+			font-size: .32rem;
+		}
+		.price .l{
+			text-align: left;
+		}
+		.price .r{
+			text-align: right;
+		}
+		.content{
+			text-align: left;
+		}
+		
+	</style>
+	<body>
+
+		<div class="wrap">
+			<ul class="head">
+                <li class="l"><a href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">九洲高尔夫</li>
+				<li class="r"></li>
+			</ul>
+			<div class="banner">
+				<img id="bannerImg" src="images/banner2.jpg" />
+			</div>
+			<ul class="info">
+				<li class="introduction">
+					<a id="introduction">场地A</a>
+					<ul id="introductionItem">
+						<!--<li guid="aaaa-aaaa">场地A</li>
+						<li guid="bbbb-bbbb">场地B</li>
+						<li guid="cccc-cccc">场地C</li>-->
+					</ul>
+				</li>
+				<!--<li class="address">
+					<a id="address">地址：北京朝阳区草房</a>
+				</li>-->
+			</ul>
+			<ul class="nav">
+				<li id="date" class="date"></li>
+				<li class="time">
+					<a id="time">
+						7:30
+					</a>
+					<ul id="timeItem" style="display: none">
+						<li class="title">选择时间 <a id="timeCancel">取消</a></li>
+						<li>
+							<div>
+								上午
+							</div>
+							<div id="morningTime">
+							</div>
+						</li>
+						<li>
+							<div>
+								下午
+							</div>
+							<div id="afternoonTime">
+							</div>
+						</li>
+					</ul>
+				</li>
+			</ul>
+			<ul class="price">
+				<li class="l">特惠价格</li>
+				<li class="r" id="price"></li>
+			</ul>
+			<div class="content">
+				<!--请注意：如果你的页面已经使用了 layui，我们强烈推荐你直接采用 layui 内置的 layDate 模块，请勿再重复引用独立版的 laydate.js<br>
+				layDate 采用原生 JavaScript 编写，不依赖任何第三方库，兼容所有浏览器（IE6/7除外）<br>
+				npm安装：npm install layui-laydate<br>-->
+			</div>
+			<div class="bottom" onclick="xiadan()">立即下单</div>
+		</div>
+	</body>
+</html>
+<script type="application/javascript">
+	var days;
+	$(function(){
+		//场地绑定事件
+		$("#introduction").click(function(){
+			$(this).next().show("slow");
+			//alert($(this).next().html());
+		});
+		//设置场地
+		$("#introductionItem").click(function(e){
+			if(e.target.nodeName == "LI"){
+				$("#introduction").attr("guid", $(e.target).attr("guid"));
+				$("#introduction").text($(e.target).text());
+			}
+			$(this).hide();
+			//加载选择场地后的时间
+			chooseIntroduction($(e.target).attr("guid"));
+			
+		});
+		//时间绑定事件
+		$("#time").click(function(){
+			$(this).next().show("slow");
+			//alert($(this).next().html());
+		});
+		//设置时间
+		$("#timeItem").click(function(e){
+			var tag = null;
+			if(e.target.nodeName == "A"){
+				tag =  $(e.target);
+			} else if(e.target.nodeName == "SPAN"){
+				tag =  $(e.target).parent();
+			}
+			
+			if(tag != null && tag.find("span").eq(0).text() != ''){
+				$("#time").attr("guid",tag.attr("guid"));
+				$("#time").text(tag.find("span").eq(0).text());
+				//选择日期后的价格设置
+				$("#price").text(tag.find("span").eq(1).text());
+			}
+			$(this).hide();
+		});
+	});
+	
+	var reservationGuid = getQueryString('guid');	//获取球场guid
+	var dateTime = new Date();
+	var mytime = dateTime .toLocaleDateString(); //获取当前日期
+	var selectDate = getQueryString('date');	//获取球场选择的日期
+
+
+	function dataLoad(days){
+		laydate.render({
+			elem: '#date'
+			,theme: '#2d9de7'
+			,min: 0 //7天前
+			,max: days //几天后天后
+			//,closeStop: '#date'
+			//,show: true //直接显示
+			,done: function(value, date, endDate){
+				// 回调函数
+				chooseDate(value);
+			}
+		});
+	}
+
+
+	$.ajax({
+		type: "POST",
+		url: T.serverurl + "/business/reservation/selectonebyguid",
+		headers: {token: T.token},
+		data: {"guid": reservationGuid},
+		success: function(r) {
+			if (r.code == 0) {
+				$.each(r.data.introductionList,function(i, obj) {
+					if(i == 0){
+						$("#bannerImg").attr("src",T.serverurl+obj.img);
+						$("#introduction").attr("guid", obj.guid);
+						$("#introduction").text(obj.name);
+						if(obj.days != 0){
+							dataLoad(obj.days-1);
+							//默认加载 第一个场地时间信息
+							//reservationdateList(obj.guid);
+							chooseDate(selectDate);
+						}else{
+							$("#date").html("无");
+							$("#time").text("无");
+							$("#price").text("该场地未开放");
+						}
+					}
+					//分场
+					$("#introductionItem").append('<li guid="'+obj.guid+'">'+obj.name+'</li>');
+				});
+			} else {
+				alert(r.msg);
+			}
+		}
+	});
+
+	//选择日期加载时间
+	function chooseDate(date) {
+		$("#date").text(date);
+		var guid = $("#introduction").attr("guid");
+		$.ajax({
+			type: "POST",
+			url: T.serverurl + "/business/reservationdate/info",
+			headers: {token: T.token},
+			data: {"introductionGuid": guid,"date":date},
+			success: function(r) {
+				if (r.code == 0) {
+					if(isNull(r.data)){
+						//循环
+						var jsonObj =  JSON.parse(r.data.timeJson);//转换为json对象
+						$("#morningTime").html("");
+						$("#afternoonTime").html("");
+						for(var j=0;j<jsonObj.length;j++){
+							var timeArr = getIntervalArr(jsonObj[j]);
+							//初始默认价格
+							if(j == 0){
+								$("#time").text(timeArr[j]);
+								$("#price").text("￥"+jsonObj[j].price/100);
+							}
+							for(var i=0;i<timeArr.length-1;i++){
+								if(timeArr[i].substring(0,2) > 12){
+									$("#afternoonTime").append('<a><span>'+timeArr[i]+'</span><span>¥'+jsonObj[j].price/100+'</span></a>');
+								}else{
+									$("#morningTime").append('<a><span>'+timeArr[i]+'</span><span>¥'+jsonObj[j].price/100+'</span></a>');
+								}
+							}
+						}
+					}else{
+						//没有设定场地时间，获取场地默认时间
+						$.ajax({
+							type: "POST",
+							url: T.serverurl + "/business/introduction/info",
+							headers: {token: T.token},
+							data: {"guid": guid},
+							success: function(r) {
+								if(r.code == 0){
+									//设置日期默认值当天
+									var days = r.data.days;
+									var dates = formatDate(yugi(days));
+									if(date > dates){
+										$("#morningTime").html("");
+										$("#afternoonTime").html("");
+										$("#time").text("无");
+										$("#price").text("无");
+									}else{
+										//循环   **需测试该段代码
+										var jsonObj =  JSON.parse(r.data.timeJson);//转换为json对象
+										$("#morningTime").html("");
+										$("#afternoonTime").html("");
+										for(var j=0;j<jsonObj.length;j++){
+											var timeArr = getIntervalArr(jsonObj[j]);
+											//初始默认价格
+											if(j == 0){
+												$("#time").text(timeArr[j]);
+												$("#price").text("￥"+jsonObj[j].price/100);
+											}
+											for(var i=0;i<timeArr.length-1;i++){
+												if(timeArr[i].substring(0,2) > 12){
+													$("#afternoonTime").append('<a><span>'+timeArr[i]+'</span><span>¥'+jsonObj[j].price/100+'</span></a>');
+												}else{
+													$("#morningTime").append('<a><span>'+timeArr[i]+'</span><span>¥'+jsonObj[j].price/100+'</span></a>');
+												}
+											}
+										}
+									}
+								}
+							}
+						});
+					}
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+	
+	
+
+	//选择场地
+	function chooseIntroduction(introductionGuid){
+		$.ajax({
+			type: "POST",
+			url: T.serverurl + "/business/introduction/info",
+			headers: {token: T.token},
+			data: {"guid": introductionGuid},
+			success: function(r) {
+				if (r.code == 0) {
+					console.log(r.data);
+					if(r.data.days != 0){
+						dataLoad(r.data.days-1);
+						//默认加载 第一个场地时间信息
+						reservationdateList(r.data.guid);
+					}else{
+						$("#date").html("无");
+						$("#time").text("无");
+						$("#price").text("该场地未开放");
+					}
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+
+
+	//加载日期  场地时间设置表数据    初始加载
+	function reservationdateList(introductionGuid){
+		$.ajax({
+			type: "POST",
+			url: T.serverurl + "/business/reservationdate/selectlist",
+			headers: {token: T.token},
+			data: JSON.stringify({"introductionGuid": introductionGuid,"startTime":mytime}),
+			contentType : 'application/json;charset=utf-8',
+			success: function(r) {
+				if (r.code == 0) {
+					if(r.data.length > 0){
+						$.each(r.data,function(i, obj) {
+							if(i == 0){
+								var newDate=/\d{4}-\d{1,2}-\d{1,2}/g.exec(obj.date)+"";
+								$(".date").text(newDate);
+								//循环
+								var jsonObj =  JSON.parse(obj.timeJson);//转换为json对象
+								$("#morningTime").html("");
+								$("#afternoonTime").html("");
+								for(var j=0;j<jsonObj.length;j++){
+									var timeArr = getIntervalArr(jsonObj[j]);
+									//初始默认价格
+									if(j == 0){
+										$("#time").text(timeArr[j]);
+										$("#price").text("￥"+jsonObj[j].price/100);
+									}
+									for(var i=0;i<timeArr.length-1;i++){
+										if(timeArr[i].substring(0,2) > 12){
+											$("#afternoonTime").append('<a><span>'+timeArr[i]+'</span><span>¥'+jsonObj[j].price/100+'</span></a>');
+										}else{
+											$("#morningTime").append('<a><span>'+timeArr[i]+'</span><span>¥'+jsonObj[j].price/100+'</span></a>');
+										}
+									}
+								}
+							}
+						});
+					}else{
+						//没有设定场地时间，获取场地默认时间
+						introductionInfo(introductionGuid);
+					}
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+
+
+	//默认场地时间  初始加载
+	function introductionInfo(guid) {
+		$.ajax({
+			type: "POST",
+			url: T.serverurl + "/business/introduction/info",
+			headers: {token: T.token},
+			data: {"guid": guid},
+			success: function(r) {
+				if(r.code == 0){
+					//设置日期默认值当天
+					$(".date").text(formatDate(yugi(0)));
+				}
+				//循环
+				var jsonObj =  JSON.parse(r.data.timeJson);//转换为json对象
+				$("#morningTime").html("");
+				$("#afternoonTime").html("");
+				for(var j=0;j<jsonObj.length;j++){
+					var timeArr = getIntervalArr(jsonObj[j]);
+					//初始默认价格
+					if(j == 0){
+						$("#time").text(timeArr[j]);
+						$("#price").text("￥"+jsonObj[j].price/100);
+					}
+					for(var i=0;i<timeArr.length-1;i++){
+						if(timeArr[i].substring(0,2) > 12){
+							$("#afternoonTime").append('<a><span>'+timeArr[i]+'</span><span>¥'+jsonObj[j].price/100+'</span></a>');
+						}else{
+							$("#morningTime").append('<a><span>'+timeArr[i]+'</span><span>¥'+jsonObj[j].price/100+'</span></a>');
+						}
+					}
+				}
+			}
+		});
+	}
+
+
+
+	//下单
+	function xiadan() {
+		var guid = $("#introduction").attr("guid");
+		var date = $(".date").text();
+		var time = $("#time").text();
+		var price = $("#price").text();
+		price = price.substring(1,5);
+		if(!isNull(time) && time == "无"){
+			alert("该时间段没有场地，请重新选择");
+			return false;
+		}
+		if (!isNull(price) && time == "无"){
+			alert("该时间段没有场地，请重新选择");
+			return false;
+		}
+
+		//$.showLoading("正在加载...");
+		$.ajax({
+			type : "POST",
+			url : T.serverepay + "/pay/order/addintroductionorder",
+			headers : {token:T.token},
+			data : {introductionGuid:guid,date:date,time:time,price:price*100},
+			success : function(res) {
+				//$.hideLoading();
+				if (res.code == 0) {
+					location.href = "order_details.html?guid="+guid+"&date="+date+"&time="+time+"&price="+price+"&orderGuid="+res.data.guid;
+				} else if (res.code == 500) {
+					alert("提交订单失败！请重试");
+				}else{
+					alert(res.msg);
+				}
+			}
+		});
+	}
+
+
+	//获取后n天的数据
+	var yugi = function(n){
+		var now = new Date;
+		now.setDate(now.getDate() + n);
+		return now;
+	};
+
+	//时间格式化
+	var formatDate = function (date) {
+		var y = date.getFullYear();
+		var m = date.getMonth() + 1;
+		m = m < 10 ? ('0' + m) : m;
+		var d = date.getDate();
+		d = d < 10 ? ('0' + d) : d;
+		var h = date.getHours();
+		var minute = date.getMinutes();
+		minute = minute < 10 ? ('0' + minute) : minute;
+		var second= date.getSeconds();
+		second = minute < 10 ? ('0' + second) : second;
+		//return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;
+		return y + '-' + m + '-' + d;
+	};
+
+	//获取毫秒数
+	function getMill(time) {
+		var arr = time.split(":");
+		var a = new Date();
+		a.setHours(arr[0]);
+		a.setMinutes(arr[1]);
+		a.setSeconds(0)
+		return a.getTime();
+	}
+	//获取间隔数组
+	function getIntervalArr(param) {
+		var date = new Date();
+		var arr = new Array();
+		if(param.interval <= 0){
+			arr.push(param.startTime);
+		}else{
+			var startTime = getMill(param.startTime);
+			var endTime = getMill(param.endTime);
+			var interval = param.interval*60*1000;
+
+			for(var i = startTime; i <= endTime; i+=interval){
+				date.setTime(i);
+				if(date.getHours() < 10){
+					time = "0"+date.getHours() + ":";
+				}else{
+					time = date.getHours() + ":";
+				}
+				if(date.getMinutes() < 10){
+					time += "0"+date.getMinutes();
+				}else{
+					time += date.getMinutes();
+				}
+				arr.push(time);
+			}
+		}
+		return arr;
+	}
+</script>

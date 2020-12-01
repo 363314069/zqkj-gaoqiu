@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>场地管理</title>
+		<script type="text/javascript" src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="../common/js/flexible.js"></script>
+		<script type="text/javascript" src="../common/js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="assets/js/common.js"></script>
+		<script type="text/javascript" src="../common/js/layui/mobile/layer.js" ></script>
+		<script type="text/javascript" src="../common/js/layui/laydate/laydate.js" ></script>
+		<link href="../common/fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="../common/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="assets/css/default.css">
+	</head>
+	<style>
+		.wrap{padding-bottom: .88rem;}
+		.list{
+			background-color: #fff;
+			overflow: auto;
+			height: 100%;
+		}
+		.list > li{
+			padding: .3rem;
+			text-align: left;
+			line-height: .5rem;
+		}
+		.list > li div{
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+		}
+		.list > li:nth-child(n + 2){
+			border-top: 1px solid #eee;
+		}
+		.bottom{
+			border-top: 1px solid #eee;
+			padding: .1rem .3rem; 
+			position: fixed; left: 0; 
+			bottom: 0; height: 0.88rem; 
+			background-color: #fff; 
+			z-index: 999; 
+			width: 100%; 
+			font-size: 0.36rem; 
+			line-height: 0.68rem;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+		}
+		.bottom li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+		}
+	</style>
+	<body>
+		<div class="wrap">
+			<ul class="head">
+				<li class="l"><a href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">场地管理</li>
+				<li class="r"></li>
+			</ul>
+			<ul class="list">
+				<!--<li id="guid-ss-dd1">
+					<div>
+						买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利
+					</div>
+				</li>-->
+			</ul>
+			<ul class="bottom">
+				<li onclick="bottomSkip('H5_order_list.html')">订单</li>
+				<li onclick="bottomSkip('H5_space_list.html')">产品</li>
+				<li onclick="bindWXUser()">绑定微信</li>
+			</ul>
+		</div>
+	</body>
+</html>
+<script>
+	var reservationGuid;
+	if(T.usermsg.reservationGuid != 0){
+		reservationGuid = T.usermsg.reservationGuid;
+	}
+	$(function(){
+		if(!isNull(T.usermsg.reservationGuid)){
+			return false;
+		}
+		$.ajax({
+			type: "post",
+			url:T.serverurl + "/business/introduction/list",
+			//data : {"organizationGuid":T.usermsg.organizationGuid},
+			data : {"reservationGuid":reservationGuid},
+			headers : {token:T.token},
+			async:false,
+			success : function(res) {
+				console.log(res);
+				if (res.code == 0) {
+					$.each(res.data,function (i, obj) {
+						var li = $('<li id="'+obj.guid+'" onclick="spaceSkip(\''+obj.guid+'\',\''+obj.state+'\',\''+obj.id+'\')">');
+						li.append('<div>'+obj.name+'</div>');
+						$(".list").append(li);
+					})
+				}
+			}
+		})
+	});
+
+	//场地跳转
+	function spaceSkip(guid,state,id) {
+		location.href = "H5_space_datetime.html?guid="+guid+"&state="+state+"&id="+id;
+	}
+
+	//底部跳转
+	function bottomSkip(html) {
+		location.href = html;
+	}
+</script>

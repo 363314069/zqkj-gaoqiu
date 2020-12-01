@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.CouponsteatimeorderDao">
+	<sql id="insert_field">
+		`GUID`,`OrganizationGuid`,`ReservationGuid`,`IntroductionGuid`,`TeatimeCouponsGuid`,`UserGuid`,`OrderGuid`,`Time`,`Date`,`Content`,`Img`,`CostPrice`,`Price`,`Discount`,`Type`,`State`,`Preferential`,`CallbackUrl`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_field">
+		`ID`,`GUID`,`OrganizationGuid`,`ReservationGuid`,`IntroductionGuid`,`TeatimeCouponsGuid`,`UserGuid`,`OrderGuid`,`Time`,`Date`,`Content`,`Img`,`CostPrice`,`Price`,`Discount`,`Type`,`State`,`Preferential`,`CallbackUrl`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_list_field">
+		`ID`,`GUID`,`OrganizationGuid`,`ReservationGuid`,`IntroductionGuid`,`TeatimeCouponsGuid`,`UserGuid`,`OrderGuid`,`Time`,`Date`,`Content`,`Img`,`CostPrice`,`Price`,`Discount`,`Type`,`State`,`Preferential`,`CallbackUrl`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`
+	</sql>
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGuid != null">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="reservationGuid != null">
+				and ReservationGuid = #{reservationGuid}
+			</if>
+			<if test="introductionGuid != null">
+				and IntroductionGuid = #{introductionGuid}
+			</if>
+			<if test="teatimeCouponsGuid != null">
+				and TeatimeCouponsGuid = #{teatimeCouponsGuid}
+			</if>
+			<if test="userGuid != null">
+				and UserGuid = #{userGuid}
+			</if>
+			<if test="orderGuid != null">
+				and OrderGuid = #{orderGuid}
+			</if>
+			<if test="time != null">
+				and Time = #{time}
+			</if>
+			<if test="date != null">
+				and Date = #{date}
+			</if>
+			<if test="content != null">
+				and Content = #{content}
+			</if>
+			<if test="img != null">
+				and Img = #{img}
+			</if>
+			<if test="costPrice != null">
+				and CostPrice = #{costPrice}
+			</if>
+			<if test="price != null">
+				and Price = #{price}
+			</if>
+			<if test="discount != null">
+				and Discount = #{discount}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="preferential != null">
+				and Preferential = #{preferential}
+			</if>
+			<if test="callbackUrl != null">
+				and CallbackUrl = #{callbackUrl}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.VipcardDao">
+	<sql id="insert_field">
+		`GUID`,`OrganizationGuid`,`Name`,`Content`,`StartTime`,`EndTime`,`CallbackUrl`,`SvgPath`,`Term`,`TermType`,`Scope`,`Type`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_field">
+		`ID`,`GUID`,`OrganizationGuid`,`Name`,`Content`,`StartTime`,`EndTime`,`CallbackUrl`,`SvgPath`,`Term`,`TermType`,`Scope`,`Type`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_list_field">
+		`ID`,`GUID`,`OrganizationGuid`,`Name`,`Content`,`StartTime`,`EndTime`,`CallbackUrl`,`SvgPath`,`Term`,`TermType`,`Scope`,`Type`,`State`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`
+	</sql>
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGuid != null">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="name != null">
+				and Name = #{name}
+			</if>
+			<if test="content != null">
+				and Content = #{content}
+			</if>
+			<if test="startTime != null">
+				and StartTime = #{startTime}
+			</if>
+			<if test="endTime != null">
+				and EndTime = #{endTime}
+			</if>
+			<if test="callbackUrl != null">
+				and CallbackUrl = #{callbackUrl}
+			</if>
+		<if test="svgPath != null">
+			and SvgPath = #{svgPath}
+		</if>
+			<if test="term != null">
+				and Term = #{term}
+			</if>
+			<if test="termType != null">
+				and TermType = #{termType}
+			</if>
+			<if test="scope != null">
+				and Scope = #{scope}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+</mapper>

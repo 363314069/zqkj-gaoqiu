@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>个人中心</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!--库-->
+    <link rel="stylesheet" type="text/css" href="css/amazeui.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/amazeui.js"></script>
+    <script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <!--核心样式-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script src="js/wx_api.js"></script>
+
+    <style>
+        .aui-palace-one {
+            padding-top: 0;
+        }
+
+        .aui-palace-one .aui-palace-grid {
+            width: 25%;
+        }
+        .aui-palace {
+            padding: 0.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .aui-palace-grid {
+            position: relative;
+            float: left;
+            padding: 1px;
+            width: 20%;
+            box-sizing: border-box;
+            margin: 5px 0;
+        }
+
+        .aui-palace-grid-text {
+            display: block;
+            text-align: center;
+            color: #333;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            padding-top: 0.2rem;
+        }
+
+        .aui-palace-grid-text h2 {
+            font-size: 0.8rem;
+            font-weight: normal;
+            color: #666666;
+        }
+        </style>
+<body>
+
+<!----------------用户头部------------------->
+<div id="user_center">
+    <div class="user_header">
+        <!--<a href="set_up.html"><img class="set" src="images/set_up.png"></a>-->
+        <div class="pic">
+            <a title="" href="#">
+                <img id="userImg" src="images/head.jpg"/>
+            </a>
+        </div>
+        <div class="name">
+            <!--<label>*COLOR*</label>
+            <p>人生旅程，不同的是沿途风景以及看风景的心情</p>-->
+        </div>
+		<!--<a class="sign" data-am-modal="{target: '#my-alert'}">每日签到</a>-->
+		<!-------------------签到弹出层------------------->
+		<!--<div id="sign_layer">
+			<div class="am-modal am-modal-alert" tabindex="-1" id="my-alert">
+			  <div class="am-modal-dialog">
+				<div class="win-m">
+					<img src="images/sign-m.png"/>
+					<div class="tex">
+						<p class="p1">签到成功</p>
+						<p class="p1">获得<span class="already-sign">20</span>积分</p>
+						<p class="p2">每天签到都可以获得积分哦</p>
+					</div>
+					<div class="am-modal-footer">
+					  <span class="am-modal-btn">知道了</span>
+					</div>
+				</div>
+			  </div>
+			</div>
+		</div>-->
+        <div class="clear"></div>
+    </div>
+    <!----------------用户导航------------------->
+    <div class="user_nav">
+        <div class="aui-palace aui-palace-one">
+            <a href="javascript:;" class="aui-palace-grid">
+                <div class="aui-palace-grid-text" id="balance">
+                    <!--<h1>0</h1>
+                    <h2>余额</h2>-->
+                </div>
+            </a>
+            <a href="javascript:;" class="aui-palace-grid">
+                <div class="aui-palace-grid-text" id="integral">
+                    <!--<h1>839</h1>
+                    <h2>积分</h2>-->
+                </div>
+            </a>
+            <a href="details_commission.html" class="aui-palace-grid">
+                <div class="aui-palace-grid-text" id="commission">
+                    <!--<h1>839</h1>
+                    <h2>佣金</h2>-->
+                </div>
+            </a>
+            <a href="javascript:;" class="aui-palace-grid">
+                <div class="aui-palace-grid-text">
+                    <h1>***</h1>
+                    <h2>***</h2>
+                </div>
+            </a>
+        </div>
+        <div class="order_nav">
+            <ul class="box_nav am-avg-sm-4">
+                <!--<li>
+                    <a title="" href="release.html">
+                        <img src="images/user_center_icon1.png"/>
+                        <p>发布游记</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="collect.html">
+                        <img src="images/user_center_icon2.png"/>
+                        <p>我的收藏</p>
+                    </a>
+                </li>-->
+                <li>
+                    <a title="" href="alone_order_list.html">
+                        <img src="images/order.png"/>
+                        <p>我的订单</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="user_coupons.html">
+                        <img src="images/coupons.png"/>
+                        <p>我的优惠券</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="share.html">
+                        <img src="images/invite.png"/>
+                        <p>邀请好友</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="vipcard.html">
+                        <img src="images/card.png"/>
+                        <p>我的卡包</p>
+                    </a>
+                </li>
+                <div class="clear"></div>
+            </ul>
+        </div>
+
+		<!--<div class="data_nav">
+			<ul class="am-avg-sm-2">
+				<li>
+					<img src="images/user_center_icon5.png" />
+					<p>积分<span>580</span></p>
+                </li>
+				<li>
+					<a href="my_project_cart.html">
+						<img src="images/icon-shop_car2.png" />
+						<p>购物车<label>9</label></p>
+					</a>
+				</li>
+			</ul>
+		</div>
+        <ul class="list_nav">
+
+            <li>
+                <a title="" href="my_note.html">
+                    <img src="images/user_center_icon6.png">我的游记
+                    <i class="am-icon-angle-right"></i>
+                </a>
+            </li>
+            <li>
+                <a title="" href="trip_comment.html">
+                    <img src="images/user_center_icon7.png">我的评论
+                    <i class="am-icon-angle-right"></i>
+                </a>
+            </li>
+        </ul>-->
+    </div>
+</div>
+    <!--footer-->
+    <div id="footer">
+        <div class="first">
+            <ul class="am-avg-sm-2">
+                <li>
+                    <a title=""  href="index.html">
+                        <img src="images/icon-footer1-a.png"/>
+                        <p>首页</p>
+                    </a>
+                </li>
+                <li>
+                    <a title="" href="activity_list.html">
+                        <img alt="" src="images/icon-footer2-a.png"/>
+                        <p>活动</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="beautiful">
+            <a title=""  href="#">
+                <img alt="" src="images/icon-footer3-a.png"/>
+            </a>
+        </div>
+        <div class="last">
+            <ul class="am-avg-sm-2">
+                <li >
+                    <a title="" href="panicBuying_list.html">
+                        <img alt="" src="images/icon-footer4-a.png"/>
+                        <p>抢购</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a title="" href="user_center.html">
+                        <img alt="" src="images/icon-footer05-a.png"/>
+                        <p>我的</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+ </body>
+</html>
+<script>
+    $(function () {
+        $.ajax({
+            type : "POST",
+            url : T.serverurl + "/integral/commission/selectcommission",
+            headers : {token:T.token},
+            data : {"state":0},
+            success : function(r) {
+                console.log(r.data)
+                if(r.code == 0){
+                    $("#commission").append("<h1>"+r.data.commissionSum/100+"元</h1><h2>佣金</h2>");
+                    $("#integral").append("<h1>"+r.data.integralSum+"</h1><h2>积分</h2>");
+                    $("#balance").append("<h1>"+r.data.balanceSum/100+"元</h1><h2>余额</h2>");
+                }else{
+                    $("#commission").append("<h1>0</h1><h2>佣金</h2>");
+                    $("#integral").append("<h1>0</h1><h2>积分</h2>");
+                    $("#balance").append("<h1>0</h1><h2>余额</h2>");
+                }
+            }
+        });
+        $(".name").append('<label>'+T.usermsg.name+'</label>');
+        $("#userImg").attr("src",T.usermsg.image);
+    });
+</script>

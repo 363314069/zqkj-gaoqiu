@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title></title>
+	<link rel="stylesheet" href="../../common/css/common.css">
+	<link rel="stylesheet" href="../../common/js/layui/css/layui.css">
+	<script src="../../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../../common/js/layui/layui.all.js"></script>
+	<script src="../../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../../common/js/common.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/ueditor.all.min.js"> </script>
+	<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+	<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/lang/zh-cn/zh-cn.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="../../common/js/ueditor1_4_3_3/ueditor.all.js"></script>
+	<script src="js/vipcard_form.js"></script>
+</head>
+<body>
+<div class="wrap">
+<fieldset id="rrapp" class="layui-elem-field">
+	<legend></legend>
+	<form class="layui-form layui-elem-field-margin" lay-filter="form">
+		<input type="hidden" name="id">
+		<input type="hidden" name="guid">
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">名称</label>
+		   	<div class="layui-input-inline">
+		      <input type="text" class="layui-input" name="name" placeholder="名称"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">开始时间</label>
+			<div class="layui-input-inline">
+				<input type="text" class="layui-input" name="startTime" id="startTime" lay-verify="required"  placeholder="yyyy-MM-dd" autocomplete="off" >
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">结束时间</label>
+			<div class="layui-input-inline">
+				<input type="text" class="layui-input" name="endTime" id="endTime" lay-verify="required" placeholder="yyyy-MM-dd" autocomplete="off" >
+			</div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">回调url</label>
+		   	<div class="layui-input-inline">
+		      <input type="text" class="layui-input" name="callbackUrl" placeholder="回调url"/>
+		    </div>
+		</div>
+
+		<!--<div class="layui-form-item">
+			<label class="layui-form-label">Svg地址</label>
+			<div class="layui-input-inline">
+				<input type="text" class="layui-input" name="svgPath" placeholder="Svg地址"/>
+			</div>
+		</div>-->
+
+		<div class="layui-upload">
+			<label class="layui-form-label">Svg</label>
+			<input type="file" accept="image/*" name="file" id="file" value="" >
+			<div class="layui-upload-list">
+				<embed src="" style="width:100px;height:100px" id="upload-normal-img"/>
+				<input type="hidden"  id="svgPath" name="svgPath" value="" />
+				<p id="test-upload-demoText"></p>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">购买起限期</label>
+		   	<div class="layui-input-inline">
+		      <input type="text" class="layui-input" name="term" placeholder="购买起限期"/>
+		    </div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="termType" placeholder="结束期限" lay-filter="termType">
+					<option value="1">统一结束期限（用EndTime计算）</option>
+					<option value="2">天（Term表示天数）</option>
+					<option value="3">月（Term表示月数）</option>
+					<option value="4">年（Term表示年数）</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">使用范围</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="scope" placeholder="结束期限" lay-filter="scope">
+					<option value="1">全品类</option>
+					<option value="2">指定商品</option>
+					<option value="3">指定商家全品类</option>
+					<option value="4">指定商家指定商品</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">类型</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="type" placeholder="类型" lay-filter="type">
+					<option value="0">默认类型</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">内容</label>
+			<div class="layui-input-block">
+				<script id="content" name="content" type="text/plain">
+				       		这里写你的初始化内容
+				</script>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-input-block">
+		    	<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+		    	<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>
+		    </div>
+		</div>
+	</form>
+</fieldset>
+</div>
+</body>
+</html>

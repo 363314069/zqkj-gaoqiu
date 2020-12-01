@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.UserExamDao">
+  <sql id="insert_field">
+    `Guid`,`OrganizationGuid`,`Name`,`Fraction`,`ExamFraction`,`Describe`,`Remark`,`Answer`,`SuId`,`ExId`,`SoId`,`ExamTime`,`WrongCount`,`QuestionCount`,`ExamType`,`AnswerStatus`,`Share`,`Like`,`Type`,`State`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+  </sql>
+  <sql id="query_field">
+    `id`,`Guid`,`OrganizationGuid`,`Name`,`Fraction`,`ExamFraction`,`Describe`,`Remark`,`Answer`,`SuId`,`ExId`,`SoId`,`ExamTime`,`WrongCount`,`QuestionCount`,`ExamType`,`AnswerStatus`,`Share`,`Like`,`Type`,`State`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+  </sql>
+  <sql id="query_list_field">
+    `id`,`Guid`,`OrganizationGuid`,`Name`,`Fraction`,`ExamFraction`,`Describe`,`Answer`,`SuId`,`ExId`,`SoId`,`ExamTime`,`WrongCount`,`QuestionCount`,`ExamType`,`AnswerStatus`,`Share`,`Like`,`Type`,`State`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`
+  </sql>
+  <sql id="where">
+    <if test="id != null">
+      and id = #{id}
+    </if>
+    <if test="guid != null">
+      and Guid = #{guid}
+    </if>
+    <if test="organizationGuid != null">
+      and OrganizationGuid = #{organizationGuid}
+    </if>
+    <if test="name != null">
+      and Name = #{name}
+    </if>
+    <if test="fraction != null">
+      and Fraction = #{fraction}
+    </if>
+    <if test="examFraction != null">
+      and ExamFraction = #{examFraction}
+    </if>
+    <if test="describe != null">
+      and Describe = #{describe}
+    </if>
+    <if test="answer != null">
+      and Answer = #{answer}
+    </if>
+    <if test="suId != null">
+      and SuId = #{suId}
+    </if>
+    <if test="exId != null">
+      and ExId = #{exId}
+    </if>
+    <if test="soId != null">
+      and SoId = #{soId}
+    </if>
+    <if test="examTime != null">
+      and ExamTime = #{examTime}
+    </if>
+    <if test="wrongCount != null">
+      and WrongCount = #{wrongCount}
+    </if>
+    <if test="questionCount != null">
+      and QuestionCount = #{questionCount}
+    </if>
+    <if test="examType != null">
+      and ExamType = #{examType}
+    </if>
+    <if test="answerStatus != null">
+      and AnswerStatus = #{answerStatus}
+    </if>
+    <if test="share != null">
+      and Share = #{share}
+    </if>
+    <if test="like != null">
+      and Like = #{like}
+    </if>
+    <if test="type != null">
+      and Type = #{type}
+    </if>
+    <if test="state != null">
+      and State = #{state}
+    </if>
+    <if test="creator != null">
+      and Creator = #{creator}
+    </if>
+    <if test="createTime != null">
+      and CreateTime = #{createTime}
+    </if>
+    <if test="checkUser != null">
+      and CheckUser = #{checkUser}
+    </if>
+    <if test="checkTime != null">
+      and CheckTime = #{checkTime}
+    </if>
+  </sql>
+  <select id="selectSoId" resultType="userExamEntity">
+    select suId,soId from userexamtab
+    <where>
+      <include refid="where"></include>
+      and soId > 0
+    </where>
+    GROUP BY suid,soid
+  </select>
+  <!-- 统计 -->
+  <select id="statistics" resultType="userExamEntity">
+    select sum(CorrectCount) as correctCount, sum(WrongCount) as wrongCount,sum(QuestionCount) as questionCount,sum(examTime) as examTime from userexamtab
+    <where>
+      <include refid="where"></include>
+      and soId > 0
+    </where>
+  </select>
+</mapper>

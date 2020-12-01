@@ -1,0 +1,380 @@
+package com.zqkj.controller;
+
+import com.ijpay.core.kit.HttpKit;
+import com.ijpay.wxpay.WxPayApiConfig;
+import com.ijpay.wxpay.WxPayApiConfigKit;
+import com.zqkj.bean.HotelOrderParameteBean;
+import com.zqkj.bean.OrderVipBean;
+import com.zqkj.bean.WxPayBean;
+import com.zqkj.entity.OrderEntity;
+import com.zqkj.remote.UserRemote;
+import com.zqkj.remote.WxRemote;
+import com.zqkj.service.OrderExtendService;
+import com.zqkj.service.OrderService;
+import com.zqkj.utils.*;
+import com.zqkj.utils.wxtemplate.PushMessage;
+import com.zqkj.utils.wxtemplate.WechatTemplate;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import tk.mybatis.mapper.entity.Example;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+
+
+/**
+ * 订单表
+ */
+@Controller
+@RequestMapping("/pay/order")
+@Api(value = "订单表", tags = { "order 订单表" })
+public class OrderController extends BaseController<OrderService, OrderEntity> implements AbstractWxPayApiController  {
+    private org.slf4j.Logger log = LoggerFactory.getLogger(this.getClass());
+
+    @Autowired
+    WxPayBean wxPayBean;
+
+
+    @Autowired
+    private WxRemote wxRemote;
+    @Autowired
+    private UserRemote userRemote;
+    @Autowired
+    private OrderExtendService orderExtendService;
+
+
+    private String notifyUrl;
+    private String refundNotifyUrl;
+    private static final String USER_PAYING = "USERPAYING";
+
+    @Override
+    public WxPayApiConfig getApiConfig() {
+        WxPayApiConfig apiConfig;
+
+        try {
+            apiConfig = WxPayApiConfigKit.getApiConfig(wxPayBean.getAppId());
+        } catch (Exception e) {
+            apiConfig = WxPayApiConfig.builder()
+                    .appId(wxPayBean.getAppId())
+                    .mchId(wxPayBean.getMchId())
+                    .partnerKey(wxPayBean.getPartnerKey())
+                    .certPath(wxPayBean.getCertPath())
+                    .domain(wxPayBean.getDomain())
+                    .build();
+        }
+        notifyUrl = apiConfig.getDomain().concat("/pay/order/payNotify");
+        refundNotifyUrl = apiConfig.getDomain().concat("/pay/order/refundNotify");
+        wxPayBean.setNotifyUrl(notifyUrl);
+        return apiConfig;
+    }
+
+    /**
+     * 创建订单
+     * @param goodsGuid 商品guid
+     * @return
+     */
+    @RequestMapping(value = "/addorder", method = {RequestMethod.POST})
+    @ResponseBody
+    public R addOrder(String goodsGuid,String inviterGuid,Integer sum,Integer[] typeArr,String userJson,String remark){
+        return service.addOrder(goodsGuid,inviterGuid,sum,typeArr,userJson,remark);
+    }
+
+    /**
+     * 创建酒店预订订单
+     * @param hotelOrderParameteBean 酒店订单参数
+     * @return
+     */
+    @RequestMapping(value = "/addhotelorder", method = {RequestMethod.POST})
+    @ResponseBody
+    public R addHotelOrder(HotelOrderParameteBean hotelOrderParameteBean){
+        return service.addHotelOrder(hotelOrderParameteBean);
+    }
+
+    /**
+     * 创建订场订单
+     * @param introductionGuid 商品guid  time 时间
+     * @return
+     */
+    @RequestMapping(value = "/addintroductionorder", method = {RequestMethod.POST})
+    @ResponseBody
+    public R addIntroductionOrder(String introductionGuid,String date, String time, Integer price){
+        return service.addIntroductionOrder(introductionGuid,date,time,price);
+    }
+
+    /**
+     * 支付订单
+     * @param orderGuid 订单guid
+     * @return
+     */
+    @RequestMapping(value = "/payintroductionorder", method = {RequestMethod.POST})
+    @ResponseBody
+    public R payIntroductionOrder(String orderGuid,String[] couponsUserGuid,Integer goldSum){
+        return service.payIntroductionOrder(orderGuid,couponsUserGuid,goldSum,null);
+    }
+
+
+    /**
+     * 创建订场订单并支付
+     * @param introductionGuid 商品guid  time 时间
+     * @return
+     */
+    @RequestMapping(value = "/addintroductionorderpay", method = {RequestMethod.POST})
+    @ResponseBody
+    public R addIntroductionOrderPay(String introductionGuid,String date, String time, Integer price,String[] couponsUserGuid,String remark,Integer buySum,Integer goldSum){
+        return service.addIntroductionOrderPay(introductionGuid,date,time,price,couponsUserGuid,remark,buySum,goldSum);
+    }
+
+
+    /**
+     * jsapi支付
+     * @param orderGuid 订单guid
+     * @return
+     */
+    @RequestMapping(value = "/jsapipay", method = {RequestMethod.POST})
+    @ResponseBody
+    public R jsapiPay(String orderGuid){
+        return service.jsapiPay(orderGuid);
+    }
+
+
+    /**
+     * 取消订单
+     * @param id 订单id
+     * @return
+     */
+    @RequestMapping(value = "/cancelorder", method = {RequestMethod.POST})
+    @ResponseBody
+    public R cancelOrder(Integer id){
+        return service.cancelOrder(id,2);//用户自动取消
+    }
+
+
+    /**
+     * 商家修改订单时间，用户确认
+     * @param orderEntity 订单id  确认状态 businConfi
+     * @return
+     */
+    @RequestMapping(value = "/userconfirm", method = {RequestMethod.POST})
+    @ResponseBody
+    public R userConfirm(OrderEntity orderEntity){
+        int count = service.updateByPrimaryKeySelective(orderEntity);
+        if(count > 0){
+            return R.ok().putData(orderEntity);
+        }else{
+            return R.error(Content.STATUS_CODE_5001,"确认是失败请重试");
+        }
+    }
+
+
+    /**
+     * 异步通知
+     */
+    @RequestMapping(value = "/payNotify", method = {RequestMethod.POST, RequestMethod.GET})
+    @ResponseBody
+    public String payNotify(HttpServletRequest request) {
+        String xmlMsg = HttpKit.readData(request);
+        log.info("支付通知=" + xmlMsg);
+        return service.payNotify(xmlMsg);
+    }
+
+
+    /**
+     * 查询个人订单列表
+     */
+    @RequestMapping(value = "/selectlist", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public R selectlist(OrderEntity orderEntity, String orderBy){
+        orderEntity.setUserGuid(BaseContentHandler.getUserGuid());
+        if(StringUtil.isEmpty(BaseContentHandler.getUserGuid())){
+            return R.error(Content.STATUS_CODE_5004,"用户guid为空，请登录！");
+        }
+        return R.ok().putData(service.select(orderEntity,orderBy));
+    }
+
+
+    /**
+     * 查询个人订单是否已经购买
+     */
+    @RequestMapping(value = "/usertotal", method = {RequestMethod.POST,RequestMethod.GET})
+    @ResponseBody
+    public R userTotal(String goodsGuid){
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setUserGuid(BaseContentHandler.getUserGuid());
+        orderEntity.setGoodsGuid(goodsGuid);
+        return R.ok().putData(service.selectCount(orderEntity));
+    }
+
+
+    /**
+     * 绑定卡，回调需要记录绑定那个调数据guid
+     */
+    @RequestMapping(value = "/updatevipguid", method = {RequestMethod.POST})
+    @ResponseBody
+    public R updateVipGuid(@RequestBody OrderVipBean orderVipBean){
+        return service.updateVipGuid(orderVipBean);
+    }
+
+
+
+    /**
+     * 远程查询订单
+     */
+    @RequestMapping(value = "/selectOne", method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public R selectOneOrder(@RequestBody String guid){
+        return R.ok().putData(service.selectOneByGuid(guid));
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "/pagelist", method = { RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "分页查询数据列表", notes = "参数为对像的变量,如参数为对像的变量,如{page:1,limit:10}")
+    public R selectListPage(PageUtil<OrderEntity> page, OrderEntity entity) {
+        // 查询列表数据
+        page = service.selectListPage(page, entity);
+        return R.ok().putData(page.getList()).put("count", page.getCount());
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/querylist", method = { RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "数据列表", notes = "参数为对像的变量,如参数为对像的变量,如{page:1,limit:10}")
+    public R queryList(OrderEntity entity) {
+        List<OrderEntity> list = service.queryList(entity);
+        return R.ok().putData(list);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/businconfi", method = { RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "商家確定", notes = "参数为对像的变量,如参数为对像的变量,如{page:1,limit:10}")
+    public R businessConfirm(@RequestBody OrderEntity entity) {
+        return service.businessConfirm(entity);
+    }
+
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "/listByGuids", method = {RequestMethod.POST})
+    @ApiOperation(value = "根据数组Guid批量查询数据", notes = "参数为数组如[1,2,3,4]")
+    public R listByGuids(String[] guids) {
+        Example example = new Example(getClazz());
+        Example.Criteria criteria = example.createCriteria();
+        List<String> guidList = new ArrayList<String>(Arrays.asList(guids));
+        criteria.andIn("guid", guidList);
+        List<OrderEntity> list = service.selectByExample(example);
+        return R.ok().putData(list);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/cashwithdrawalorder", method = {RequestMethod.POST})
+    @ApiOperation(value = "用户创建提现待审核订单", notes = "提现金额，佣金guids")
+    public R cashWithdrawalOrder(Integer totalAmount,String[] commissionGuids) {
+        OrderEntity orderEntity = service.cashWithdrawalOrder(totalAmount,commissionGuids);
+        if(orderEntity == null){
+            return R.ok().putData(orderEntity);
+        }else{
+            return R.error(Content.STATUS_CODE_5007,"插入订单失败");
+        }
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "/cashwithdrawal", method = {RequestMethod.POST})
+    @ApiOperation(value = "后台审核通过佣金提现", notes = "订单guid")
+    public R cashWithdrawal(String guid) {
+        return service.cashWithdrawal(guid);
+    }
+
+
+
+    @ResponseBody
+    @RequestMapping(value = "/directlywithdrawal", method = {RequestMethod.POST})
+    @ApiOperation(value = "用户直接提现不需要审核", notes = "提现金额，佣金guids")
+    public R directlyWithdrawal(Integer totalAmount,String[] commissionGuids) {
+        OrderEntity orderEntity = service.directlyWithdrawal(totalAmount,commissionGuids);
+        if(orderEntity == null){
+            return R.ok().putData(orderEntity);
+        }else{
+            return R.error(Content.STATUS_CODE_5007,"插入订单失败");
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/callbackwithdrawal", method = {RequestMethod.POST})
+    @ApiOperation(value = "回调提现", notes = "回调提现，json")
+    public R callbackWithdrawal(@RequestBody String strJson) {
+        String orderGuid = service.callbackWithdrawal(strJson);
+        if(StringUtil.isEmpty(orderGuid)){
+            return R.ok().putData(orderGuid);
+        }else{
+            return R.error(Content.STATUS_CODE_5007,"提现失败");
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/listByGoodsGuid", method = {RequestMethod.POST})
+    @ApiOperation(value = "根据数组Guid批量查询数据", notes = "参数为数组如[1,2,3,4]")
+    public R listByGoodsGuid(String[] goodsGuids,String[] businConfis) {
+        Example example = new Example(getClazz());
+        Example.Criteria criteria = example.createCriteria();
+        List<String> guidList = new ArrayList<String>(Arrays.asList(goodsGuids));
+        criteria.andIn("goodsGuid", guidList);
+        criteria.andEqualTo("state",1);
+        if(businConfis != null && businConfis.length > 0){
+            List<String> businConfiList = new ArrayList<String>(Arrays.asList(businConfis));
+            criteria.andIn("businConfi", businConfiList);
+        }
+        example.orderBy("createTime").desc();
+        List<OrderEntity> list = service.selectByExample(example);
+        return R.ok().putData(list);
+    }
+
+
+    /**
+     * 远程查询订单扩展信息
+     */
+    @RequestMapping(value = "/selectOneExtend", method = {RequestMethod.GET,RequestMethod.POST})
+    @ResponseBody
+    public R selectOneExtend(@RequestBody String orderGuid){
+        return R.ok().putData(orderExtendService.selectOneByOrderGuid(orderGuid));
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/test", method = { RequestMethod.GET, RequestMethod.POST})
+    @ApiOperation(value = "test", notes = "参数为对像的变量,如参数为对像的变量,如{page:1,limit:10}")
+    public R test() {
+        cn.hutool.json.JSONObject accessTokenJson = new cn.hutool.json.JSONObject(wxRemote.getAccessToken());    //获取accessToken
+        String accessToken = accessTokenJson.getStr("data");
+        //设置消息模板
+        TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+        //根据具体模板参数组装
+        params.put("first", WechatTemplate.item("您的户外旅行活动订单已经支付完成，可在我的个人中心中查看", "#000000"));
+        params.put("keyword1", WechatTemplate.item("发现尼泊尔—人文与自然的旅行圣地", "#000000"));
+        params.put("keyword2", WechatTemplate.item("5000元", "#000000"));
+        params.put("keyword3", WechatTemplate.item("2019.09.04", "#000000"));
+        params.put("keyword4", WechatTemplate.item("5", "#000000"));
+        params.put("remark", WechatTemplate.item("请届时携带好身份证件准时到达集合地点，若临时退改将产生相应损失，敬请谅解,谢谢！", "#000000"));
+        WechatTemplate wechatTemplate = new WechatTemplate();
+        wechatTemplate.setTemplate_id("aRqjbTKbZc2Mc12n74YVSs1bIBFg_qrKLD-cKt7G3PY");
+        wechatTemplate.setTouser("oEHsgw76uxG_fp3-L0BuTAieCyGg");
+        wechatTemplate.setUrl("www.baidu.com");
+        wechatTemplate.setData(params);
+        String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+        return R.ok().putData(code);
+    }
+}

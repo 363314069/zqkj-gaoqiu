@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>卡管理</title>
+	<link rel="stylesheet" href="../../common/css/common.css">
+	<link rel="stylesheet" href="../../common/js/layui/css/layui.css">
+	<script src="../../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../../common/js/common.js"></script>
+<script src="js/vipcoupons_form.js"></script>
+</head>
+<body>
+<div class="wrap">
+<fieldset id="rrapp" class="layui-elem-field">
+	<legend></legend>
+	<form class="layui-form layui-elem-field-margin" lay-filter="form">
+		<input type="hidden" name="id">
+		<input type="hidden" name="guid">
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">机构GUID</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="organizationGuid" placeholder="机构GUID"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">名称</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="name" placeholder="名称"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">内容</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="content" placeholder="内容"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">回调url</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="callbackUrl" placeholder="回调url"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">开始时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="startTime" placeholder="开始时间" id="startTime" placeholder="yyyy-MM-dd"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">结束时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="endTime" placeholder="结束时间" id="endTime" placeholder="yyyy-MM-dd"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">购买起期限</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="term" placeholder="购买起期限"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">结束期限</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="termType" placeholder="结束期限">
+					<option value="1" selected="selected">统一结束期限（用EndTime计算）</option>
+					<option value="2">天（用EndTime计算）</option>
+					<option value="3">月（用EndTime计算）</option>
+					<option value="4">年（用EndTime计算）</option>
+				</select>
+			</div>
+		</div>
+
+
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">类型</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="type" placeholder="类型（卡的类型，通过参数表管理）"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">备注</label>
+			<div class="layui-input-block">
+				<textarea class="layui-textarea" name="remark" placeholder="备注"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-input-block">
+		    	<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+		    	<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>
+		    </div>
+		</div>
+	</form>
+</fieldset>
+</div>
+</body>
+</html>

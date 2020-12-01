@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title></title>
+	<link rel="stylesheet" href="../../common/css/common.css">
+	<link rel="stylesheet" href="../../common/js/layui/css/layui.css">
+	<script src="../../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../../common/js/common.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/ueditor.all.min.js"> </script>
+	<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+	<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/lang/zh-cn/zh-cn.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="../../common/js/ueditor1_4_3_3/ueditor.all.js"></script>
+<script src="js/couponsteatime_form.js"></script>
+</head>
+<body>
+<div class="wrap">
+<fieldset id="rrapp" class="layui-elem-field">
+	<legend></legend>
+	<form class="layui-form layui-elem-field-margin" lay-filter="form">
+		<input type="hidden" name="id">
+		<input type="hidden" name="guid">
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">球场</label>
+		   	<div class="layui-input-block">
+				<select name="reservationGuid" id="reservationGuid" lay-filter="reservationGuid">
+				</select>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">场地</label>
+		   	<div class="layui-input-block">
+				<select name="introductionGuid" id="introductionGuid" lay-filter="introductionGuid">
+				</select>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">商品名称</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="name" placeholder="商品名称" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">联系电话</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="phone" placeholder="联系电话" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-upload">
+			<label class="layui-form-label">图片</label>
+			<input type="file" accept="image/*" name="imgs" id="imgs" value="" >
+			<div class="layui-upload-list">
+				<img style="width: 100px;height: 100px" id="upload-normal-img">
+				<input type="hidden"  id="img" name="img" value="" />
+				<p id="test-upload-demoText"></p>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">原价</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="costPrice" placeholder="原价"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">当前价格</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="price" placeholder="当前价格" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">折扣</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="discount" placeholder="折扣"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">预定天数</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="days" placeholder="预定天数"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="type" placeholder="类型">
+					<option value="1" selected="selected">正常时段</option>
+					<option value="2" selected="selected">特惠时段</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">是否可以使用优惠</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="preferential" id="preferential" value="1" lay-filter="preferential" lay-skin="switch" lay-text="启用|禁用">
+			</div>
+		</div>
+		<div class="layui-form-item" id="couponsList" style="display: none">
+			<label class="layui-form-label">优惠券</label>
+			<div class="layui-input-block" id="coupons" name="coupons">
+
+			</div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">开始时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="startTime" id="startTime" lay-verify="required" placeholder="开始时间" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">结束时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="endTime" id="endTime" lay-verify="required" placeholder="结束时间" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item" id="timeJsons">
+			<label class="layui-form-label">时间段</label>
+			<div class="layui-input-block">
+				<button type="button" class="layui-btn layui-btn-normal layui-btn-radius formadd">+添加时间段</button>
+				<input type="hidden" name="timeJson" value=""></input>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">内容</label>
+			<div class="layui-input-block">
+				<script id="content" name="content" type="text/plain">
+				       这里写你的初始化内容
+				</script>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-input-block">
+		    	<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+		    	<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>
+		    </div>
+		</div>
+	</form>
+</fieldset>
+</div>
+</body>
+</html>

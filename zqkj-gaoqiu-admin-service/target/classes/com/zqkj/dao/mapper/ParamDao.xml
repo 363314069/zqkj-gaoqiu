@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.ParamDao">
+	<sql id="insert_field">
+		`ParentId`,`Guid`,`OrganizationGuid`,`Name`,`Key`,`Value`,`Type`,`Level`,`IndexId`,`IsParent`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_field">
+		`id`,`ParentId`,`Guid`,`OrganizationGuid`,`Name`,`Key`,`Value`,`Type`,`Level`,`IndexId`,`IsParent`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_list_field">
+		`id`,`ParentId`,`Guid`,`OrganizationGuid`,`Name`,`Key`,`Value`,`Type`,`Level`,`IndexId`,`IsParent`,`State`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`
+	</sql>
+	<sql id="where">
+			<if test="id != null">
+				and id = #{id}
+			</if>
+			<if test="parentId != null">
+				and ParentId = #{parentId}
+			</if>
+			<if test="guid != null">
+				and Guid = #{guid}
+			</if>
+			<if test="organizationGuid != null">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="name != null">
+				and Name = #{name}
+			</if>
+			<if test="key != null">
+				and Key = #{key}
+			</if>
+			<if test="value != null">
+				and Value = #{value}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="level != null">
+				and Level = #{level}
+			</if>
+			<if test="indexId != null">
+				and IndexId = #{indexId}
+			</if>
+			<if test="isParent != null">
+				and IsParent = #{isParent}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+</mapper>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>系统模块列管理</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="../common/css/common.css">
+	<link rel="stylesheet" href="../common/js/layui/css/layui.css">
+	<link rel="stylesheet" href="../common/js/yfplugin.css">
+	<link rel="stylesheet" href="../common/js/zTree_v3-3.5.33/css/zTreeStyle/zTreeStyle.css" />
+	<link rel="stylesheet" href="../common/fonts/font-yinfu/iconfont.css" />
+	<script src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.core.min.js" ></script>
+	<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.exedit.js"></script>
+	<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.excheck.js"></script>
+	<script src="../common/js/common.js"></script>
+	<script src="../common/js/yfplugin.js"></script>
+	<script src="assets/js/module.js"></script>
+	<style>
+		.wrap{height: calc(100% - 20px); box-sizing: border-box;}
+		.con{height: calc(100% - 40px); font-size: 0px;}
+		/*.ztree *,.ztree li{font-size: 16px; line-height: 26px;}
+		.ztree li a.curSelectedNode{height: 26px;}*/
+		.ztree li a:hover{text-decoration:none;}
+		.ztree li a:hover .node_name{text-decoration:underline;}
+		.ztree li a .btn{display: none; margin-left: 10px;}
+		.ztree li a .btn .iconfont{font-weight: bold; display: inline-block; height: 16px; width: 16px; line-height: 16px;}
+		.ztree li a .btn .add{background-color: #009688;}
+		.ztree li a .btn .edit{ }
+		.ztree li a .btn .remove{background-color: #FF5722;}
+		.ztree li a:hover .btn,.ztree li a.curSelectedNode .btn{display: inline;}
+		.ztree li span.button.type1_ico_docu{background: url(assets/img/api.svg) 0 0 no-repeat;background-size: contain;}
+		.ztree li span.button.type2_ico_docu{background: url(assets/img/web.svg) 0 0 no-repeat;background-size: contain;}
+		.ztree li span.button.type3_ico_docu{background: url(assets/img/btn.svg) 0 0 no-repeat;background-size: contain;}
+		.ztree li span.button.type4_ico_docu{background: url(assets/img/menu.svg) 0 0 no-repeat;background-size: contain;}
+		.con .right{width: 50%; display: inline-block;}
+		.form{display: none;}
+		.form .btn{text-align: center;}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<fieldset class="layui-elem-field layui-field-title">
+			<legend>系统模块列管理</legend>
+		</fieldset>
+		<div class="con">
+			<ul id="zTree" class="ztree left">
+				
+			</ul>
+		</div>
+	</div>
+	<div id="form" class="form">
+		<fieldset class="layui-elem-field layui-field-title">
+			<legend>系统模块列</legend>
+		</fieldset>
+		<form class="layui-form layui-elem-field-margin" lay-filter="form" enctype="multipart/form-data">
+			<input type="hidden" name="id">
+			<input type="hidden" name="guid">
+			<input type="hidden" name="parentId" />
+			<input type="hidden" name="indexId" />
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">父节点</label>
+			   	<div class="layui-input-inline">
+			    	<input type="text" class="layui-input" name="parentName" placeholder="父节点"/>
+			    </div>
+			</div>
+			<!--
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">组织机构GUID</label>
+			   	<div class="layui-input-inline">
+			      <select class="layui-input" name="organizationGuid"></select>
+			    </div>
+			</div>
+			-->
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">模块名称</label>
+			   	<div class="layui-input-inline">
+			      <input type="text" class="layui-input" name="name" placeholder="模块名称"/>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">模块连接</label>
+			   	<div class="layui-input-inline">
+			      <input type="text" class="layui-input" name="link" placeholder="模块连接"/>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">模块参数</label>
+			   	<div class="layui-input-inline">
+			      <input type="text" class="layui-input" name="param" placeholder="模块参数"/>
+			    </div>
+			</div>
+			<!--
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">模块图标</label>
+			   	<div class="layui-input-inline">
+			      <input type="file" name="file" placeholder="模块图标"/>
+			      <input type="hidden" name="moduleIcon">
+			    </div>
+			</div>
+			-->
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">模块排序</label>
+			   	<div class="layui-input-inline">
+			      <input type="text" class="layui-input" name="sort" placeholder="模块排序"/>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">模块类型</label>
+			   	<div class="layui-input-inline">
+			    	<select class="layui-input" name="type" placeholder="模块类型">
+			   			<option value="0" selected="selected">分类</option>
+			   			<option value="1">接口</option>
+			   			<option value="2">页面</option>
+			   			<option value="3">按扭</option>
+			   			<option value="4">菜单</option>
+			   		</select>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">状态</label>
+			   	<div class="layui-input-inline">
+			      <select class="layui-input" name="state">
+			   	  	<option value="0">关闭</option>
+			   	  	<option value="1" selected="selected">开启</option>
+			   	  </select>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			   	<label class="layui-form-label">备注</label>
+			   	<div class="layui-input-inline">
+			      <input type="text" class="layui-input" name="remark" placeholder="备注"/>
+			    </div>
+			</div>
+			<div class="layui-form-item">
+			    <div class="layui-input-block">
+			    	<a class="layui-btn" lay-submit="" lay-filter="save">立即提交</a>
+			    	<!--
+			    	<a class="layui-btn layui-btn-primary" id="back">返回</a>
+			    	-->
+			    </div>
+			</div>
+		</form>
+	</div>
+</body>
+</html>

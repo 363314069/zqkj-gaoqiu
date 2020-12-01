@@ -1,0 +1,227 @@
+<html>
+<head>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>订单进度</title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+		<!--script type="text/javascript" src="js/common.js"></script-->
+		<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default.css" rel="stylesheet" type="text/css">
+	</head>
+	<style type="text/css">
+		html, body, .wrap{height: 100%;}
+		
+		.head {
+			display: -webkit-flex;/* Safari */
+			display: flex;
+			justify-content:space-between;
+			width: 100%;
+			font-size: 0.36rem;
+		}
+		.head .iconfont{font-size: 0.36rem;}
+		.head > li{height: 0.88rem; color: #363636; line-height: 0.88rem; overflow: hidden;}
+		.head .c{flex: 1; text-align: center;}
+		.head .l{width: 1rem; text-align: left; padding-left: 0.2rem;}
+		.head .r{width: 1rem; text-align: right; padding-right: 0.2rem;}
+		
+		.progress{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+		}
+		.progress li{
+			text-align: center;
+			position: relative;
+			flex: 1;
+		}
+		.progress span{
+			margin: 0 auto;
+			display: block;
+			line-height: 0.4rem;
+			text-align: center;
+			font-size: 0.24rem;
+			color: #666;
+		}
+		.progress .sn{
+			background-color: #bbb;
+			color: #fff;
+			border-radius: 50%;
+			width: 0.4rem;
+			height: 0.4rem;
+			z-index: 1002;
+			position: relative;
+		}
+		.progress .line{
+			position: absolute;
+			left: 0;
+			width: 100%;
+			top: 0.2rem;
+			height: 0.2rem;
+			border-top: 0.02rem dashed #e7e7e7;
+			z-index: 1001;
+		}
+		.progress li:first-child .line{
+			left: 50%;
+			width: 50%;
+		}
+		.progress li:last-child .line{
+			left: 0%;
+			width: 50%;
+		}
+		
+		.progress .select span{color: #2d9de7;}
+		.progress .select .line{border-top: 0.02rem dashed #2d9de7;}
+		.progress .select .sn{background-color: #2d9de7; color: #fff;}
+	</style>
+</head>
+<body>
+	<div class="wrap">
+		<ul class="head">
+			<a href="javascript:history.go(-1);"><li class="l"><i class="iconfont">&#xe663;</i></li></a>
+			<li class="c">订单进度</li>
+			<li class="r"></li>
+		</ul>
+		<ul class="progress">
+			<li class="select1">
+				<span class="sn">1</span>
+				<span class="text">创建订单</span>
+				<span class="line"></span>
+			</li>
+			<li class="select2">
+				<span class="sn">2</span>
+				<span class="text">等待确认</span>
+				<span class="line"></span>
+			</li>
+			<li class="select3">
+				<span class="sn">3</span>
+				<span class="text">在线支付</span>
+				<span class="line"></span>
+			</li>
+			<li class="select4">
+				<span class="sn">4</span>
+				<span class="text">预定成功</span>
+				<span class="line"></span>
+			</li>
+		</ul>
+		<div style="line-height:1.0rem; margin:3.0rem 0 0 0; display: none " id="countMsg">
+			<p style="font-size: 0.5rem;">下单成功</p>
+			<span style="font-size: 0.3rem;">商家正在确认球位</span></br>
+			<span style="font-size: 0.3rem;">15分钟内商家以短信方式通知，支付后完成预定</span>
+		</div>
+		<div style="line-height:1.0rem; margin:3.0rem 0 0 0; display: none " id="payButton">
+			<button onclick="introductionSub()" style="border-radius: 0.5rem;background-color:#2d9de7;width: 5rem;font-size: 0.5rem;">立即支付</button>
+		</div>
+		<div style="line-height:1.0rem; margin:3.0rem 0 0 0; display: none " id="refuse">
+			<p style="font-size: 0.5rem;">商家已拒绝该订单</p>
+		</div>
+	</div>
+
+</body>
+</html>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/cookie/js.cookie.min.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+
+<link rel="stylesheet" href="../pay/css/weui.min.css">
+<link rel="stylesheet" href="../pay/css/pay.css">
+<link rel="stylesheet" href="../pay/css/wepayui.min.css">
+<link rel="stylesheet" href="../pay/css/jquery-weui.min.css">
+
+<script type="text/javascript" src="../pay/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../pay/layer/layer.js"></script>
+<script type="text/javascript" src="../pay/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript" src="../pay/js/common-pay.js"></script>
+<script type="text/javascript">
+	var orderGuid = getQueryString('guid');
+	$(function() {
+		setTimeout("changeDivStyle();", 100); // 0.1秒后展示结果，因为HTML加载顺序，先加载脚本+样式，再加载body内容。所以加个延时
+	});
+
+	function changeDivStyle(){
+		$.ajax({
+			type: "POST",
+			url: T.serverurl + "/pay/order/info",
+			headers: {token: T.token},
+			data:{guid:orderGuid},
+			success: function(r) {
+				if (r.code == 0) {
+					if(r.data.state == 0){
+						if(r.data.businConfi == 1){
+							$('.select1').addClass('select');
+							$("#countMsg").show();
+							$("#payButton").hide();
+							$('.select2').addClass('select');
+						}else if(r.data.businConfi == 2){
+							$('.select1').addClass('select');
+							$('.select2').addClass('select');
+							$('.select3').addClass('select');
+							$("#countMsg").hide();
+							$("#payButton").show();
+						}else if(r.data.businConfi == 3){
+							$("#countMsg").hide();
+							$("#payButton").hide();
+							$("#refuse").show();
+						}else if(r.data.businConfi == 4){
+							$('.select1').addClass('select');
+							$('.select2').addClass('select');
+							$('.select3').addClass('select');
+							$('.select4').addClass('select');
+						}
+					}else{
+						$('.select1').addClass('select');
+						$('.select2').addClass('select');
+						$('.select3').addClass('select');
+						$('.select4').addClass('select');
+					}
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+
+	function introductionSub() {
+		$.showLoading("正在加载...");
+		$.ajax({
+			type : "POST",
+			url : T.serverepay + "/pay/order/payintroductionorder",
+			headers : {token:T.token},
+			data : {orderGuid:orderGuid},
+			success : function(res) {
+				$.hideLoading();
+				if (res.code == 0) {
+					var data = $.parseJSON(res.msg);
+					if (typeof WeixinJSBridge == "undefined") {
+						if (document.addEventListener) {
+							document.addEventListener('WeixinJSBridgeReady',
+									onBridgeReady(data), false);
+						} else if (document.attachEvent) {
+							document.attachEvent('WeixinJSBridgeReady',
+									onBridgeReady(data));
+							document.attachEvent('onWeixinJSBridgeReady',
+									onBridgeReady(data));
+						}
+					} else {
+						onBridgeReady(data);
+					}
+				} else if (res.code == 500) {
+					alert("提交订单失败！请重试");
+				}else{
+					alert(res.msg);
+				}
+			}
+		});
+	}
+</script>

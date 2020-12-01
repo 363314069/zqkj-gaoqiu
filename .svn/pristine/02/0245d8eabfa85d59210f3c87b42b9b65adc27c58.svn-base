@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title></title>
+	<link rel="stylesheet" href="../../common/css/common.css">
+	<link rel="stylesheet" href="../../common/js/layui/css/layui.css">
+	<script src="../../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../../common/js/layui/layui.all.js"></script>
+	<script src="../../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../../common/js/common.js"></script>
+<script src="js/coupons_form.js"></script>
+</head>
+<body>
+<div class="wrap">
+<fieldset id="rrapp" class="layui-elem-field">
+	<legend></legend>
+	<form class="layui-form layui-elem-field-margin" lay-filter="form">
+		<input type="hidden" name="id">
+		<input type="hidden" name="guid">
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">名称</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="name" placeholder="名称" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">面值金额</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="faceValue" placeholder="面值金额" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">满多少可以使用</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="moneyConform" placeholder="满多少可以使用" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item" style="display: none">
+		   	<label class="layui-form-label">面值折扣</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="faceValueDiscount" placeholder="面值折扣" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">开始时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="startTime" id="startTime" placeholder="开始时间" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">结束时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="endTime" id="endTime" placeholder="结束时间" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">使用规则</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="useRules" placeholder="使用规则" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">价格</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="price" placeholder="价格"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">使用类型</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="useType" placeholder="使用类型">
+					<option value="0" selected="selected">不可叠加</option>
+					<option value="1">可叠加</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="type" placeholder="类型">
+					<option value="1" selected="selected">默认类型</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+			</div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">发布数量</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="seleaseNumber" placeholder="发布数量" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">限购数量</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="receiveAmount" placeholder="领取量" autocomplete="off"/>
+		    </div>
+		</div>
+		<div class="layui-form-item" style="display: none">
+		   	<label class="layui-form-label">购买起期限</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="term" placeholder="购买起期限" autocomplete="off"/>
+		    </div>
+		</div>
+
+		<div class="layui-form-item" style="display: none">
+			<label class="layui-form-label">结束期限</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="termType" placeholder="结束期限">
+					<option value="1" selected="selected">统一结束期限（用EndTime计算）</option>
+					<option value="2">天（Term表示天数）</option>
+					<option value="3">月（Term表示月数）</option>
+					<option value="4">年（Term表示年数）</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">使用范围</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="scope" placeholder="使用范围" lay-filter="scope" id="scope">
+					<option value="1" selected="selected">全品类</option>
+					<option value="2">指定商品</option>
+					<!-- 选择3 加载全部商家   选择4 加载全部商家选择商家后加载商家商品 -->
+					<option value="3">指定商家全品类</option>
+					<option value="4">指定商家指定商品</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="layui-form-item" id="organizationList" style="display: none">
+			<label class="layui-form-label">选择商家</label>
+			<div class="layui-input-block" id="organizationArray">
+
+			</div>
+		</div>
+
+
+		<div class="layui-form-item">
+		    <div class="layui-input-block">
+		    	<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+		    	<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>
+		    </div>
+		</div>
+	</form>
+</fieldset>
+</div>
+</body>
+</html>

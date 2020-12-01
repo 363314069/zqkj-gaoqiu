@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.UserDao">
+  <sql id="insert_field">
+    `GUID`,`AppId`,`OpenId`,`LoginName`,`LoginPassword`,`OrganizationGUID`,`UserGroupGUID`,`Name`,`Token`,`Address`,`Contacts`,`Phone`,`InitPhone`,`Mail`,`WeChat`,`QQCode`,`Type`,`State`,`Image`,`Gap`,`InviteSum`,`ReservationGuid`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+  </sql>
+  <sql id="query_field">
+    `ID`,`GUID`,`AppId`,`OpenId`,`LoginName`,`LoginPassword`,`OrganizationGUID`,`UserGroupGUID`,`Name`,`Token`,`Address`,`Contacts`,`Phone`,`InitPhone`,`Mail`,`WeChat`,`QQCode`,`Type`,`State`,`Image`,`Gap`,`InviteSum`,`ReservationGuid`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+  </sql>
+  <sql id="query_list_field">
+    usertab.`ID`,usertab.`GUID`,usertab.`AppId`,usertab.`OpenId`,usertab.`LoginName`,usertab.`LoginPassword`,usertab.`OrganizationGUID`,usertab.`UserGroupGUID`,usertab.`Name`,usertab.`Token`,usertab.`Address`,usertab.`Contacts`,usertab.`Phone`,usertab.`InitPhone`,usertab.`Mail`,usertab.`WeChat`,usertab.`QQCode`,usertab.`Type`,usertab.`State`,usertab.`Creator`,usertab.`Image`,usertab.`Gap`,usertab.`InviteSum`,usertab.`ReservationGuid`,usertab.`CreateTime`,usertab.`CheckUser`,usertab.`CheckTime`
+  </sql>
+  <sql id="where">
+    <if test="id != null">
+      and ID = #{id}
+    </if>
+    <if test="guid != null">
+      and GUID = #{guid}
+    </if>
+    <if test="appId != null">
+      and AppId = #{appId}
+    </if>
+    <if test="openid != null">
+      and OpenId = #{openid}
+    </if>
+    <if test="loginName != null">
+      and LoginName = #{loginName}
+    </if>
+    <if test="loginPassword != null">
+      and LoginPassword = #{loginPassword}
+    </if>
+    <if test="organizationGuid != null">
+      and OrganizationGuid = #{organizationGuid}
+    </if>
+    <if test="userGroupGuid != null">
+      and UserGroupGuid = #{userGroupGuid}
+    </if>
+    <if test="name != null and name != ''">
+      and Name LIKE CONCAT(CONCAT('%',#{name},'%'))
+    </if>
+    <if test="token != null">
+      and Token = #{token}
+    </if>
+    <if test="address != null">
+      and Address = #{address}
+    </if>
+    <if test="contacts != null">
+      and Contacts = #{contacts}
+    </if>
+    <if test="phone != null and phone != ''">
+      and Phone = #{phone}
+    </if>
+    <if test="initPhone != null">
+      and InitPhone = #{initPhone}
+    </if>
+    <if test="mail != null">
+      and Mail = #{mail}
+    </if>
+    <if test="weChat != null">
+      and WeChat = #{weChat}
+    </if>
+    <if test="qqCode != null">
+      and QQCode = #{qqCode}
+    </if>
+    <if test="type != null">
+      and Type = #{type}
+    </if>
+    <if test="state != null">
+      and State = #{state}
+    </if>
+    <if test="image != null">
+      and Image = #{image}
+    </if>
+    <if test="gap != null">
+      and Gap = #{gap}
+    </if>
+    <if test="inviteSum != null">
+      and InviteSum = #{inviteSum}
+    </if>
+    <if test="reservationGuid != null">
+      and ReservationGuid = #{reservationGuid}
+    </if>
+    <if test="creator != null">
+      and Creator = #{creator}
+    </if>
+    <if test="createTime != null">
+      and CreateTime = #{createTime}
+    </if>
+    <if test="checkUser != null">
+      and CheckUser = #{checkUser}
+    </if>
+    <if test="checkTime != null">
+      and CheckTime = #{checkTime}
+    </if>
+  </sql>
+  
+  <select id="selectListBySourceGuid" resultType="userEntity">
+    select
+    <include refid="query_list_field" />
+    from usermaptab
+    LEFT JOIN usertab ON usertab.GUID =
+    usermaptab.UserGuid
+    <where>
+      <if test="sourceGuid != null">
+        and usermaptab.SourceGuid = #{sourceGuid}
+      </if>
+      <if test="type != null">
+        and usermaptab.Type = #{type}
+      </if>
+      <if test="userGroupGuid != null">
+        and UserGroupGuid = #{userGroupGuid}
+      </if>
+    </where>
+  </select>
+  
+  <select id="selectListNotBySourceGuid" resultType="userEntity">
+    select
+    <include refid="query_list_field" />
+    from usertab
+    <where>
+      guid not in(select userguid from usermaptab
+      <where>
+        <if test="sourceGuid != null">
+          and usermaptab.SourceGuid = #{sourceGuid}
+        </if>
+        <if test="type != null">
+          and usermaptab.Type = #{type}
+        </if>
+      </where>
+      )
+      <if test="userGroupGuid != null">
+        and UserGroupGuid = #{userGroupGuid}
+      </if>
+    </where>
+  </select>
+
+  <select id="selectListPage" resultType="userEntity" parameterType="java.util.Map">
+    select
+    <include refid="query_field"/>
+    from usertab
+    <where>
+      <include refid="where" />
+    </where>
+    <!--<if test="page != null and limit != null">
+        limit ${page}, ${limit}
+    </if>-->
+  </select>
+
+  <select id="selectListPageCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select
+    COUNT(id)
+    from usertab
+    <where>
+      <include refid="where" />
+    </where>
+  </select>
+
+</mapper>

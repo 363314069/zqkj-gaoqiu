@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta content="telephone=no" name="format-detection">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+	<title>九洲高尔夫</title>
+	<script type="text/javascript" src="js/flexible.js"></script>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+	<script type="text/javascript" src="js/common.js"></script>
+	<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+	<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+	<script type="text/javascript" src="js/svg-inject-1.2.3/svg-inject.min.js"></script>
+	<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+	<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link href="css/default.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="js/H5_activity_info.js?v=0.06" ></script>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+	<script src="js/coordtransform.js"></script>
+	<script src="js/wx_api.js?v=6"></script>
+    <style>
+		html, body{ background-color: transparent; overflow: hidden;}
+		.wrap{padding-top: 0; overflow: auto; padding-bottom: 1rem;}
+		.wrap img{
+			max-width: 100%;
+			
+		}
+        .head1{
+			position: relative;
+			background-color: none;
+			max-height: 5rem;
+			overflow: hidden;
+		}
+		.head1 img{width: 100%;}
+		.head1 .back{
+			display: block;
+			position: fixed;
+			top: .2rem;
+			left: .2rem;
+			width: .88rem;
+			height: .88rem;
+			border-radius: 50%;
+			line-height: .88rem;
+			color: #fff;
+			background-color: rgba(0,0,0,0.5);
+		}
+		.head1 .content{
+			display: block;
+			position: absolute;
+			right: .5rem;
+			bottom: .2rem;
+			text-align: left;
+			padding: .1rem .3rem;
+			font-size: .28rem;
+			color: #ffffff;
+			font-weight: bold;
+		}
+		.head1 .content::before{
+			position: absolute;
+			left: 0;
+			top: 0;
+			content: '';
+			display: block;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			background-color: #ff9531cc;
+			transform:skewX(-30deg);
+			-webkit-transform:skewX(-30deg);  /*兼容-webkit-引擎浏览器*/
+			-moz-transform:skewX(-30deg);/*兼容-moz-引擎浏览器*/
+		}
+		.head1 .content div{
+			position: relative;
+			z-index: 2;
+		}
+		.head1 .content div:nth-child(2){
+			font-size: .24rem;
+		}
+
+		.title{
+			text-align: left;
+			font-size: .36rem;
+			font-weight: bold;
+			padding: .2rem .4rem;
+			line-height: .6rem;
+		}
+		.title .sprice{
+			font-size: .24rem;
+			color: #999;
+		}
+		.title #price{
+			color: #ff9531;
+			font-size: .36rem;
+		}
+		.introduce{padding: .2rem;}
+		#buy_nav{
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background-color: #FFFFFF;
+			height: 1rem;
+			text-align: left;
+			font-size: 0;
+		}
+		#buy_nav .call{
+			display: inline-block;
+			width: 1.8rem;
+			text-align: center;
+		}
+		#buy_nav .call span{
+			display: block;
+			font-size: .24rem;
+			color: #999999;
+		}
+		#buy_nav .call span:nth-child(1) svg {
+			height: .6rem; 
+			width: .6rem;
+			fill: #999999;
+		}
+		#buy_nav .cur{
+			display: inline-block;
+			width: calc(100% - 1.8rem);
+			text-align: center;
+			height: 1rem;
+			line-height: 1rem;
+			background: #ff9531;
+			font-size: .32rem;
+			vertical-align: top;
+			color: #ffffff;
+		}
+		.box{display: none;}
+		.layui-m-layercont{padding: .2rem;}
+		.form{display: block; max-height: 6rem; overflow-y: auto; text-align: left;}
+		.form input{border: transparent; border-bottom: 1px solid #999999; background-color: transparent;}
+		.form .items span{position: relative; margin-left: .2rem; display: inline-block;}
+		.form .items .name input{width: 1.8rem; padding-left: .36rem;}
+		.form .items .phoe input{width: 2.5rem; padding-left: .36rem;}
+		.form .items .chad input{width: 1.5rem; padding-left: .36rem;}
+		.form .items .code input{width: 1.2rem; padding-left: .36rem;}
+		.form .items span::before{
+			font-size: .32rem;
+			font-family: "iconfont" !important;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+		.form .items .name::before{content: '\e66b';}
+		.form .items .phoe::before{content: '\e69b';}
+		.form .items .chad::before{content: '\e6a3';}
+		.form .items .code::before{content: '\e638';}
+		.form .items div{padding: .1rem;}
+		.form .items li{margin: .2rem 0; text-align: left; border: 1px solid #eeeeee;}
+		.form .items li:nth-child(1) .remove{display: none;}
+		.form .items li .remove{
+			width: .4rem;
+			height: .4rem;
+			background-color: #FF0000;
+			line-height: .4rem;
+			color: #ffffff;
+			border-radius: 50%;
+			text-align: center;
+			font-size: .36rem;
+			font-weight: bold;
+		}
+		.form #remark{width: calc(100% - .1rem); height: 2rem;}
+		#add{line-height: 1rem; background-color: #cccccc; color: #fffFFF; margin: .1rem 0; text-align: center; font-size: 1rem;}
+
+		.time {
+			background-color: #fdf4f5;
+			width: 100%;
+			padding: 0 10px;
+			margin-bottom: 10px;
+		}
+		.time .date {
+			height: 40px;
+			line-height: 40px;
+			border-bottom: 1px solid #eee;
+		}
+		.time .date img {
+			width: 25px;
+			float: left;
+			margin: 5px 10px 0 0;
+		}
+		.time .date p {
+			float: left;
+			color: #ff9531;
+			font-size: 14px;
+		}
+		.clear {
+			clear: both;
+		}
+		.tishi{color: #FF0000;}
+    </style>
+<body>
+<div class="wrap">
+    <div class="head1">
+		<img id="activityImg" src="http://wap.oneagles.com/\upload\img\20200424\7138020f-b7d8-4d5c-8e58-1b9e383f56e5.jpg">
+        <a class="back" href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a>
+        <div class="content">
+			<!--<div>正在抢购</div>-->
+			<div>
+				<span class="l">报名活动截止时间:</span>
+				<span id="clock">00 天 00:00:00</span>
+			</div>
+        </div>
+    </div>
+    <div  class="title">
+        <label id="nameLabel"></label>
+        <!--<div class="sprice">
+            嘉宾价：<font id="originalPrice"></font>
+        </div>-->
+		<div class="sprice">
+			活动价：<font id="price"></font>
+		</div>
+    </div>
+    <div class="time">
+		<div class="date">
+			<img src="images/time.png">
+			<p id="date"></p>
+			<div class="clear"></div>
+		</div>
+		<!--<div class="date">
+            <img src="images/time.png">
+            <p id="startTime"></p>
+            <div class="clear"></div>
+        </div>
+        <div class="date">
+            <img src="images/time.png">
+            <p id="endTime"></p>
+            <div class="clear"></div>
+        </div>
+        <ul>
+            <li class="phone">
+                <p>咨询电话：<span id="consultphone"></span></p>
+            </li>
+        </ul>-->
+    </div>
+    <div class="introduce">
+        <div class="detail">
+            <!--<label>度假卡权益: </label>-->
+            <div class="clear"></div>
+            <div class="con">
+
+            </div>
+        </div>
+    </div>
+    <!-----------加入购物车/购买----------->
+    <div id="buy_nav">
+        <a class="call" href="#"> 
+			<span><img src="images/svg/phone.svg" onload="SVGInject(this)"/></span>
+            <span>电话咨询</span>
+        </a>
+        <!--<a class="cur" href="#" onclick="applyTo()">立即抢购</a>-->
+    </div>
+</div>
+
+<!-- 弹出层   start -->
+<div class="box" id="dialog">
+	<form id="ajaxForm" class="form">
+		<ul id="countUl">
+			<li>
+				<ul id="items" class="items">
+					<li>
+						<div>
+							<span class="name"><input type="text" name="name" id="defaultName" placeholder="姓名"></span>
+							<span class="phoe"><input type="text" name="phoe" id="defaultPhone" placeholder="手机"></span>
+						</div>
+						<div>
+							<span class="chad"><input type="text" name="chad" id="defaultChad" placeholder="差点"></span>
+							<!--<span class="radio"><input type="radio" name="type0" value="1" checked="checked">嘉宾</span>-->
+							<span class="radio" style="display: none"><input type="radio" name="type0" value="2" checked="checked">会员</span>
+							<span class="remove iconfont">&#xe60d;</span>
+						</div>
+					</li>
+				</ul>
+				
+			</li>
+			<li id="add">
+				<span>+</span>
+			</li>
+			<li>
+				<textarea id="remark" placeholder="其他需求..."></textarea>
+			</li>
+			<li id="codeLi" style="display: none">
+				<p class="tishi">您是新用户，请完善以下信息</p>
+				<ul class="items">
+					<li>
+						<div>
+							<span class="name"><input type="text" id="nameUser" class="name" placeholder="姓名"></span>
+							<span class="phoe"><input type="text" id="phoeUser" class="phoe" placeholder="手机"></span>
+						</div>
+						<div>
+							<span class="chad"><input type="text" id="chadUser" class="chad" placeholder="差点"></span>
+							<span class="code"><input type="text" name="" class="code" id="code" placeholder="验证码"></span>
+							<!--<input type="button" value="获取验证码" class="verify">-->
+							<span onclick="authCodeActivity()" id="dynamic" class="verify">获取验证码</span>
+						</div>
+
+					</li>
+				</ul>
+			</li>
+			<li>
+				<label for="">人数 :</label><input type="text" value="1" class="num">
+			</li>
+			<li>
+				金额 :￥<span data-price="" id="data-price"></span>
+			</li>
+		</ul>
+	</form>
+</div>
+<!-- 弹出层   end -->
+</body>
+ </html>
+<script type="text/javascript" src="js/jquery.countdown.min.js"></script>
+<script type="text/javascript" src="../pay/js/common-pay.js?v=1"></script>
+<script type="text/javascript">
+    footer.hide();//关闭下面导航
+    //弹出层   start
+	var openbox = function(){
+		layer.open({
+			title: [
+			'活动报名',
+			'background-color:#8DCE16; color:#fff;'
+			]
+			,shadeClose:false
+			,anim: 'up'
+			,content: '<div id="window-box"></div>'
+			,btn: ['确认', '取消']
+			,yes: function(index){
+				$("#dialog").append($("#window-box").children("form"));
+				layer.close(index);
+				submitUser();
+			}
+			,no: function(index){
+				$("#dialog").append($("#window-box").children("form"));
+				layer.close(index);
+				return;
+			}
+		});
+		$("#window-box").append($("#dialog").children("form"));
+		submitOrdersInfo();//判断手机号是否为空不为空展示出注册框
+	}
+    $(function(){
+		$("#buy_nav").click(function(){
+			openbox();
+		});
+		$("#items").find("input:radio").click(function(event){
+			countprice();
+		});
+		$("#add").click(function(){
+			var sum = $("#items").children().length;
+		    var scrollTop = $(".form").scrollTop();
+			var height = $("#countUl").height();
+			var item = $("#items").children().eq(0);
+			var li = $("<li>");
+			li.html(item.html());
+			li.find("input").val('');
+			li.find("input").attr('disabled', false);
+			li.find("input:radio").attr("name", "type" + sum);
+			//li.find("input:radio").eq(0).val(1);
+			//li.find("input:radio").eq(1).val(2);
+			li.find("input:radio").eq(0).val(2);
+			li.find(".remove").click(function(){
+				li.remove();
+				$("#items").find("li").each(function(){
+					 $(this).find("input:radio").attr("name", "type" + $(this).index());
+				})
+				countprice();
+			})
+			li.find("input:radio").click(function(event){
+				countprice();
+			});
+            var num = $("#items").children().length;
+		    if(!isNull(buyNumber) || buyNumber == 0){
+				$("#items").append(li);
+		    } else {
+		        if (num < buyNumber) {
+					$("#items").append(li);
+		        } else {
+		            alert("该商品限购" + buyNumber + "个");
+		        }
+		    }
+			//设置滚动条位置
+			//$(".form").scrollTop(scrollTop + $("#countUl").height() -height);
+			countprice();
+		})
+		var countprice = function(){
+			//var price = parseFloat($(".price").find('span').data('price')) * 100;
+			var priceCount = 0;
+			$("#items").find("li").each(function(){
+				var type = $(this).find("input:checked").val();
+				if(type == 2){
+					priceCount += vipPrice;
+				}else{
+					priceCount += originalPrice;
+				}
+			})
+			var sum = $("#items").children().length;
+			$('.num').val(sum);
+			var all = parseFloat(priceCount / 100);
+			$('.price').find('span').text(all);
+			$("#data-price").text(all);
+		}
+    });
+	
+</script>

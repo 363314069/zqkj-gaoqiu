@@ -1,0 +1,173 @@
+<html style="font-size: 58.5938px;"><head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="description" content="佣金明细">
+    <meta name="keywords" content="佣金明细">
+    <title>佣金明细</title>
+    <link rel="stylesheet" type="text/css" href="css/shopcar.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+	<script type="text/javascript" src="js/common.js"></script>
+</head>
+<body>
+	<div class="fix_head">
+		<a href="javascript:history.go(-1);" class="back">
+			<img src="images/back.jpg">
+		</a>
+		<p>佣金明细</p>
+	</div>
+	<div class="sc_h"></div>
+	<div id="list">
+
+	</div>
+
+	<div class="fix_bottom">
+		<div id="qx" data="0"></div><span style="float:left;line-height:0.8rem;">全选</span>
+		<div class="zjq">
+		<p class="p1">合计:￥
+		<span id="zj">0</span>
+		</p>
+		</div>
+		<a id="js" href="javascript:cashWithdrawal()">提现</a>
+	</div>
+	<script type="text/javascript">
+		$(function(){
+			$(".xz").click(function(){
+				var a = $(this).attr("data");
+				if (a==0) {
+					$(this).css("background-image","url(images/check_on.jpg)");
+					$(this).attr("data",1)
+				}else{
+					$(this).css("background-image","url(images/check.jpg)");
+					$(this).attr("data",0)
+					$("#qx").attr("data",0);
+					$("#qx").css("background-image","url(images/check.jpg)");
+				}
+				js();				
+				
+			});
+
+			$("#qx").click(function(){
+				var a = $(this).attr("data");
+				if (a==0) {
+					$(".xz").attr("data",1);
+				$(this).css("background-image","url(images/check_on.jpg)");
+				$(".xz").css("background-image","url(images/check_on.jpg)");
+				$(this).attr("data",1);
+				}else{
+					$(".xz").attr("data",0);
+				$(this).css("background-image","url(images/check.jpg)");
+				$(".xz").css("background-image","url(images/check.jpg)");
+					$(this).attr("data",0);
+				}
+				js();
+			});
+
+			 function js(){
+				var num=0;
+				$(".xz").each(function(){
+					if ($(this).attr("data")==1) {
+						var jg = $(this).parent().next().next().find(".pri").text();
+		    			num+=parseFloat(jg);
+					}
+				});
+		  		$('#zj').html(num);
+			}
+		});
+
+
+
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/integral/commission/list",
+			headers : {token:T.token},
+			data : {"creator":T.usermsg.guid,"orderBy":"createTime desc"},
+			async:false,
+			success : function(r) {
+				if (r.code == 0) {
+					var orderGuid = new Array();
+					$.each(r.data,function (i, obj) {
+						if(obj.state == 0){
+							$("#list").append('<div class="lb"><div class="check"><div class="xz" data="0" style="background-image: url(&quot;images/check.jpg&quot;);"></div></div><div class="mid">' +
+									'<p class="name" id="'+obj.sourceGuid+'"></p><input type="hidden" class="guid" guid="'+obj.guid+'">' +
+									'<p class="color">产生时间:'+obj.createTime+'</p>' +
+									'</div><div class="jgq"><div class="price"><p>￥<span class="pri">'+obj.integral/100+'</span></p></div></div></div>');
+						}else if(obj.state == 1){
+							$("#list").append('<div class="lb"><div class="check"></div><div class="mid">' +
+									'<p class="name" id="'+obj.sourceGuid+'"></p><input type="hidden" class="guid" guid="'+obj.guid+'">' +
+									'<p class="color">产生时间:'+obj.createTime+'</p>' +
+									'<p class="color" style="color: #ee3348">提现审核中</p>' +
+									'</div><div class="jgq"><div class="price"><p>￥<span class="pri">'+obj.integral/100+'</span></p></div></div></div>');
+						}else if(obj.state == 2){
+							$("#list").append('<div class="lb"><div class="check"></div><div class="mid">' +
+									'<p class="name" id="'+obj.sourceGuid+'"></p><input type="hidden" class="guid" guid="'+obj.guid+'">' +
+									'<p class="color">产生时间:'+obj.createTime+'</p>' +
+									'<p class="color" style="color: green">提现成功</p>' +
+									'</div><div class="jgq"><div class="price"><p>￥<span class="pri">'+obj.integral/100+'</span></p></div></div></div>');
+						}
+						orderGuid.push(obj.sourceGuid);
+					});
+					$.ajax({
+						type: 'POST',
+						traditional: true,
+						headers : {token:T.token},
+						url: T.serverurl + "/pay/order/listByGuids",
+						data : {"guids":orderGuid},
+						async:false,
+						success : function(res) {
+							if (res.code == 0) {
+								$.each(res.data, function(j, resobj){
+									$("#"+resobj.guid).html(resobj.name);
+								});
+							}
+						}
+					});
+				}
+			}
+		});
+
+		//提现
+		function cashWithdrawal() {
+			var zj = $('#zj').html();
+			if(zj > 0){
+				var commissionGuids = new Array();
+				$(".xz").each(function(){
+					if ($(this).attr("data")==1) {
+						var guid = $(this).parent().next().find(".guid").attr("guid");
+						commissionGuids.push(guid);
+					}
+				});
+				if(zj < 1 && zj > 200){
+					alert("提现金额范围在1~200元之间");
+					return false;
+				}else{
+					if (confirm("确认提现"+zj+"元吗？")) {
+						$.ajax({
+							type: 'POST',
+							traditional: true,
+							headers : {token:T.token},
+							url: T.serverurl + "/pay/order/directlywithdrawal",
+							data : {"totalAmount":zj*100,"commissionGuids":commissionGuids},
+							async:false,
+							success : function(res) {
+								if (res.code == 0) {
+									//alert("已提交，审核通过后以公众号红包形式发放，请关注九洲高尔夫公众号");
+									alert("提现成功，请在公众号中领取红包！");
+									window.location.reload();
+								}else{
+									alert(res.msg);
+								}
+							}
+						});
+					}
+				}
+			}else{
+				alert("提现金额不能为0");
+			}
+		}
+	</script>
+
+</body></html>

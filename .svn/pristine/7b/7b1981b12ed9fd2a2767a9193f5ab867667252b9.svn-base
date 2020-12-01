@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>我的</title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="js/common.js?v=0.01"></script>
+		<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default.css" rel="stylesheet" type="text/css">
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<script src="js/coordtransform.js"></script>
+		<script src="js/wx_api.js?v=6"></script>
+		<!--
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=Eo0EMvydXBWKhzAX40eUjN7eOIx0ISxV"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=E7JBZ-5UO3R-NIJWJ-WXGP5-P2R5V-IKFZY"></script>
+		-->
+	</head>
+	<style>
+		body{background-color: #00a964; font-size: .32rem;}
+		ul.footer{border: none; background-color: #00a964;}
+		ul.footer .iconfont, ul.footer a{color: #fff;}
+		ul.footer .select .iconfont, ul.footer .select a{ color: #fff;}
+		.wrap{
+			border-radius: 0 0 1rem 1rem;
+			height: calc(100% - .2rem);
+			overflow-y:auto; 
+			text-align: left;
+			font-size: .32rem;
+		}
+
+		.my-head {	
+			color: #fff;
+			position: relative;
+		}
+		.my-head::after{
+			content: '';
+			display: block;
+			position: absolute;
+			bottom: -.6rem;
+			left: 0;
+			width: 100%;
+			height: 1.8rem;
+			border-radius: 25% 25% 0 0;
+			background-color: #fff;
+			z-index: 0;
+		}
+		.my-head li:nth-child(1) div{
+			display: inline-block;
+			text-align: left;
+		}
+		.my-head .my-head-img{
+			background: url(images/beautiful_02.jpg);
+			background-size: cover;
+			width: 1.28rem;
+			height: 1.28rem;
+			border-radius: 50%;
+			margin: .2rem .3rem .2rem .5rem;
+		}
+		.my-head .my-head-msg{
+			padding-top: .5rem;
+			display: inline-block;
+			vertical-align: top;
+			
+		}
+		.my-head .my-head-msg span{
+			display: block;
+		}
+		
+		.my-head li:nth-child(2){
+			position: relative;
+			z-index: 999;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			margin: .2rem .5rem;
+			background-color: #282c35;
+			border-radius: .2rem;
+			padding: .3rem 0;
+		}
+		.my-head li:nth-child(2) a{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			display: block;
+			color: #fff;
+			font-size: .36rem;
+			line-height: .6rem;
+		}
+		.my-head li:nth-child(2) a span{
+			display: block;
+			text-align: center;
+		}
+		.my-head li:nth-child(2) a span:nth-child(2){
+			font-weight: 100;
+			font-size: .28rem;
+		}
+		.list{
+			background-color: #fff;
+			min-height: 100%;
+		}
+		.list > li{
+			padding: .2rem .5rem;
+			border-bottom: 1px solid #F1F1F1;
+		}
+		
+		.list > li a{
+			display: block;
+			position: relative;
+		}
+		.list > li a::after{
+			content: "\e662";
+			font-family: "iconfont" !important;
+			font-size: .28rem;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			position:absolute;
+			right: 0;
+			top: 0;
+		}
+		.head{
+			background-color: transparent;
+		}
+
+		/*添加邀请码css   start*/
+		.userImg{
+			width: .4rem;
+			height: .4rem;
+		}
+		.in-cen{
+			position: fixed;
+			z-index: 999;
+			left: 0px;
+			top: 0px;
+			right: 0px;
+			background: rgba(0, 0, 0, 0.7);
+			display: none;
+			width: 100%;
+			height: 100%;
+			text-align: center;
+		}
+		.in-pop {
+			left: 0;
+			top: 12%;
+			z-index: 9999;
+			display: none;
+			width: 80%;
+			height: auto;
+			margin: 0 10%;
+			text-align: right;
+			position: fixed !important;
+			background-size: cover;
+			border-radius: 5px;
+		}
+		.in-pop-box {
+			padding: 30px 0;
+		}
+		.in-pop-head {
+			width: 90px;
+			height: 90px;
+			margin: 0 auto;
+		}
+		.in-pop-head img {
+			width: 100%;
+			height: 100%;
+			display: block;
+			border-radius: 50%;
+			border: 2px solid #fff;
+		}
+		.in-pop-code {
+			width: 190px;
+			height: 190px;
+			margin: 0 auto;
+		}
+		.in-pop-code img {
+			width: 100%;
+			height: 100%;
+			display: block;
+			border: none;
+		}
+		.in-pop a {
+			width: 30px;
+			height: 30px;
+			display: block;
+			position: absolute;
+			right: -14px;
+			top: -14px;
+		}
+		.in-pop a img {
+			width: 100%;
+			height: 100%;
+			display: block;
+			border: none;
+		}
+		.in-pop-text {
+			background: rgba(0,0,0,0.4);
+			position: absolute;
+		; bottom: 0;
+			width: 100%;
+			text-align: center;
+			padding: 10px 0;
+		}
+		.in-pop-text p {
+			color: #fff;
+			font-size: 14px;
+		}
+		.in-pop-text {
+			background: rgba(0,0,0,0.4);
+			position: absolute;
+		; bottom: 0;
+			width: 100%;
+			text-align: center;
+			padding: 10px 0;
+		}
+		.in-pop-text p {
+			color: #fff;
+			font-size: 14px;
+		}
+		.in-self-info{
+			height:430px;
+		}
+		@media (device-height:480px) and (-webkit-min-device-pixel-ratio:2){/* iphone4/4s */
+			.in-self-info{
+				height:432px;
+			}
+		}
+		@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2){/* iphone5/5s */
+			.in-self-info{
+				height:360px;
+			}
+		}
+		@media (device-height:667px) and (-webkit-min-device-pixel-ratio:2){/* iphone6/6s */
+			.in-self-info{
+				height:430px;
+			}
+		}
+		@media (device-height: 736px) and (-webkit-min-device-pixel-ratio:2) { /* iphone6/6s Plus */
+			#in-self {
+				width: 100%;
+				height: 320px;
+			}
+			.in-pop-box {
+				padding: 30px 0 50px 0;
+			}
+			.in-self-info{
+				height:465px;
+			}
+		}
+		/*添加邀请码css   end*/
+	</style>
+	<body>
+		<div class="wrap">
+			<ul class="head">
+				<li class="l"><a id="back" href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+			</ul>
+			<ul class="my-head">
+				<li>
+					<div class="my-head-img">
+						
+					</div>
+					<div class="my-head-msg">
+						<!--<span>万花筒</span>
+						<span>2020-04-27</span>-->
+					</div>
+				</li>
+				<li>
+					<a>
+						<span id="balance">0</span>
+						<span>余额</span>
+					</a>
+					<!--<a>
+						<span id="couponsSum">0</span>
+						<span>优惠券</span>
+					</a>-->
+					<a>
+						<span id="gold">0</span>
+						<span>金币</span>
+					</a>
+					<!--<a>
+						<span id="commission">0</span>
+						<span>佣金</span>
+					</a>-->
+					<a href="javascript:;" onclick="Ceng()">
+						<span><img class="userImg" src="images/share/ewm.png"></span>
+						<span>邀请码</span>
+					</a>
+				</li>
+			</ul>
+			<div id="ceng" class="in-cen"></div>
+			<div id="close" class="in-pop">
+				<div class="in-self-info">
+					<a onclick="closeCeng()">
+						<img src="images/share/icon-close.png" alt="">
+					</a>
+					<img id="invitecode" alt="" src="" style="height: 100%; width: 100%">
+					<div class="in-pop-text">
+						<p>您的专属邀请二维码</p>
+						<p>长按图片，保存到手机</p>
+					</div>
+				</div>
+			</div>
+			<ul class="list">
+				<li>
+					<a href="alone_order_list.html">订单查看</a>
+				</li>
+				<!--<li>
+					<a>佣金查看</a>
+				</li>-->
+				<li>
+					<a href="invite_list.html">我的邀请</a>
+				</li>
+				<!--<li>
+					<a>身份管理</a>
+				</li>-->
+				<li>
+					<a href="my_coupons.html?v=0.0.2">优惠券</a>
+				</li>
+				<li style="display: none" id="memberAreaLi">
+					<a href="memberArea_list.html">会员产品</a>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
+<script>
+	$(function () {
+		$(".my-head-msg").append('<span>'+T.usermsg.name+'</span><span>'+formatDate(new Date(T.usermsg.createTime))+'</span>');
+		$(".my-head-img").css({"background-image":"url("+T.usermsg.image+")"});
+		//扩展表信息查询
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/integral/commission/selectcommission",
+			headers : {token:T.token},
+			data : {"state":0},
+			success : function(r) {
+				if(r.code == 0){
+					$("#commission").text(parseInt(r.data.commission)/100);
+					$("#balance").text(parseInt(r.data.balance)/100);
+					$("#gold").text(r.data.gold);
+				}
+			}
+		});
+		//优惠券数量查询
+		/*$.ajax({
+			type : "POST",
+			url : T.serverurl + "/business/couponsuser/total",
+			headers : {token:T.token},
+			data : {"userGuid":T.usermsg.guid},
+			success : function(r) {
+				if(r.code == 0){
+					$("#couponsSum").text(r.data);
+				}
+			}
+		});*/
+		console.log(T.usermsg);
+		var userType = parseInt(T.usermsg.type);
+		if(userType == 1 || userType == 2 || userType == 5 || userType == 6){
+			$("#memberAreaLi").show();
+		}
+	});
+
+
+	//二维码弹窗
+	function Ceng() {
+		var domain = window.location.protocol + "//" + window.location.host +"/wap/business/sub.html";
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/security/wxoauth/invitecode",
+			headers : {token:T.token},
+			data : {codeUrl:domain},
+			success : function(r) {
+				if (r.code == 0) {
+					$("#invitecode").attr("src",T.serverurl + r.data);
+					//$("#close").css("background-image","url('"+T.serverurl + r.data+"')");
+					$("#ceng").show();
+					$("#close").show();
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+	function closeCeng() {
+		$("#ceng").hide();
+		$("#close").hide();
+	}
+
+	//时间格式化
+	var formatDate = function (date) {
+		var y = date.getFullYear();
+		var m = date.getMonth() + 1;
+		m = m < 10 ? ('0' + m) : m;
+		var d = date.getDate();
+		d = d < 10 ? ('0' + d) : d;
+		var h = date.getHours();
+		var minute = date.getMinutes();
+		minute = minute < 10 ? ('0' + minute) : minute;
+		var second= date.getSeconds();
+		second = minute < 10 ? ('0' + second) : second;
+		//return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;
+		return y + '-' + m + '-' + d;
+	};
+</script>

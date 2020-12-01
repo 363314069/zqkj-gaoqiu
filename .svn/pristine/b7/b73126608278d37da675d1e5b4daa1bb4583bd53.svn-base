@@ -1,0 +1,47 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <link rel="stylesheet" href="/wap/pay/css/wepayui.min.css">
+    <link rel="stylesheet" href="/wap/pay/css/pay.css">
+    <script src="/wap/common/js/jquery/jquery-1.8.0.min.js"></script>
+    <script src="/wap/common/js/cookie/js.cookie.min.js"></script>
+</head>
+<body ontouchstart class="weui-wepay-pay-wrap">
+<div class="msg_success">
+    <div class="weui-msg">
+        <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+        <div class="weui-msg__text-area">
+            <h2 class="weui-msg__title">绑定成功</h2>
+            <p class="weui-msg__desc">正在跳转请稍后......</p>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+</script>
+</html>
+<script type="text/javascript">
+
+    setTimeout(function(){
+        sessionStorage.setItem('token', '${token}');
+        sessionStorage.setItem("usermsg", '${user}');
+        location.href = "/admin/wap/H5_order_list.html";
+        /*if(!isNull(sessionStorage.getItem("bindUrl"))){
+            location.href = "/admin/wap/H5_order_list.html";
+        }else{
+            location.href = sessionStorage.getItem("bindUrl");
+        }*/
+    },2000);
+    //判断是否为空
+    function isNull(data) {
+        return (data == "" || data == undefined || data == null || data == 'null') ? false : true;
+    }
+</script>

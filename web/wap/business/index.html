@@ -1,0 +1,151 @@
+<html>
+<head>
+    <title>首页</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!--库-->
+    <link rel="stylesheet" type="text/css" href="css/amazeui.css">
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/amazeui.js"></script>
+    <script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+    <script type="text/javascript" src="js/common.js"></script>
+    <!-- 微信分享公共方法 -->
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+    <script src="js/wx_api.js"></script>
+</head>
+<body>
+<div id="index">
+    <!-----------轮播banner----------->
+    <div id="index_banner">
+        <div class="am-slider am-slider-default">
+            <ul class="am-slides">
+                <li><a title="" href="#"><img src="images/banner2.jpg"/></a></li>
+                <li><a title="" href="#"><img src="images/banner4.jpg"/></a></li>
+                <li><a title="" href="#"><img src="images/banner3.jpg"/></a></li>
+                <li><a title="" href="#"><img src="images/banner.jpg"/></a></li>
+            </ul>
+        </div>
+    </div>
+    <!-----------栏目----------->
+    <div class="order_nav">
+        <ul class="box_nav am-avg-sm-4">
+            <li>
+                <!--<a title="" href="activity_list.html">
+                    <img src="images/index_icon01.png"/>
+                    <p>活动</p>
+                </a>-->
+                <a title="" href="coupons_list.html?footer=2">
+                    <img src="images/index_icon01.png"/>
+                    <p>优惠券</p>
+                </a>
+            </li>
+            <li>
+                <a title="" href="panicBuying_list.html?footer=0">
+                    <img src="images/index_icon02.png"/>
+                    <p>抢购</p>
+                </a>
+            </li>
+            <li>
+                <!--<a title="" href="coupons_list.html">
+                    <img src="images/index_icon03.png"/>
+                    <p>优惠券</p>
+                </a>-->
+                <a title="" href="H5_reservation_list.html?footer=1">
+                    <img src="images/index_icon03.png"/>
+                    <p>订场</p>
+                </a>
+            </li>
+            <li>
+                <!--<a title="" href="news_list.html">-->
+                <a title="" href="group_purchase_list.html">
+                    <img src="images/index_icon04.png"/>
+                    <p>团购</p>
+                </a>
+            </li>
+            <div class="clear"></div>
+        </ul>
+    </div>
+	
+	<div id="trip_list" style="width:100%;overflow:hidden;margin: 10px 0 100px 0 ;">
+		<div class="am-tabs" data-am-tabs>
+			 <div id="item_name">
+            <img src="images/index_icon05.png">
+            <span>中秦科技</span>
+        </div>
+			<ul class="am-tabs-nav am-nav am-nav-tabs am-avg-sm-2">
+				<li class="am-active"><a href="#tab1">活动</a></li>
+				<li><a href="#tab2">抢购</a></li>
+			</ul>
+
+			<div class="am-tabs-bd">
+				<div class="am-tab-panel am-fade am-in am-active" id="tab1">
+
+				</div>
+				<div class="am-tab-panel am-fade" id="tab2">
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--footer-->
+<div id="footer">
+    <div class="first">
+        <ul class="am-avg-sm-2">
+            <li class="active">
+                <a title=""  href="index.html">
+                    <img src="images/icon-footer01-a.png"/>
+                    <p>首页</p>
+                </a>
+            </li>
+            <li>
+                <a title="" href="activity_list.html">
+                    <img alt="" src="images/icon-footer2-a.png"/>
+                    <p>活动</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="beautiful">
+        <!--<a title=""  href="beautiful_list.html">-->
+        <a title=""  href="#">
+            <img alt="" src="images/icon-footer3-a.png"/>
+        </a>
+    </div>
+    <div class="last">
+        <ul class="am-avg-sm-2">
+            <li >
+                <a title="" href="panicBuying_list.html?footer=0">
+                    <img alt="" src="images/icon-footer4-a.png"/>
+                    <p>抢购</p>
+                </a>
+            </li>
+            <li>
+                <a title="" href="user_center.html?footer=3">
+                    <img alt="" src="images/icon-footer5-a.png"/>
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="js/index.js"></script>
+<script>
+    $(function () {
+        $('.am-slider').flexslider({
+            controlNav: true,               // Boolean: 是否创建控制点
+            directionNav: false,             // Boolean: 是否创建上/下一个按钮（previous/next）
+            touch: true                    // Boolean: 允许触摸屏触摸滑动滑块
+        });
+    });
+</script>

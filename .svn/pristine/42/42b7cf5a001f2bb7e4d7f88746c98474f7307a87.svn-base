@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title></title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="js/common.js"></script>
+
+		<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default.css" rel="stylesheet" type="text/css">
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<script src="js/wx_api.js"></script>
+	</head>
+	<style>
+		.wrap{padding-bottom: 1.2rem; min-height: 100%; }
+		
+		.banner{}
+		.banner img{width: 100%;}
+		.list{
+			
+		}
+		.list > li{
+			padding: 0.3rem .2rem;
+			overflow: hidden;
+			border-radius: .3rem;
+			background-color: #fff;
+			margin: 0.2rem;
+			font-size: 0.32rem;
+			text-align: left;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+		}
+		.list > li .list-title{
+			width: calc(100% - 2.4rem);
+			line-height: .5rem;
+			display: -webkit-box;    
+			-webkit-box-orient: vertical;    
+			-webkit-line-clamp: 2;    
+			overflow: hidden;
+		}
+		
+		.list > li .list-price{
+			width: 2.4rem;
+			line-height: .5rem;
+			text-align: center;
+		}
+		
+		.list > li .buy-prices{
+			
+		}
+		
+		.list > li .buy-num{
+			
+		}
+		.list > li .buy-prices .price{
+			color: #DB0415;
+		}
+		.list > li .buy-prices .original{
+			color: #999;
+			font-size: 0.24rem;
+			display: none;
+		}
+		.list > li .buy-num .buy-btn{
+			background-color: #DB0415;border: 1px solid #DB0415;color: #fff;
+			padding: 0.05rem 0.4rem; font-size: 0.28rem; color: #fff; border-radius: .3rem;
+		}
+	</style>
+	<body>
+		<div class="wrap">
+			<ul class="head">
+                <li class="l"><a href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">九洲高尔夫</li>
+				<li class="r"></li>
+			</ul>
+			<div class="banner">
+				<img id="bannerImg" src="images/banner2.jpg" />
+			</div>
+			<ul class="list">
+				<!--<li>
+					<div class="list-title">
+						18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场18洞球场
+					</div>
+					<div class="list-price">
+						<div class="buy-prices"><span class="price">¥489</span><span class="original">¥1500</span>&lt;!&ndash;原价&ndash;&gt;</div>
+						<div class="buy-num"><span class="buy-btn">去购买</span></div>
+					</div>
+				</li>-->
+			</ul>
+			
+			<div class="content">
+				<!--请注意：如果你的页面已经使用了 layui，我们强烈推荐你直接采用 layui 内置的 layDate 模块，请勿再重复引用独立版的 laydate.js<br>
+				layDate 采用原生 JavaScript 编写，不依赖任何第三方库，兼容所有浏览器（IE6/7除外）<br>
+				npm安装：npm install layui-laydate<br>-->
+			</div>
+			<!--
+			<div class="bottom" onclick="xiadan()">立即支付</div>
+			-->
+		</div>
+	</body>
+</html>
+<script type="application/javascript">
+	var reservationGuid = getQueryString('guid');	//获取球场guid
+	$(function(){
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/reservation/info",
+			headers : {token:T.token},
+			data : {"guid":reservationGuid},
+			async:false,
+			success : function(r) {
+				if (r.code == 0) {
+					$("#bannerImg").attr("src",T.serverurl+r.data.img);
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/introduction/selectlist",
+			headers : {token:T.token},
+			data : {"orderBy":'createTime desc',state:1,"reservationGuid":reservationGuid},
+			async:false,
+			success : function(r) {
+				if (r.code == 0) {
+					$.each(r.data, function(i, obj) {
+						var li  = $('<li>');
+						li.append('<div class="list-title">'+obj.name+'</div>')
+						var div = $('<div class="list-price">');
+						div.append('<div class="buy-prices"><span class="price">¥'+obj.price/100+'</span></div>');
+						div.append('<div class="buy-num" onclick="xiadan(\''+obj.guid+'\')"><span class="buy-btn">去购买</span></div>');
+						li.append(div);
+						$(".list").append(li)
+					});
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	});
+
+
+	//下单
+	function xiadan(guid) {
+		location.href = "H5_introduction_pay.html?footer=1&guid="+guid;
+	}
+</script>

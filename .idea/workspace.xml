@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="5f1da9a9-ec7b-41b1-857d-f763d9356aa0" name="Default Changelist" comment="球队活动添加">
+      <change beforePath="$PROJECT_DIR$/zqkj-gaoqiu-pay-service/src/main/java/com/zqkj/utils/TimingTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/zqkj-gaoqiu-pay-service/src/main/java/com/zqkj/utils/TimingTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/zqkj-gaoqiu-pay-service/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/zqkj-gaoqiu-pay-service/src/main/resources/application-dev.yml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\softKF\maven\apache-maven-3.6.3\repository" />
+        <option name="userSettingsFile" value="D:\softKF\maven\apache-maven-3.6.3\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1e7c67QujfOhLuxnH2IJUKVVySA" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="ToolWindowStructure.ShowToolbar" value="false" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="settings.editor.selected.configurable" value="settings.github" />
+  </component>
+  <component name="ReactorSettings">
+    <option name="notificationShown" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.zqkj.bean" />
+      <recent name="com.zqkj.remote" />
+      <recent name="com.zqkj.controller.validata" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\work\zqkj-gaoqiu\web\wap\business\v1.1\my" />
+      <recent name="D:\work\zqkj-gaoqiu\web\wap\business" />
+      <recent name="D:\work\zqkj-gaoqiu\web\admin\business\backstage\js" />
+      <recent name="D:\work\zqkj-gaoqiu\web\admin\business\backstage" />
+      <recent name="D:\work\zqkj-gaoqiu\zqkj-gaoqiu-business-service\src\main\java\com\zqkj\controller" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Spring Boot.BusinessApplication">
+    <configuration name="AdminApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.zqkj.AdminApplication" />
+      <module name="zqkj-gaoqiu-admin-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zqkj.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BusinessApplication" type="Application" factoryName="Application" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.zqkj.BusinessApplication" />
+      <module name="zqkj-gaoqiu-business-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zqkj.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EurekaServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.zqkj.gaoqiu.EurekaServiceApplication" />
+      <module name="zqkj-gaoqiu-eureka-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zqkj.gaoqiu.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IntegralApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.zqkj.IntegralApplication" />
+      <module name="zqkj-gaoqiu-integral-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zqkj.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PayApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.zqkj.PayApplication" />
+      <module name="zqkj-gaoqiu-pay-service" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.zqkj.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="AdminApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="zqkj-gaoqiu-admin-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zqkj.AdminApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="BusinessApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="zqkj-gaoqiu-business-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zqkj.BusinessApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="EurekaServiceApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="zqkj-gaoqiu-eureka-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zqkj.gaoqiu.EurekaServiceApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="GatewayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="zqkj-gaoqiu-gateway-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zqkj.GatewayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="IntegralApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="zqkj-gaoqiu-integral-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zqkj.IntegralApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PayApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="zqkj-gaoqiu-pay-service" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.zqkj.PayApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.PayApplication" />
+        <item itemvalue="Application.IntegralApplication" />
+        <item itemvalue="Application.AdminApplication" />
+        <item itemvalue="Application.EurekaServiceApplication" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>C:\Users\rcj\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\work\zqkj-gaoqiu" />
+          <option name="myCopyRoot" value="D:\work\zqkj-gaoqiu" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="D:\work\zqkj-gaoqiu" />
+          <option name="myCopyRoot" value="D:\work\zqkj-gaoqiu" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="5f1da9a9-ec7b-41b1-857d-f763d9356aa0" name="Default Changelist" comment="" />
+      <created>1593675893020</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1593675893020</updated>
+      <workItem from="1593948414230" duration="789000" />
+      <workItem from="1593950267431" duration="33000" />
+      <workItem from="1593950314524" duration="40000" />
+      <workItem from="1594000649189" duration="2419000" />
+      <workItem from="1594104198829" duration="15635000" />
+      <workItem from="1594174899032" duration="22528000" />
+      <workItem from="1594206522070" duration="2048000" />
+      <workItem from="1594214661564" duration="1120000" />
+      <workItem from="1594277523596" duration="735000" />
+      <workItem from="1594288237664" duration="4442000" />
+      <workItem from="1594305182859" duration="8000" />
+      <workItem from="1594642152836" duration="656000" />
+      <workItem from="1594777665444" duration="1294000" />
+      <workItem from="1594782442576" duration="1117000" />
+      <workItem from="1594873634611" duration="11907000" />
+      <workItem from="1595207740924" duration="15034000" />
+      <workItem from="1595255101154" duration="1814000" />
+      <workItem from="1595257358430" duration="1340000" />
+      <workItem from="1595294165671" duration="31000" />
+      <workItem from="1595296491480" duration="940000" />
+      <workItem from="1595342945706" duration="639000" />
+      <workItem from="1595672027714" duration="106000" />
+      <workItem from="1596038582043" duration="19000" />
+      <workItem from="1596369955636" duration="11000" />
+      <workItem from="1596807050660" duration="2146000" />
+      <workItem from="1597672588720" duration="54000" />
+      <workItem from="1598179869031" duration="138000" />
+      <workItem from="1598272558864" duration="200000" />
+      <workItem from="1598447299217" duration="205000" />
+      <workItem from="1598680450895" duration="24000" />
+      <workItem from="1599373575659" duration="654000" />
+      <workItem from="1599799849803" duration="33000" />
+      <workItem from="1600246033054" duration="688000" />
+      <workItem from="1603033072198" duration="613000" />
+      <workItem from="1604126574021" duration="16738000" />
+      <workItem from="1604320060394" duration="26000" />
+      <workItem from="1606372990444" duration="2949000" />
+      <workItem from="1606483599885" duration="486000" />
+      <workItem from="1606550837782" duration="10395000" />
+      <workItem from="1606802835511" duration="1016000" />
+    </task>
+    <task id="LOCAL-00001" summary="球队活动添加">
+      <created>1594214586926</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1594214586927</updated>
+    </task>
+    <task id="LOCAL-00002" summary="注册不送金，活动可以绑定球队">
+      <created>1594305124083</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1594305124083</updated>
+    </task>
+    <task id="LOCAL-00003" summary="订场积分返现业务修改">
+      <created>1594891474575</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1594891474575</updated>
+    </task>
+    <task id="LOCAL-00004" summary="活动查询条件修改">
+      <created>1595237392436</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1595237392436</updated>
+    </task>
+    <task id="LOCAL-00005" summary="活动查询条件修改">
+      <created>1595238869443</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1595238869443</updated>
+    </task>
+    <task id="LOCAL-00006" summary="修改h5订场页面查询条件，添加旅游套餐类型">
+      <created>1595256873974</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1595256873974</updated>
+    </task>
+    <task id="LOCAL-00007" summary="新版返回，价格包含（球场下多个产品和球场价格相同出现重复）修改">
+      <created>1595258625807</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1595258625807</updated>
+    </task>
+    <task id="LOCAL-00008" summary="活动下单后通知接口修改">
+      <created>1596808837368</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1596808837368</updated>
+    </task>
+    <task id="LOCAL-00009" summary="酒店通知、酒店优惠券使用">
+      <created>1604147616286</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1604147616286</updated>
+    </task>
+    <task id="LOCAL-00010" summary="对用户现有的优惠券进行管理功能">
+      <created>1606649581957</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1606649581957</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="球队活动添加" />
+    <MESSAGE value="注册不送金，活动可以绑定球队" />
+    <MESSAGE value="订场积分返现业务修改" />
+    <MESSAGE value="活动查询条件修改" />
+    <MESSAGE value="H5订场条件查询修改、后台添加旅游套餐类型" />
+    <MESSAGE value="修改h5订场页面查询条件，添加旅游套餐类型" />
+    <MESSAGE value="新版返回，价格包含（球场下多个产品和球场价格相同出现重复）修改" />
+    <MESSAGE value="活动下单后通知接口修改" />
+    <MESSAGE value="酒店通知、酒店优惠券使用" />
+    <MESSAGE value="对用户现有的优惠券进行管理功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="对用户现有的优惠券进行管理功能" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="361" y="71" key="#Project_Structure" timestamp="1598180000648">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="71" key="#Project_Structure/0.0.1536.824@0.0.1536.824" timestamp="1598180000648" />
+    <state x="574" y="122" key="#com.intellij.ide.util.MemberChooser" timestamp="1606648371353">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="574" y="122" key="#com.intellij.ide.util.MemberChooser/0.0.1536.824@0.0.1536.824" timestamp="1606648371353" />
+    <state x="293" y="8" key="CommitChangelistDialog2" timestamp="1606649579446">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="293" y="8" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1606649579446" />
+    <state width="485" height="466" key="DebuggerActiveHint" timestamp="1604143358832">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="485" height="466" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1604143358832" />
+    <state x="147" y="64" width="1228" height="687" key="DiffContextDialog" timestamp="1606649027844">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="147" y="64" width="1228" height="687" key="DiffContextDialog/0.0.1536.824@0.0.1536.824" timestamp="1606649027844" />
+    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1606804262313">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1606804262313" />
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom" timestamp="1606649622195">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1606649622195" />
+    <state width="1493" height="210" key="GridCell.Tab.0.center" timestamp="1606649622195">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1606649622195" />
+    <state width="1493" height="210" key="GridCell.Tab.0.left" timestamp="1606649622195">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1606649622195" />
+    <state width="1493" height="210" key="GridCell.Tab.0.right" timestamp="1606649622195">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="210" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1606649622195" />
+    <state width="1493" height="171" key="GridCell.Tab.1.bottom" timestamp="1606649622189">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="171" key="GridCell.Tab.1.bottom/0.0.1536.824@0.0.1536.824" timestamp="1606649622189" />
+    <state width="1493" height="171" key="GridCell.Tab.1.center" timestamp="1606649622189">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="171" key="GridCell.Tab.1.center/0.0.1536.824@0.0.1536.824" timestamp="1606649622189" />
+    <state width="1493" height="171" key="GridCell.Tab.1.left" timestamp="1606649622189">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="171" key="GridCell.Tab.1.left/0.0.1536.824@0.0.1536.824" timestamp="1606649622189" />
+    <state width="1493" height="171" key="GridCell.Tab.1.right" timestamp="1606649622189">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="171" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1606649622189" />
+    <state width="1493" height="171" key="GridCell.Tab.2.bottom" timestamp="1606649622189">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="171" key="GridCell.Tab.2.bottom/0.0.1536.824@0.0.1536.824" timestamp="1606649622189" />
+    <state width="1493" height="171" key="GridCell.Tab.2.center" timestamp="1606649622189">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="171" key="GridCell.Tab.2.center/0.0.1536.824@0.0.1536.824" timestamp="1606649622189" />
+    <state width="1493" height="171" key="GridCell.Tab.2.left" timestamp="1606649622189">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="171" key="GridCell.Tab.2.left/0.0.1536.824@0.0.1536.824" timestamp="1606649622189" />
+    <state width="1493" height="171" key="GridCell.Tab.2.right" timestamp="1606649622189">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state width="1493" height="171" key="GridCell.Tab.2.right/0.0.1536.824@0.0.1536.824" timestamp="1606649622189" />
+    <state x="270" y="54" key="SettingsEditor" timestamp="1606804131261">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="270" y="54" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1606804131261" />
+    <state x="93" y="93" width="1350" height="638" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog" timestamp="1606802930086">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="93" y="93" width="1350" height="638" key="com.intellij.history.integration.ui.views.DirectoryHistoryDialog/0.0.1536.824@0.0.1536.824" timestamp="1606802930086" />
+    <state x="449" y="236" key="com.intellij.ide.util.TipDialog" timestamp="1604320061665">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="449" y="236" key="com.intellij.ide.util.TipDialog/0.0.1536.824@0.0.1536.824" timestamp="1604320061665" />
+    <state x="581" y="252" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1606802841972">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="581" y="252" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1606802841972" />
+    <state x="468" y="10" width="655" height="804" key="find.popup" timestamp="1606648300938">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="468" y="10" width="655" height="804" key="find.popup/0.0.1536.824@0.0.1536.824" timestamp="1606648300938" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1606637820364">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1606637820364" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/zqkj-gaoqiu-business-service/src/main/java/com/zqkj/service/impl/ActivityServiceImpl.java</url>
+          <line>80</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/zqkj-gaoqiu-admin-service/src/main/java/com/zqkj/controller/UserController.java</url>
+          <line>168</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/zqkj-gaoqiu-integral-service/src/main/java/com/zqkj/controller/validata/IntegralValidata.java</url>
+          <line>14</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/zqkj-gaoqiu-integral-service/src/main/java/com/zqkj/service/impl/IntegralServiceImpl.java</url>
+          <line>38</line>
+          <option name="timeStamp" value="12" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/zqkj-gaoqiu-business-service/src/main/java/com/zqkj/service/impl/ActivityServiceImpl.java</url>
+          <line>452</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

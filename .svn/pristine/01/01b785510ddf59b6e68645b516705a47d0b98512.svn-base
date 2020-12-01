@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+    <title>九洲高尔夫劲爆抢购</title>
+	<script type="text/javascript" src="./../../res/js/flexible.js"></script>
+	<script type="text/javascript" src="./../../res/js/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="./../../res/js/cookie/js.cookie.min.js"></script>
+	<script type="text/javascript" src="./../../res/js/layer/mobile/layer.js"></script>
+	<script type="text/javascript" src="./../../res/js/layer/laydate/laydate.js"></script>
+	<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+	<link href="./../../res/fonts/font-zqkj-1.1/iconfont.css" rel="stylesheet" type="text/css">
+	<link href="./../../res/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	
+	<link href="./../css/default-1.1.css?v=2" rel="stylesheet" type="text/css">
+	<script src="./../js/zqkj/common-1.1.js?v=1"></script>
+	<script src="./../js/zqkj/load-1.1.js"></script>
+	<script src="./../js/zqkj/wx_api-1.0.js"></script>
+    <style>
+        body{padding: 0 0 .88rem 0;}
+		.wrap{text-align: left;}
+		.wrap .top{position: relative;}
+		.wrap .top .banner img{width: 100%;}
+		.wrap .top .enddate{position: absolute; bottom: .2rem; right: .2rem; color: #E4990B;}
+		.wrap .title{font-size: .48rem; line-height: .6rem;}
+		.wrap .sprice{line-height: 1.2rem; font-size: .32rem;}
+		.wrap .sprice #price{color: #E4990B; font-size: .48rem;}
+		.content{padding: .2rem;}
+		.content img{max-width: 100%;}
+		.buy_nav {position: fixed; bottom: 0; text-align: center; background-color: #fff;}
+		.buy_nav .box{
+			width: 7.5rem; 
+			margin: 0 auto; 
+			display: -webkit-flex;/* Safari */	
+			display: flex;
+			justify-content:space-between;
+			font-size: .36rem;
+			text-align: center;
+			height: .88rem;
+		}
+		.buy_nav .call{font-size: .28rem; width: 2rem;}
+		.buy_nav .iconfont{font-size: .48rem;}
+		.buy_nav .btn{background-color: #E4990B; display: block; flex: 1; color: #fff; line-height: .88rem; height: .88rem;}
+		.dialog {position: fixed; width: 100%; height: 100%; background-color: #00000066; text-align: center; top: 0; left: 0; z-index: 999999; display: none;}
+		.dialog .dialog_box{
+			background-color: #fff; 
+			position: absolute; 
+			top: 2rem; 
+			left: 0;
+			width: calc(100% - 1rem);
+			margin: 0 .5rem;
+			border-radius: .2rem;
+			-moz-border-radius: .2rem;
+			-webkit-border-radius: .2rem;
+			padding: .2rem;
+			font-size: .32rem;
+			text-align: left;
+			line-height: .6rem;
+		}
+		.dialog .dialogTop{font-size: .32; border-bottom: 1px dotted #ccc; text-align: right; display: block;}
+		#countUl li{margin: .2rem 0;}
+		#countUl label{width: 1.5rem; display: inline-block; text-align: right;}
+		#countUl .code,#countUl .num{width: 1.8rem;}
+		#countUl .m-num{display: inline-block; vertical-align: middle;}
+		#countUl .add, #countUl .jian{border: 1px solid #666; display: inline-block; width: .4rem; height: .4rem; line-height: .4rem; text-align: center;}
+		#countUl .price{display: inline-block; color: #FF0000;}
+		#countUl .submit{border: none; background-color: #00a964; font-size: .32rem; color: #fff; text-align: center; width: calc(100% - 1rem); margin: 0 .5rem;}
+    </style>
+<body>
+	<div class="wrap">
+		<div class="top">
+			<a title="返回" class="main-back" href="snapUp"><i class="iconfont">&#xe663;</i></a>
+			<div class="banner"></div>
+			<div class="enddate">
+				<p>距离抢购结束还有：</p>
+				<span id="clock">00 天 00:00:00</span>
+			</div>
+		</div>
+		<div class="content">
+			<div id="nameLabel" class="title"></div>
+			<div class="sprice" style="display:none;">
+				价格：<font id="price"></font>
+			</div>
+			<div class="con"></div>
+		</div>
+		<!-----------加入购物车/购买----------->
+		<div id="buy_nav" class="buy_nav">
+			<div class="box">
+				<a class="call" href="#">
+					<i class="iconfont">&#xe625;</i>
+					<p>电话咨询</p>
+				</a>
+				<a class="btn" href="#"></a>
+			</div>
+		</div>
+	</div>
+	<!-- 弹出层   start -->
+	<div  id="dialog" class="dialog">
+		<div class="dialog_box">
+			<div class="dialogTop">
+				<a href="javascript:;" class="clase">关闭</a>
+			</div>
+			<form id="ajaxForm" class="login-wrap">
+				<ul id="countUl">
+					<li>
+						<label for="">姓名 :</label>
+						<input type="text" id="name" class="name">
+					</li>
+					<li>
+						<label for="">差点 :</label>
+						<input type="text" id="chad" class="pass">
+					</li>
+					<li>
+						<label for="">手机 :</label>
+						<input type="text" id="phoe" class="mobile">
+					</li>
+					<li id="codeLi">
+						<label for="">验证码 :</label>
+						<input type="text" name="" class="code" id="code">
+						<!--<input type="button" value="获取验证码" class="verify">-->
+						<input class="verify" id="dynamic" type="button" onclick="authCode()" value="获取验证码"></input>
+					</li>
+					<li>
+						<label for="">数量 :</label>
+						<div class="m-num fl">
+							<span class="jian">-</span>
+							<input type="text" value="2" class="num">
+							<span class="add">+</span>
+						</div>
+						<!--<div class="price fr">￥<span data-price="" id="data-price"></span></div>-->
+					</li>
+					<li>
+						<label for="">金额 :</label>
+						<div class="price fr">￥<span data-price="" id="data-price"></span></div>
+					</li>
+					<li>
+						<input type="button" class="submit " onclick="submitUser()" value="提交">
+					</li>
+				</ul>
+			</form>
+		</div>
+	</div>
+<!-- 弹出层   end -->
+</body>
+</html>
+<script type="text/javascript">
+    $(document).ready(function(){
+        //关闭弹窗
+        $('#dialog .clase').click(function(){
+            $('#dialog').hide();
+        });
+    });
+
+
+    $(".add").click(function(){
+        var num = parseInt($(this).siblings('.num').val());
+        var price = parseFloat($(".price").find('span').data('price'));
+        if(!isNull(buyNumber) || buyNumber == 0){
+            var sum = parseInt(num+1);
+            $(this).siblings('.num').val(sum);
+            var all = parseFloat(sum *price);
+            $('.price').find('span').text(all)
+        }else {
+            if (num < buyNumber) {
+                var sum = parseInt(num + 1);
+                $(this).siblings('.num').val(sum);
+                var all = parseFloat(sum * price);
+                $('.price').find('span').text(all)
+            } else {
+                alert("该商品限购" + buyNumber + "个");
+            }
+        }
+    })
+    $(".jian").click(function(){
+        var num = parseInt($(this).siblings('.num').val());
+        var price = parseFloat($('.price').find('span').data('price'));
+        if(num >1){
+            var sum = parseInt(num-1);
+            $(this).siblings('.num').val(sum);
+            var all = parseFloat(sum *price);
+            $('.price').find('span').text(all)
+        }else{
+            alert('数量不能小于1个')
+        }
+    })
+	var activityGuid = T.p("guid");
+	var inviterGuid = T.p("inviterGuid");//邀请人guid
+	var buyNumber = 0;  //商品限购数量
+	var sigPhone = 0;
+	$(function(){
+	    var api = {
+	        info:{url:T.serverebusiness + "/business/activity/info", type:"get"},
+	        list:{url:T.serverebusiness + "/business/activity/list", type:"post"},
+	        page:{url:T.serverebusiness + "/business/activity/page", type:"post"},
+	        activityApply:{url:T.serverebusiness + "/business/apply/activityapply", type:"post"}
+	    };
+	    if(isNull(activityGuid)){
+	        $.ajax({
+	            type : "POST",
+	            url : api.info.url,
+	            method : api.info.type,
+	            headers : {token:T.token},
+	            data : {guid:activityGuid},
+	            success : function(r) {
+	                if (r.code == 0) {
+	                    if(r.data.state == 0){
+	                       jump.to("snapUp");
+	                    }
+	                    var currentTime = new Date().getTime().toString();
+	                    var startTime = new Date(r.data.startTime.replace(/-/g, '/')).getTime().toString();
+	                    var endTime = new Date(r.data.endTime.replace(/-/g, '/')).getTime().toString();
+						var buynavbtn = $("#buy_nav").find(".btn");
+	                    if(currentTime > endTime){
+	                        //判断是否已结束
+							buynavbtn.text("已结束");
+							buynavbtn.css("background-color", "#B7B2B3");
+	                        //append('<a class="cur" style="background-color: #B7B2B3" href="#">已结束</a>');
+	                        $(".sprice").show();
+	                    }else if(currentTime < startTime){
+	                        //判断是否未开始
+							buynavbtn.text("未开始");
+							buynavbtn.css("background-color", "#B7B2B3");
+	                        //$("#buy_nav").append('<a class="cur" style="background-color: #B7B2B3" href="#">未开始</a>');
+	                        $(".sprice").show();
+	                    }else{
+	                        if(isNull(r.data.price) && r.data.price > 0){
+								buynavbtn.text("立即购买");
+	                            $(".sprice").show();
+	                        }else{
+								buynavbtn.text("立即领取");
+	                        }
+							buynavbtn.click(function(){
+								submitOrdersInfo();
+							});
+	                    }
+						wxapi.share.title = r.data.name;
+	                    $("#nameLabel").html(r.data.name);
+	                    $("#consultphone").html(r.data.phone);
+	                    buyNumber = r.data.buyNumber;
+	                    $(".call").attr('href','tel:'+r.data.phone+'');
+	                    $("#data-price").attr("data-price",r.data.price/100);
+	                    $("#data-price").text(r.data.price/100*2);
+	                    $("#price").html("￥"+r.data.price/100);
+	                    //$("#startTime").html("开始时间：" + r.data.startTime);
+	                    //$("#endTime").html("结束时间：" + r.data.endTime);
+	                    $(".con").append(r.data.content);
+						$(".con").find("img").removeAttr("width").removeAttr("height");
+	                    $(".banner").append('<img src="'+T.serverebusiness + r.data.img+'" id="coverimg">');
+						$('#clock').countdown(r.data.endTime, function(event) {
+	                        $(this).html(event.strftime('%D 天 %H:%M:%S'));
+	                    });
+	                    //分享加载
+	                    //jssdk(T.usermsg.name+"推荐抢购："+r.data.name,r.data.name,T.serverebusiness + r.data.img);
+						wxapi.setShare({
+							title:T.usermsg.name+"推荐抢购："+r.data.name,
+							desc:r.data.name,
+							link:location.href,
+							imgUrl:T.serverebusiness + r.data.img
+						});
+	                } else {
+	                    alert(r.msg);
+	                }
+	            }
+	        });
+	    }
+	});
+	
+	
+	//验证码
+	var authCodeValue = "";
+	//电话号码验证
+	function isPhoneNo(phone) {
+	    var pattern = /^1[34578]\d{9}$/;
+	    return pattern.test(phone);
+	}
+	//发送短信
+	function authCode() {
+	    var phoe  = $("#phoe").val();
+	    if(!isNull(phoe)){
+	        layer.open({
+	            content: '手机号不能为空',
+	            style: 'background:rgba(0,0,0,0.6); color:#fff; border:none;',
+	            time:100
+	        });
+	        return false;
+	    }else if(isPhoneNo(phoe) == false){
+	        layer.open({
+	            content: '请输入正确手机号',
+	            style: 'background:rgba(0,0,0,0.6); color:#fff; border:none;',
+	            time:3
+	        });
+	        return false;
+	    }else {
+	        $.ajax({
+	            type : "POST",
+	            url : T.serverebusiness + "/security/wxoauth/authcode",
+	            headers : {token:T.token},
+	            data : {phone:phoe},
+	            success : function(r) {
+	                console.log(r);
+	                if (r.code == 0) {
+	                    authCodeValue = r.msg;
+	                    var Time = 60;
+	                    var TimeDown = setInterval(timedown,1000);
+	                    //倒计时
+	                    function timedown(){
+	                        $("#dynamic").attr("disabled", true);
+	                        $("#dynamic").val(""+ Time + "s");
+	                        if(Time == 0){
+	                            $("#dynamic").val("重新获取").removeAttr("disabled");
+	                            clearInterval(TimeDown);
+	                        }
+	                        Time--;
+	                    }
+	                } else {
+	                    $("#dynamic").val("重新获取").removeAttr("disabled");
+	                    alert(r.msg);
+	                }
+	            }
+	        });
+	    }
+	}
+	
+	//完善信息
+	function submitUser(){
+	    if(sigPhone == 0){
+	        $.ajax({
+	            type : "POST",
+	            url : T.serverebusiness + "/security/wxoauth/register",
+	            headers : {token:T.token},
+	            /*dataType: "json",
+	             contentType : 'application/json;charset=utf-8',*/
+	            async: false,
+	            data : {name:$("#name").val(),chad:$("#chad").val(),phone:$("#phoe").val(),authCode:$("#code").val()},
+	            success : function(r) {
+	                if (r.code == 0) {
+	                    $('#dialog').hide();
+	                    submitOrders();
+	                } else {
+	                    alert(r.msg);
+	                }
+	            }
+	        });
+	    }else{
+	        submitOrders();
+	    }
+	}
+	
+	
+	//提交订单
+	function submitOrders() {
+	    //判断是否是本人打开自己分享的连接，自己下单不加佣金
+	    if(inviterGuid == T.usermsg.guid){
+	        inviterGuid = null;
+	    }
+	    $('#dialog').hide();
+	    $.showLoading("正在加载...");
+	    $.ajax({
+	        type : "POST",
+	        url : T.serverepay + "/pay/order/addorder",
+	        headers : {token:T.token},
+	        data : {goodsGuid:activityGuid,inviterGuid:inviterGuid,sum:$(".num").val()},
+	        success : function(res) {
+	            $.hideLoading();
+	            console.log(res);
+	            if (res.code == 0) {
+	                if(isNull(res.data) && res.data.orderMoney == 0){
+	                    alert("恭喜您，领取成功。请关注“九洲高尔夫”公众号预定使用！");
+	                    location.href = "alone_order_list.html";
+	                }else{
+	                    //location.href = "sure_order2.html?guid="+activityGuid+"&orderGuid="+res.data.guid;
+	                    if (res.code == 0) {
+	                        var data = $.parseJSON(res.msg);
+	                        if (typeof WeixinJSBridge == "undefined") {
+	                            if (document.addEventListener) {
+	                                document.addEventListener('WeixinJSBridgeReady',
+	                                    onBridgeReady(data), false);
+	                            } else if (document.attachEvent) {
+	                                document.attachEvent('WeixinJSBridgeReady',
+	                                    onBridgeReady(data));
+	                                document.attachEvent('onWeixinJSBridgeReady',
+	                                    onBridgeReady(data));
+	                            }
+	                        } else {
+	                            onBridgeReady(data);
+	                        }
+	                    } else {
+	                        if (res.code == 2) {
+	                            layer.alert(res.msg);
+	                        } else {
+	                            layer.msg("error：" + res.msg, {
+	                                shift : 6
+	                            });
+	                        }
+	                    }
+	                }
+	            } else if (res.code == 500) {
+	                alert("提交订单失败！请重试");
+	            }else{
+	                alert(res.msg);
+	            }
+	        }
+	    });
+	}
+	
+	
+	
+	//判断手机号是否为空
+	function submitOrdersInfo() {
+	    $('#dialog').fadeIn();
+	    $.ajax({
+	        type : "GET",
+	        url : T.serverepay + "/security/user/selectUserMessage",
+	        headers : {token:T.token},
+	        success : function(res) {
+	            if (res.code == 0) {
+	                var data = res.data;
+	                if(!isNull(data.phone)){
+	                    sigPhone = 0;//0手机号为空   1手机号不为空
+	                    //手机号为空 进入到完善页面
+	                    $('#dialog').fadeIn();
+	                }else{
+	                    sigPhone = 1;
+	                    $("#name").val(T.usermsg.name);
+	                    $("#name").attr("disabled","disabled");
+	                    $("#chad").val(T.usermsg.gap);
+	                    $("#chad").attr("disabled","disabled");
+	                    $("#phoe").val(T.usermsg.phone);
+	                    $("#phoe").attr("disabled","disabled");
+	                    $("#codeLi").hide();
+	                    //不为空直接提交订单
+	                    //submitOrders();
+	                }
+	            } else {
+	                location.reload();
+	            }
+	        }
+	    });
+	}
+</script>

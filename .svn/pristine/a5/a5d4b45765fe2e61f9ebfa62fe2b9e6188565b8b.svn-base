@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>订单</title>
+		<script type="text/javascript" src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="../common/js/flexible.js"></script>
+		<script type="text/javascript" src="../common/js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="assets/js/common.js"></script>
+		<script type="text/javascript" src="../common/js/layui/mobile/layer.js" ></script>
+		<script type="text/javascript" src="../common/js/layui/laydate/laydate.js" ></script>
+		<link href="../common/fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="../common/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="assets/css/default.css">
+	</head>
+	<style>
+		html,body{overflow: hidden;}
+		.wrap{padding-bottom: 0.88rem; box-sizing: border-box;}
+		.menu {
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #e7e7e7;
+			font-size: 0.32rem;
+			line-height: 0.8rem;
+			background-color: #fff;
+		}
+		.menu > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+			height: 0.8rem;
+			padding: 0 0.1rem;
+		}
+		.menu .select{
+			border-bottom: 0.04rem solid #2d9de7;
+			color: #2d9de7;
+		}
+		.list{
+			height: calc(100% - .8rem);
+			overflow-y:auto; 
+		}
+		.list::after{
+			display: block; content: ''; clear: both;
+		}
+		.list .title{
+			font-size: 0.24rem;
+			line-height: 0.5rem;
+			border-bottom: 1px solid #e7e7e7;
+			margin-bottom: 0.2rem;
+		}
+		.list .content{
+			display: -webkit-flex;
+			display: flex;
+		}
+		.list > li{
+			padding: 0.2rem;
+			border-radius: .3rem;
+			background-color: #fff;
+			margin: 0.2rem;
+		}
+
+		.list .item {
+			width:100%;
+			text-align: left;
+			font-size: 0.24rem;
+			line-height: .5rem;
+			padding-left: 0.2rem;
+		}
+		
+		.list .title .number{float: left;}
+		.list .title .state{float: right;}
+		.list .title::after{display: block; content: ''; clear: both;}
+		.list .item .item1{
+			font-size: 0.32rem; 
+			margin: 0.1rem 0; 
+			box-sizing: border-box; 
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			
+		}
+		.list .item .item2 span{color: #666; font-size: 0.28rem; display: inline-block;}
+		.list .item .item2 span:nth-child(1) {width: 2.5rem;}
+		.list .item .item2 span:nth-child(n + 2) {margin-left: .4rem;}
+		.list .item .item2 i{color: #DB0415;}
+		.list .item .item2 span:nth-child(3) {display: none;}
+		.list .btn {margin-top: 0.3rem}
+		.list .btn .btn-a{float: right;}
+		.list .btn a{padding: 0 .4rem; margin-left: 0.2rem; font-size: 0.28rem; line-height: .6rem; color: #fff; border-radius: .3rem;}
+		.list .btn .pay{background-color: #DB0415;border: 1px solid #DB0415;}
+		.list .btn .cancel{border: 1px solid #666; color: #666;}
+		.list .btn::after{display: block; content: ''; clear: both;}
+		.list .btn .prices{color: #DB0415; float: left; font-size: .36rem; }
+		.list .btn .prices .original{text-decoration: line-through; color: #999; margin-left: 0.2rem; font-size: 0.2rem;display: none;} 
+		.bottom{
+			border-top: 1px solid #eee;
+			padding: .1rem .3rem; 
+			position: fixed; left: 0; 
+			bottom: 0; height: 0.88rem; 
+			background-color: #fff; 
+			z-index: 999; 
+			width: 100%; 
+			font-size: 0.36rem; 
+			line-height: 0.68rem;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+		}
+		.bottom li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+		}
+		
+		.timeItem li{text-align: left;}
+		.timeItem li .itemtop{background-color: #eee; text-align: center; font-size: 0.32rem; line-height: 0.6rem;}
+		.timeItem .title{
+			height: .88rem;
+			position: relative;
+			line-height: .88rem;
+			font-size: 0.36rem;
+			color: #fff;
+			text-align: center;
+			background-color: #2d9de7;
+		}
+		.timeItem .title a{
+			line-height: .88rem;
+			font-size: 0.32rem;
+			position: absolute;
+			left: 0.4rem;
+			top: 0;
+			color: #fff;
+		}
+		.timeItem li div{
+			font-size: 0;
+		}
+		.timeItem li div a{
+			display: inline-block; 
+			width: 20%;
+			line-height: 0.4rem;
+			text-align: center;
+			padding: 0.2rem;
+			box-sizing: border-box;
+			font-size: 0.32rem;
+		}
+		.timeItem li div a span{display: block;}
+		.timeItem li div a span:last-child{display: none;}
+		.editmsg{text-align: left;font-size: 0.28rem;}
+		.editmsg .item .item1{
+			font-size: 0.32rem; 
+			margin: 0.1rem 0; 
+			box-sizing: border-box; 
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+		}
+		.editmsg .item .item2 span{color: #666; display: inline-block;}
+		.editmsg .item .item2 span:nth-child(1) {width: 2.4rem;}
+		.editmsg .item .item2 span:nth-child(n + 2) {margin-left: .2rem;}
+		.editmsg .item .item2 span:nth-child(3) {display: none;}
+		.editmsg .item .item2 i{color: #DB0415;}
+		.editmsg .item .edit{color: #DB0415;}
+	</style>
+
+	<body style="font-size: 0.32rem;">
+		<div class="wrap">
+			<ul class="head">
+				<li class="l"><a href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">订单</li>
+				<li class="r"></li>
+			</ul>
+			<ul class="menu">
+				<li class="select" onclick="selectList(0);">全部</li>
+				<li onclick="selectList(1);">待处理</li>
+				<li onclick="selectList(2);">已完成</li>
+				<li onclick="selectList(3);">已取消</li>
+			</ul>
+			<ul class="list">
+				<!--<li id="guid-ss-dd1">
+					<div class="title"><span class="number">流水号：<i>JD202003291</i></span>  <span class="state">待处理</span></div>
+					<div class="content">
+						<ul class="item">
+							<li name="title" class="item1">买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利</li>
+							<li class="item2" name="datetime"><span>日期：<i name="date">2020-04-07</i></span><span>时间：<i name="time">9:10</i></span></li>
+							<li class="item2" name="userinfo"><span>姓名：<i name="name">张三</i></span><span>数量：<i name="">4</i></span><span>手机：<i name="phon">13466666407</i></span></li>
+							<li class="item4" name="remark">备注：李四，王五</li>
+							<li class="btn">
+								<div class="prices"><span name="price">¥489</span><span class="original">¥1500</span>&lt;!&ndash;原价&ndash;&gt;</div>
+								<div class="btn-a">
+									<a class="cancel">取消</a>
+									<a class="edit pay" onclick="edit('guid-ss-dd1');">修改</a>
+									<a class="ok pay">确认</a>
+								</div>
+							</li>
+						</ul>
+					</div>
+				</li>-->
+			</ul>
+			<ul class="bottom">
+				<li onclick="bottomSkip('H5_order_list.html')">订单</li>
+				<li onclick="bottomSkip('H5_space_list.html')">产品</li>
+				<li onclick="bindWXUser()">绑定微信</li>
+			</ul>
+		</div>
+		<div id="timeItem" style="display: none;">
+			<ul class="timeItem">
+				<li class="title">选择时间 <a id="timeCancel">取消</a></li>
+				<li>
+					<div class="itemtop">
+						上午
+					</div>
+					<div id="morningTime">
+						<a guid='xss-ds-d'><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+					</div>
+				</li>
+				<li>
+					<div class="itemtop">
+						下午
+					</div>
+					<div id="afternoonTime">
+						<a guid='xss-ds-d'><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
+<script>
+	//本机构下的球场的订单
+	function selectList(businConfi) {
+		var reservationGuid;
+		if(T.usermsg.reservationGuid != 0){
+			reservationGuid = T.usermsg.reservationGuid;
+		}
+		if(!isNull(T.usermsg.reservationGuid)){
+			return false;
+		}
+		$(".list").empty();
+		$.ajax({
+			type: "post",
+			url:T.serverurl + "/business/introduction/list",
+			//data : {"organizationGuid":T.usermsg.organizationGuid},
+			data : {"reservationGuid":reservationGuid},
+			headers : {token:T.token},
+			async:false,
+			success : function(res) {
+				if (res.code == 0) {
+					var goodsGuids = new Array();
+					$.each(res.data,function (i, obj) {
+						goodsGuids.push(obj.guid);
+					});
+
+					//状态筛选
+					var businConfis = new Array();
+					if(businConfi == 1){
+						//待处理信息
+						businConfis.push(1);
+					}else if(businConfi == 2){
+						//已完成的信息
+						businConfis.push(2);
+						businConfis.push(4);
+						businConfis.push(5);
+					}else if(businConfi == 3){
+						businConfis.push(3);
+					}
+					$.ajax({
+						type: "post",
+						traditional: true,
+						url:T.serverurl + "/pay/order/listByGoodsGuid",
+						data : {"goodsGuids":goodsGuids,"businConfis":businConfis},
+						headers : {token:T.token},
+						async:false,
+						success : function(r) {
+							if (r.code == 0) {
+								var userGuids = new Array();
+								$.each(r.data,function (i, obj) {
+									userGuids.push(obj.userGuid);
+									var li = $('<li id="'+obj.guid+'">');
+									var div = $('<div class="title">');
+									if(isNull(obj.serialNumber)){
+										div.append('<span class="number">流水号：<i>'+obj.serialNumber+'</i></span>');
+									}else{
+										div.append('<span class="number">订单号：<i>'+obj.orderNumber+'</i></span>');
+									}
+									if(obj.businConfi == 1){
+										div.append('<span class="state">待处理</span>');
+									}else if(obj.businConfi == 2 || obj.businConfi == 4 || obj.businConfi == 5){
+										div.append('<span class="state">已完成</span>');
+									}else if(obj.businConfi == 3){
+										div.append('<span class="state">已取消</span>');
+									}
+									var div1 = $('<div class="content">');
+									var div1_ul = $('<ul class="item">');
+									div1_ul.append('<li name="title" class="item1">'+obj.name+'</li>');
+									div1_ul.append('<li class="item2" name="datetime"><span>日期：<i name="date">'+formatDate(obj.date,"yyyy-MM-dd")+'</i></span><span>时间：<i name="time">'+obj.time+'</i></span></li>');
+									if(isNull(obj.buySum)){
+										div1_ul.append('<li class="item2" name="userinfo"><span>姓名：<i name="useuName-'+obj.userGuid+'" >张三</i></span><span>数量：<i name="">'+obj.buySum+'</i></span><span>手机：<i name="useuPhon-'+obj.userGuid+'">13466666407</i></span></li>');
+									}else{
+										div1_ul.append('<li class="item2" name="userinfo"><span>姓名：<i name="useuName-'+obj.userGuid+'" >张三</i></span><span>数量：<i name="">1</i></span><span>手机：<i name="useuPhon-'+obj.userGuid+'">13466666407</i></span></li>');
+									}
+
+									div1_ul.append('<li class="item4" name="remark">备注：'+obj.remark+'</li>');
+									var div1_ul_li = $('<li class="btn">');
+									div1_ul_li.append('<div class="prices"><span name="price">¥'+obj.orderMoney/100+'</span><span class="original">¥'+obj.totalOrderMoney/100+'</span><!--原价--></div>');
+									if(obj.businConfi == 1){
+										div1_ul_li.append('<div class="btn-a"><a class="cancel" onclick="businconfi(\''+obj.id+'\',3)">取消</a><a class="edit pay" onclick="edit(\''+obj.guid+'\',\''+obj.id+'\',\''+obj.date+'\',\''+obj.goodsGuid+'\');">修改</a><a class="ok pay" onclick="businconfi(\''+obj.id+'\',2)">确认</a></div>');
+									}
+									li.append(div).append(div1.append(div1_ul.append(div1_ul_li)));
+									$(".list").append(li);
+								});
+								$.ajax({
+									type:"post",
+									traditional: true,
+									url:T.serverurl + "/security/user/listByGuids",
+									data : {"guids":userGuids},
+									async:false,
+									success : function(r) {
+										if (r.code == 0) {
+											$.each(r.data, function(i, obj){
+												$("*[name='useuName-"+obj.guid+"']").html(obj.name);
+												$("*[name='useuPhon-"+obj.guid+"']").html(obj.phone);
+											});
+										}
+									}
+								});
+							}
+						}
+					});
+				}
+			}
+		});
+	}
+
+	var data = {pagetime:null, guid:null};
+	function timeItemClose(){
+		$('#timeItem').append($("#layui-m-layer" + data.pagetime).find(".layui-m-layercont").children());
+		layer.close(data.pagetime);
+	}
+	//设置时间
+	function setTime(time, price){
+		var li = $("#" + data.guid);
+		var item =  li.find(".content").html();
+		var div = $("<div>");
+		div.append(item);
+		div.find(".item").append("<li class='edit'>时间修改为：" + time + "</li>");
+		div.find(".btn").remove();
+		confirm("<div class='editmsg'>" + div.html() + "</div>",function(){
+			$.ajax({
+				type:'post',
+				url:T.serverurl + "/pay/order/businconfi",
+				data : JSON.stringify({"id":data.id,"businConfi":4,"time":time}),
+				contentType:'application/json;charset=utf-8',
+				success : function(r) {
+					if (r.code == 0) {
+						layer.open({
+							content: '操作成功'
+							,btn: '确认'
+							,yes: function(index){
+								location.reload();
+								layer.close(index);
+							}
+						});
+					} else {
+						alert(r.msg);
+					}
+				}
+			});
+		});
+	}
+	function edit(guid,id,date,introductionGuid){
+		//加载场地T-time
+		introductionTimeJson(date,introductionGuid);
+		data.guid = guid;
+		data.id = id;
+		data.pagetime = layer.open({
+			type: 1
+			,content: ''
+			,anim: 'up'
+			,style: 'position:fixed; left:0; top:0; width:100%; height:100%; border: none; -webkit-animation-duration: .5s; animation-duration: .5s;'
+		});
+		$("#layui-m-layer" + data.pagetime).find(".layui-m-layercont").append($('#timeItem').children('ul'));
+	}
+	$(function(){
+		selectList(0);
+		$(".menu").children().click(function(){
+			$(this).parent().children().removeClass("select");
+			$(this).addClass("select");
+		});
+		$("#timeItem").children('ul').click(function(e){
+			var tag = null;
+			if(e.target.nodeName == "A"){
+				tag =  $(e.target);
+			} else if(e.target.nodeName == "SPAN"){
+				tag =  $(e.target).parent();
+			} else {
+				return;
+			}
+
+			if(tag != null && tag.find("span").eq(0).text() != ''){
+				//var guid = tag.attr("guid");
+				var time = tag.find("span").eq(0).text();
+				var price = tag.find("span").eq(1).text();
+				setTime(time, price);
+			}
+			timeItemClose();
+		});
+	});
+
+
+	//商家确认/取消
+	function businconfi(id,businConfi) {
+		if(businConfi == 2){
+			layer.open({
+				content: '您确定要确认该订单吗？'
+				,btn: ['确认', '不要']
+				,yes: function(index){
+					layer.close(index);
+					updateBusinconfi(id,businConfi);
+				}
+			});
+		}else{
+			layer.open({
+				content: '您确定要取消该订单吗？'
+				,btn: ['确认', '不要']
+				,yes: function(index){
+					layer.close(index);
+					updateBusinconfi(id,businConfi);
+				}
+			});
+		}
+	}
+
+
+	function updateBusinconfi(id,businConfi) {
+		$.ajax({
+			type:'post',
+			url:T.serverurl + "/pay/order/businconfi",
+			data : JSON.stringify({"id":id,"businConfi":businConfi}),
+			headers : {token:T.token},
+			contentType:'application/json;charset=utf-8',
+			success : function(r) {
+				if (r.code == 0) {
+					layer.open({
+						content: '操作成功'
+						,btn: '确认'
+						,yes: function(index){
+							location.reload();
+							layer.close(index);
+						}
+					});
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+
+
+	//根据时间加载T-time
+	function introductionTimeJson(date,introductionGuid) {
+		//重置日期列表
+		$("#afternoonTime").html('');
+		$("#morningTime").html('');
+
+		//重选日期后 数量和优惠券重置
+		$(".num").text(1);
+		$("input[name='faceValue']").each(function(){
+			$(this).prop("checked",false);
+		});
+
+		$.ajax({
+			type: "POST",
+			url: T.serverurl + "/business/reservationdate/info",
+			headers: {token: T.token},
+			data: {"introductionGuid": introductionGuid,"date":date},
+			success: function(r) {
+				if (r.code == 0) {
+					//如果有设置时间就加载设置
+					if(isNull(r.data)){
+						var jsonObj =  JSON.parse(r.data.timeJson);//转换为json对象
+						for(var j=0;j<jsonObj.length;j++){
+							var timeArr = getIntervalArr(jsonObj[j]);
+							for(var i=0;i<timeArr.length-1;i++){
+								if(timeArr[i].substring(0,2) > 12){
+									$("#afternoonTime").append('<a><span>'+timeArr[i]+'</span><span>'+jsonObj[j].price/100+'</span></a>');
+								}else{
+									$("#morningTime").append('<a><span>'+timeArr[i]+'</span><span>'+jsonObj[j].price/100+'</span></a>');
+								}
+							}
+						}
+					}else{
+						//没有设置就加载场地默认的
+						$.ajax({
+							type : "GET",
+							url : T.serverurl + "/business/introduction/info",
+							headers : {token:T.token},
+							data : {"guid":introductionGuid},
+							async:false,
+							success : function(r) {
+								if (r.code == 0) {
+									var timeJsonArr = JSON.parse(r.data.timeJson);
+									for(var j=0;j<timeJsonArr.length;j++){
+										var timeArr = getIntervalArr(timeJsonArr[j]);
+										for(var i=0;i<timeArr.length-1;i++){
+											if(timeArr[i].substring(0,2) > 12){
+												$("#afternoonTime").append('<a><span>'+timeArr[i]+'</span><span>'+timeJsonArr[j].price/100+'</span></a>');
+											}else{
+												$("#morningTime").append('<a><span>'+timeArr[i]+'</span><span>'+timeJsonArr[j].price/100+'</span></a>');
+											}
+										}
+									}
+								} else {
+									alert(r.msg);
+								}
+							}
+						});
+					}
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+
+
+	//格式化日期字符串
+	function formatDate(date, format) {
+		if (!date) return;
+		if (!format) format = "yyyy-MM-dd";
+		switch(typeof date) {
+			case "string":
+				date = new Date(date.replace(/\-/g, '/'));
+				break;
+			case "number":
+				date = new Date(date);
+				break;
+		}
+		if (!date instanceof Date) return;
+		var dict = {
+			"yyyy": date.getFullYear(),
+			"M": date.getMonth() + 1,
+			"d": date.getDate(),
+			"H": date.getHours(),
+			"m": date.getMinutes(),
+			"s": date.getSeconds(),
+			"MM": ("" + (date.getMonth() + 101)).substr(1),
+			"dd": ("" + (date.getDate() + 100)).substr(1),
+			"HH": ("" + (date.getHours() + 100)).substr(1),
+			"mm": ("" + (date.getMinutes() + 100)).substr(1),
+			"ss": ("" + (date.getSeconds() + 100)).substr(1)
+		};
+		return format.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, function() {
+			return dict[arguments[0]];
+		});
+	}
+
+	//获取间隔数组
+	function getIntervalArr(param) {
+		var date = new Date();
+		var arr = new Array();
+		if(param.interval <= 0){
+			arr.push(param.startTime);
+		}else{
+			var startTime = getMill(param.startTime);
+			var endTime = getMill(param.endTime);
+			var interval = param.interval*60*1000;
+
+			for(var i = startTime; i <= endTime; i+=interval){
+				date.setTime(i);
+				if(date.getHours() < 10){
+					time = "0"+date.getHours() + ":";
+				}else{
+					time = date.getHours() + ":";
+				}
+				if(date.getMinutes() < 10){
+					time += "0"+date.getMinutes();
+				}else{
+					time += date.getMinutes();
+				}
+				arr.push(time);
+			}
+		}
+		return arr;
+	}
+	//获取毫秒数
+	function getMill(time) {
+		var arr = time.split(":");
+		var a = new Date();
+		a.setHours(arr[0]);
+		a.setMinutes(arr[1]);
+		a.setSeconds(0)
+		return a.getTime();
+	}
+
+	//底部跳转
+	function bottomSkip(html) {
+		location.href = html;
+	}
+</script>

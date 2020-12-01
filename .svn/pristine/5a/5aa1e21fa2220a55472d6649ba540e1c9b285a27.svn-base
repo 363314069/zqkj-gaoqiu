@@ -1,0 +1,182 @@
+package com.zqkj.controller.validata;
+
+import java.io.IOException;
+import java.util.*;
+
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.poi.excel.ExcelUtil;
+import cn.hutool.poi.excel.ExcelWriter;
+import com.zqkj.service.UserService;
+import com.zqkj.utils.*;
+import org.apache.commons.lang3.StringUtils;
+
+import com.zqkj.entity.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
+
+public class UserValidata {
+
+	@Autowired
+	private UserService userService;
+
+	public R validata(UserEntity entity,Map<String, String> map){
+		if(entity.getLoginName() == null || "".equals(entity.getLoginName())) {
+			map.put("loginName", StatusCodeUtil.getMsg(10101));
+		} else if(!entity.getLoginName().matches("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,15}$")){
+			map.put("loginName", StatusCodeUtil.getMsg(10102));
+		}
+		if(map.size() > 0)
+			return R.error("参数错误").putData(map);
+		return null;
+	}
+	
+	public R save(UserEntity entity) {
+		Map<String, String> map = new HashMap<String, String>();
+		if(StringUtils.isBlank(entity.getLoginPassword())) {
+			map.put("loginPassword", StatusCodeUtil.getMsg(10103));
+		}else if(entity.getLoginPassword().trim().length() > 16) {
+			map.put("loginPassword", StatusCodeUtil.getMsg(10104));
+		}
+		validata(entity, map);
+		if(map.size() > 0)
+			return R.error(Content.STATUS_CODE_5006).putError(map);
+		return null;
+	}
+	
+	public R saveList(List<UserEntity> list) {
+		return null;
+	}
+	
+	public R info(UserEntity entity) {
+		return null;
+	}
+	
+	public R update(UserEntity entity) {
+		Map<String, String> map = new HashMap<String, String>();
+		//validata(entity, map);
+		if(StringUtil.isEmpty(entity.getLoginName())){
+			entity.setLoginName(null);
+		}
+		if(StringUtil.isEmpty(entity.getLoginPassword())){
+			entity.setLoginPassword(null);
+		}
+		if(map.size() > 0)
+			return R.error(Content.STATUS_CODE_5006).put("error", map);
+		return null;
+	}
+	public R del(UserEntity entity) {
+		if(entity.getId() == null && StringUtils.isAllBlank(entity.getGuid())){
+			return R.error(Content.STATUS_CODE_5006);
+		}
+		return null;
+	}
+	
+	public R delByIds(Long[] ids) {
+		if(ids == null && ids.length == 0){
+			return R.error(Content.STATUS_CODE_5006);
+		}
+		return null;
+	}
+	
+	public R delByGuids(String[] guids) {
+		if(guids == null && guids.length == 0){
+			return R.error(Content.STATUS_CODE_5006);
+		}
+		return null;
+	}
+	
+	public R list(UserEntity entity, String orderBy) {
+		return null;
+	}
+	
+	public R page(PageUtil<UserEntity> page, UserEntity entity) {
+		return null;
+	}
+	
+	public R total(UserEntity entity) {
+		return null;
+	}
+	
+	public R pageByRoleGuid(PageUtil<UserEntity> page, String roleGuid, String userGroupGuid) {
+		if(StringUtils.isBlank(roleGuid)){
+			return R.error(10201);
+		}
+		return null;
+	}
+	
+	public R pageByGroupGuid(PageUtil<UserEntity> page, String userGroupGuid) {
+		if(StringUtils.isBlank(userGroupGuid)){
+			return R.error(10203);
+		}
+		return null;
+	}
+	
+	public R pageNotByRoleGuid(PageUtil<UserEntity> page, String roleGuid, String userGroupGuid) {
+		if(StringUtils.isBlank(roleGuid)){
+			return R.error(10201);
+		}
+		return null;
+	}
+	
+	public R pageNotByGroupGuid(PageUtil<UserEntity> page, String userGroupGuid) {
+		if(StringUtils.isBlank(userGroupGuid)){
+			return R.error(10203);
+		}
+		return null;
+	}
+
+	public R selectOne(@RequestBody String guid) {
+		if(StringUtil.isEmpty(guid)){
+			return R.error(Content.STATUS_CODE_5006,"用户GUID为空");
+		}
+		return null;
+	}
+
+	public R selectUserMessage() {
+		return null;
+	}
+
+
+	public R listByGuids(String[] guids) {
+		if(guids == null || guids.length == 0){
+			return R.error(Content.STATUS_CODE_5004).put("count", 0);
+		}
+		return null;
+	}
+
+	public R selectListPage(PageUtil<UserEntity> page, UserEntity entity) {
+		return null;
+	}
+
+
+	/*public R queryAdmin(String openid) {
+		if(StringUtil.isEmpty(openid)){
+			return R.error(Content.STATUS_CODE_5006,"用户OPENID为空");
+		}
+		return null;
+	}*/
+
+
+	public R selectAdmin() {
+		return null;
+	}
+
+	public R bindingAdminReservation(String reservationGuid,String userGuid) {
+		if(StringUtil.isEmpty(reservationGuid)){
+			return R.error(Content.STATUS_CODE_5006,"球场GUID为空");
+		}
+		if(StringUtil.isEmpty(userGuid)){
+			return R.error(Content.STATUS_CODE_5006,"用户GUID为空");
+		}
+		return null;
+	}
+
+
+	public void exportExcel(HttpServletResponse response,String[] guids){
+	}
+
+}

@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>球场预订</title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="js/common-1.0.1.js?v=2"></script>
+		<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default-1.0.1.css?v=4" rel="stylesheet" type="text/css">
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<script src="js/coordtransform.js"></script>
+		<script src="js/wx_api.js?v=6"></script>
+		<!--
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=Eo0EMvydXBWKhzAX40eUjN7eOIx0ISxV"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=E7JBZ-5UO3R-NIJWJ-WXGP5-P2R5V-IKFZY"></script>
+		-->
+	</head>
+	<style>
+		.wrap{
+			background-color: #fff;
+			border-radius: 0 0 1rem 1rem;
+			font-size: .32rem;
+		}
+		.nav-select{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #e7e7e7;
+			font-size: 0.32rem;
+			line-height: 0.8rem;
+			color: #2d9de7;
+		}
+		.nav-select .iconfont{font-size: 0.36rem;}
+		.nav-select > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+			height: 0.8rem;
+		}
+		.nav-select i{margin: 0 0.1rem;}
+		.nav-select .fa{vertical-align: text-top;}
+		.menu {	
+			/*display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #e7e7e7;*/
+			font-size: 0.32rem;
+			line-height: 0.8rem;
+			text-align: left;
+			padding: 0 .2rem;
+		}
+		.menu > li{
+			/*-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;*/
+			display: inline-block;
+			text-align: center;
+			height: 0.8rem;
+			padding: 0 0.1rem;
+		}
+		.menu > li:nth-child(2n){
+			padding: 0;
+		}
+		.menu .select{
+			border-bottom: 0.04rem solid #2d9de7;
+			color: #2d9de7;
+		}
+		.list{
+			
+		}
+		.list > li{
+			padding: 0.4rem 0.2rem;
+			overflow: hidden;
+			position: relative;
+		}
+		.list .item {
+			margin: 0 .2rem 0 .7rem;
+			text-align: left;
+			overflow: hidden;
+			font-size: 0.28rem;
+			line-height: .45rem;
+			border: 1px solid #e7e7e7;
+			padding: .2rem .2rem .2rem 1.3rem;
+			border-radius: .2rem;
+			-moz-border-radius: .2rem;
+			-webkit-border-radius: .2rem;
+			box-shadow: .05rem .05rem .05rem 0rem rgba(0, 0, 0, .2);
+			position: relative;
+		}
+		.list .item > li{
+			margin: .1rem 0;
+		}
+		.list .item > li:nth-child(1){
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+		}
+		.list .item > li:nth-child(2) span{
+			padding: 0 .1rem;
+			border: 1px solid #5592f5;
+			border-radius: .1rem;
+			-moz-border-radius: .1rem;
+			margin: 0 .1rem .1rem 0;
+			-webkit-border-radius: .1rem;
+			color: #5592f5;
+			display: inline-block;
+			font-size: .24rem;
+			
+		}
+		.list .item > li:nth-child(3){
+			color: #999;
+			font-size: .24rem;
+		}
+		.list .item > li:nth-child(4) span:nth-child(1){
+			color: #ff0000;
+			font-size: 0.48rem;
+		}
+		.list .item > li:nth-child(4) span:nth-child(2){
+			margin-left: .1rem;
+			color: #fbbd4c;
+			font-size: .24rem;
+		}
+		.list .item > li:nth-child(4) span:nth-child(2) img{
+			vertical-align: middle;
+		}
+		.list .price{
+			text-align: center;
+			width: 1.8rem;
+			font-size: 0.36rem;
+			position: absolute;
+			padding:0 0 .3rem 0;
+			right: -.65rem;
+			bottom: -.3rem;
+			line-height: .6rem;
+			color: #fff;
+			-webkit-transform:rotate(-45deg);
+			background-color: #fbbd4c;
+		}
+		.list .price a{
+			color: #fff;
+		}
+		
+		.list .logo{ 
+			width: 1.6rem; 
+			height: 1.2rem; 
+			border-radius: .2rem; 
+			-moz-border-radius: .2rem; 
+			-webkit-border-radius: .2rem;
+			background: url(images/head120.jpg) no-repeat center center;
+			background-size: cover;
+			position: absolute;
+			left: .4rem;
+			top: calc(50% - .6rem);
+			z-index: 9999;
+		}
+		
+		.list .logo img{
+			display: none;
+		}
+		.list .coupon span{
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+			display: inline-block;
+			max-width: calc(100% - .5rem);
+		}
+		.list .coupon::after{
+			content: '券';
+			background-color: #fbbd4c;
+			color: #fff;
+			display: inline-block;
+			vertical-align: top;
+			margin-left: .1rem;
+			border-radius: .1rem;
+			-moz-border-radius: .1rem;
+			-webkit-border-radius: .2rem .1rem .2rem .1rem;
+			font-size: .24rem;
+			padding: 0 .05rem;
+		}
+		.list .contain{
+			
+		}
+		.list .gold img{width: .40rem; vertical-align: middle;}
+		ul.arealist {
+			display: none;
+			position:fixed;
+			overflow:auto;
+			left:0; 
+			top:0; 
+			width:100%; 
+			height:100%; 
+			border: none; 
+			background-color: #FFFFFF; 
+			text-align: left;
+			line-height: 0.8rem;
+			font-size: 0.28rem;
+			padding-top:0.88rem;
+			box-sizing: border-box;
+			z-index: 9999;
+		}
+		.list .day > ul > li{
+			padding: 0.4rem 0.2rem;
+			overflow: hidden;
+			position: relative;
+		}
+		.list .day{
+			padding: 0;
+			margin: .4rem 0;
+			border: 1px solid #e7e7e7;
+			border-radius: .4rem;
+			-moz-border-radius: .4rem;
+			-webkit-border-radius: .4rem;
+		}
+		.list .day::before{
+			content: attr(data-title); 
+			display: block;
+			background-color: #00a964;
+			line-height: .8rem;
+			color: #ffffff;
+		}
+		.arealist > li > a::before{
+			content: "\e660"; 
+			font-family: "iconfont" !important;
+			font-size: .28rem;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			padding: 0.2rem;
+		}
+		.arealist > li > a{display: block; border-bottom: 1px solid #e7e7e7;}
+		.arealist ul li{display: inline-block; padding: 0 0.6rem;}
+		.arealist ul{display: none; border-bottom: 1px solid #e7e7e7;}
+		.arealist .select{color: #2d9de7;}
+		.arealist .select::before{content: "\e661"; }
+
+		.head .head1{background-color: #fff;}
+		.head .head1 a{color: #666;}
+		.head .head1 .l{width: auto;}
+		.head .head1 .r{width: auto;}
+		.head .head1 .c{position: relative;text-align: right; margin-right: .2rem;}
+		.head .head1 .c input{
+			height: .6rem; 
+			width: 2.8rem; 
+			border-radius: 0.2rem;
+			color: #666;
+			/*border: 1px solid #e7e7e7;*/
+			border: 0; 
+			outline: none; 
+			background-color: #eee;
+			line-height: .6rem;
+			padding: 0 .5rem 0 .2rem;
+		}
+		.head .head1 .c i{position: absolute; right: .1rem; top: 0; color: #666;}
+		.head .head1 .r a{
+			display: block; 
+			/*border: 1px solid #e7e7e7;*/
+			background-color: #eee;
+			height: .6rem; 
+			width: 2rem; 
+			border-radius: .2rem;
+			margin-top: .14rem;
+			text-align: center;
+			line-height: .6rem;
+		}
+		.head .head1 .r a::before{
+			font-family: "iconfont" !important;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			content: '\e6ae';
+			font-size: 0.36rem;
+			margin-right: .1rem;
+		}
+		
+		.news{
+			padding: .2rem;
+			font-size: .32rem;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			/*
+			border-bottom: 1px solid #e7e7e7;
+			*/
+			line-height: .32rem;
+			color: #fff;
+			position: relative;
+		}
+		.news > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+			width: 33%;
+			z-index: 10;
+		}
+		.news ul{
+			box-shadow: .05rem .05rem .05rem 0rem rgba(0, 0, 0, .2);
+			margin: .1rem;
+			background-color: #6ccea7;
+			font-size: .28rem;
+		}
+
+		.news ul > li:nth-child(n + 2){
+			padding: .08rem;
+		}
+		.news .title{
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+		}
+		.news .price{
+			color: #ffff00;
+		}
+		
+		.news ul > li.buying{
+			padding: .3rem 0;
+		}
+		.news .buying a{
+			background-color: #fbbd4c;
+			color: #fff;
+			padding: .1rem .5rem;
+		}
+		.news::before{
+			position: absolute;
+			left: .1rem;
+			top: 0;
+			display: block;
+			content: '';
+			border-radius: .2rem;
+			background-color: #f1f5fe;
+			height: 2.5rem;
+			width: calc(100% - .2rem);
+		}
+		.news .logo{
+			height: 1.2rem;
+			background:url(images/banner3.jpg) no-repeat center center;
+			background-size: cover;
+		}
+		.list .item > li:nth-child(4) span > span:nth-child(1){
+			margin-left: .1rem;
+			color: #999;
+			font-size: .24rem;
+		}
+	</style>
+	<body>
+		<div class="head">
+			<ul class="top head1">
+				<li class="l"><a id="back"><i class="iconfont">&#xe663;</i></a><a>订场</a></li>
+				<li class="c">
+					<form οnsubmit="return false;">
+						<input type="text" id="selectName" name="reservationname">
+						<i class="iconfont" onclick="fuzzyQuery()">&#xe653;</i>
+					</form>
+				</li>
+				<li class="r"><a id="area">北京</a></li>
+			</ul>
+		</div>
+		<div class="wrap">
+			<!--
+			<ul class="nav-select">
+				<li><i class="iconfont">&#xe6ae;</i><span id="area"></span><i class="fa fa-sort-desc"></i></li>
+				<li><i class="iconfont">&#xe633;</i><span id="date"></span><i class="fa fa-sort-desc"></i></li>
+			</ul>
+			<ul>
+				<li><input type="text" id="selectName" name="reservationname" class="queryInput"><button class="buttonQuery" onclick="fuzzyQuery()">搜索</button></li>
+			</ul>
+			-->
+			<ul class="news" style="display: none">
+				<!--<li>
+					<ul>
+						<li class="logo"></li>
+						<li class="title">天津生态城18洞 08:00-09:00</li>
+						<li class="price">360元</li>
+						<li class="buying"><a>抢购</a></li>
+					</ul>
+				</li>
+				<li>
+					<ul>
+						<li class="logo"></li>
+						<li class="title">天津生态城18洞 08:00-09:00</li>
+						<li class="price">360元</li>
+						<li class="buying"><a>抢购</a></li>
+					</ul>
+				</li>
+				<li>
+					<ul>
+						<li class="logo"></li>
+						<li class="title">天津生态城18洞 08:00-09:00</li>
+						<li class="price">360元</li>
+						<li class="buying"><a>抢购</a></li>
+					</ul>
+				</li>-->
+			</ul>
+			<ul class="menu">
+				<li class="select" onclick="th2()" singType="1">特惠时段</li>
+				<li>|</li>
+				<!--<li onclick="loadReservationList('price')" singType="2">特惠时段</li>-->
+				<li onclick="loadIntroductionList('createTime desc')" singType="2">金币订场</li>
+				<!--<li>|</li>
+				<li onclick="loadReservationListClosest('createTime desc')" singType="3">距离最近</li>-->
+				<!--<li onclick="nearestDistance()">距离最近</li>-->
+			</ul>
+			<ul class="list">
+				<!--<li>
+					<div class="logo">
+						<img src="images/share/bg.jpg">
+					</div>
+					<ul class="item">
+						<li>XXXX球场</li>
+						<li>距离：2304公里</li>
+						<li>北京市朝阳区XXX北京市朝阳区XXX</li>
+					</ul>
+					<div class="price">
+						<span>¥489</span>
+					</div>
+				</li>-->
+			</ul>
+		</div>
+		<ul id="arealist" class="arealist">
+			<!--<li>
+				<a>北京</a>
+				<ul>
+					<li>
+						<a>北京</a>
+					</li>
+				</ul>
+			</li>
+			<li>
+				<a>浙江</a>
+				<ul>
+					<li>
+						<a>杭州</a>
+					</li>
+					<li>
+						<a>温州</a>
+					</li>
+					<li>
+						<a>宁波</a>
+					</li>
+				</ul>
+			</li>-->
+		</ul>
+		<ul style="display: none" id="displayLi"></ul>
+		<div class="footer">
+			<div class="topbg">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 130">
+					<path style="fill:#00a964;" d="M601,100H149C66.71,100,0,55.23,0,0V130H750V0C750,55.23,683.29,100,601,100Z"/>
+				</svg>
+			</div>
+		</div>
+	</body>
+</html>
+<script>
+	var userCode = null;
+	var dataReservationList = null;
+	var addressCode;
+	var areaobj = {
+		province:null, 	//省
+		city:null, 		//市
+		area:null		//区
+	};
+	var paramList = null;//参数表数据
+
+	var adcode = null;
+	//wxapi.getLo
+	/*laydate.render({
+		elem: '#date'
+		,theme: '#2d9de7'
+		,min: 0 //7天前
+		//,max: 62 //7天后
+		,value: new Date()
+		//,closeStop: '#date'
+		//,show: true //直接显示
+		,done: function(value, date, endDate){
+			// 回调函数
+			if($(".select").attr("singType") == 1){
+				loadIntroductionList('createTime desc')
+			}else if($(".select").attr("singType") == 2){
+				loadReservationList('price');
+			}else{
+				loadReservationListClosest('createTime desc');
+			}
+		}
+	});*/
+
+
+	//计算时间段相差天数
+	function datedifference(sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式
+		var dateSpan,
+				tempDate,
+				iDays;
+		sDate1 = Date.parse(sDate1);
+		sDate2 = Date.parse(sDate2);
+		dateSpan = sDate2 - sDate1;
+		dateSpan = Math.abs(dateSpan);
+		iDays = Math.floor(dateSpan / (24 * 3600 * 1000));
+		return iDays
+	};
+
+	//获取当天日期
+	function getNowFormatDate() {
+		var date = new Date();
+		var seperator1 = "-";
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var strDate = date.getDate();
+		if (month >= 1 && month <= 9) {
+			month = "0" + month;
+		}
+		if (strDate >= 0 && strDate <= 9) {
+			strDate = "0" + strDate;
+		}
+		var currentdate = year + seperator1 + month + seperator1 + strDate;
+		return currentdate;
+	}
+
+	//加载金币订场
+	function loadIntroductionList(orderBy){
+		$(".list").html("");
+		//根据地区加载球场列表，然后根据球场列表查询产品
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/reservation/selectlist",
+			headers : {token:T.token},
+			data : {"orderBy":orderBy,"addressCode":addressCode,state:1},
+			async:false,
+			success : function(reservation) {
+				if (reservation.code == 0) {
+					var reservationGuids = new Array();
+					$.each(reservation.data, function(i, obj) {
+						reservationGuids.push(obj.guid);
+					});
+					if(reservationGuids.length > 0){
+						//加载场地列表
+						$.ajax({
+							type : "POST",
+							url : T.serverurl + "/business/introduction/listByReservations",
+							headers : {token:T.token},
+							data : {reservationGuids:reservationGuids,state:1,orderBy:"price"},
+							traditional: true,
+							async:false,
+							success : function(r) {
+								if (r.code == 0) {
+									$.each(r.data, function(i, obj) {
+										if(isNull(obj.goldSum) && obj.goldSum > 0){
+											var li = $('<li onclick="reserve(\''+obj.guid+'\')">');
+											li.append('<div class="logo" style="background-image: url(' + T.serverurl+obj.img.replace(/\\/g, '/') + ');"></div>');
+											var li_ui = $('<ul class="item">');
+											//判断是否可用优惠券
+											if(obj.preferential == 1){
+												li_ui.append('<li class="coupon"><span>'+obj.name + '</span></li>');//标题
+											}else{
+												li_ui.append('<li>'+obj.name+'</li>');//标题
+											}
+											var li_ui_li = $('<li>');//
+
+											if(isNull(obj.priceInclude)){
+												//li_ui_li.append('价格包含：');
+												var priceIncludes = obj.priceInclude.split(",");
+												for(var priceInt=0;priceInt < priceIncludes.length;priceInt++){
+													$.each(paramList,function (parint, parObj) {
+														if(isNull(parObj.guid) && parObj.guid == priceIncludes[priceInt]){
+															li_ui_li.append('<span>'+parObj.name+'</span>');
+														}
+													});
+												}
+											}
+											li_ui.append(li_ui_li);
+											/*var tiemJsonArr = JSON.parse(obj.timeJson);
+											var timeJsonStr = "<li>";
+											for(var i=0; i<tiemJsonArr.length; i++){
+												timeJsonStr += tiemJsonArr[i].startTime+'-'+tiemJsonArr[i].endTime+' ';
+											}
+											timeJsonStr += '</li>';
+											li_ui.append(timeJsonStr);//*/
+											li_ui.append("<li></li>");//
+											li_ui.append('<li><span>'+parseInt(obj.price/100 - obj.goldSum)+'元<span class="rise">起</span></span> <span>+'+obj.goldSum+'金币 <img style="width:.4rem;" src="images/svg/jb1.svg"><span></li>');
+											//li_ui.append('<li class="gold"><div class="price"><span>'+obj.price/100+'元<br>抵扣：30 <img src="fonts/svg/jb1.svg"></span><a>订场</a></div></li>');
+											li_ui.append('<li class="price"><a>订场</a></li>');
+											li.append(li_ui);
+											$(".list").append(li);
+										}
+									});
+								} else {
+									alert(r.msg);
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	}
+
+	//加载球场列表
+	function loadReservationList(orderBy){
+		$(".list").html("");
+		//加载场地列表
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/reservation/selectLowestPrice",
+			headers : {token:T.token},
+			data : {"orderBy":orderBy,"addressCode":addressCode,name:$("#selectName").val()},
+			success : function(r) {
+				if (r.code == 0) {
+					$.each(r.data, function(i, obj) {
+						var distance = 0;
+						var li = $('<li onclick="reservationInfo(\''+obj.guid+'\')">');
+						li.append('<div class="logo" style="background-image: url(' + T.serverurl+obj.img.replace(/\\/g, '/') + ');"></div>');
+						var ul = $('<ul class="item">');
+						ul.append('<li id="name-'+obj.guid+'">'+obj.name+'</li>');
+						//价格包含
+						var ul_li = $('<li>');
+						$.each(obj.introductionList,function (introductionint, introductionObj) {
+							if(obj.price == introductionObj.price){
+								if(isNull(introductionObj.priceInclude)){
+									//ul_li.append('包含：');
+									var priceIncludes = introductionObj.priceInclude.split(",");
+									for(var priceInt=0;priceInt < priceIncludes.length;priceInt++){
+										$.each(paramList,function (parint, parObj) {
+											if(isNull(parObj.guid) && parObj.guid == priceIncludes[priceInt]){
+												ul_li.append('<span>'+parObj.name+'</span>');
+											}
+										});
+									}
+								}
+							}
+						});
+						ul.append(ul_li);
+						ul.append('<li>距离：'+distanceMethods(obj.coordinate)+'公里</li>');
+						ul.append('<li><span>'+obj.price/100+'元</span> <!--<span>金币抵扣：30 <img style="width:.4rem;" src="images/svg/jb1.svg"><span>--></li>');
+						//li_ui.append('<li class="gold"><div class="price"><span>'+obj.price/100+'元<br>抵扣：30 <img src="fonts/svg/jb1.svg"></span><a>订场</a></div></li>');
+						ul.append('<li class="price"><a>订场</a></li>');
+						li.append(ul);
+						$(".list").append(li);
+					});
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+
+	//加载球场距离最近列表
+	function loadReservationListClosest(orderBy){
+		$(".list").html("");
+		//加载场地列表
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/reservation/selectLowestPrice",
+			headers : {token:T.token},
+			data : {"orderBy":orderBy,"addressCode":addressCode,name:$("#selectName").val()},
+			success : function(r) {
+				if (r.code == 0) {
+					$.each(r.data, function(i, obj) {
+						if(isNull(obj.coordinate)){
+							obj.coordinate = distanceMethods(obj.coordinate);
+						}else{
+							obj.coordinate = 0;
+						}
+					});
+
+					r.data.sort(function (a , b) {
+						return a.coordinate - b.coordinate;
+					});
+
+					$.each(r.data, function(i, obj) {
+						var distance = 0;
+						var li = $('<li onclick="reservationInfo(\''+obj.guid+'\')">');
+						li.append('<div class="logo" style="background-image: url(' + T.serverurl+obj.img.replace(/\\/g, '/') + ');"></div>');
+						var ul = $('<ul class="item">');
+						ul.append('<li id="name-'+obj.guid+'">'+obj.name+'</li>');
+						//价格包含
+						var ul_li = $('<li>');
+						$.each(obj.introductionList,function (introductionint, introductionObj) {
+							if(obj.price == introductionObj.price){
+								if(isNull(introductionObj.priceInclude)){
+									//ul_li.append('包含：');
+									var priceIncludes = introductionObj.priceInclude.split(",");
+									for(var priceInt=0;priceInt < priceIncludes.length;priceInt++){
+										$.each(paramList,function (parint, parObj) {
+											if(isNull(parObj.guid) && parObj.guid == priceIncludes[priceInt]){
+												ul_li.append('<span>'+parObj.name+'</span>');
+											}
+										});
+									}
+								}
+							}
+						});
+						ul.append(ul_li);
+						ul.append('<li>距离：'+obj.coordinate+'公里</li>');
+						ul.append('<li><span>'+obj.price/100+'元</span> <!--<span>金币抵扣：30 <img style="width:.4rem;" src="images/svg/jb1.svg"><span>--></li>');
+						ul.append('<li class="price"><a>订场</a></li>');
+						li.append(ul);
+						$(".list").append(li);
+					});
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+
+	//特惠
+	function th() {
+		$(".news").empty();
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/reservation/selectlist",
+			headers : {token:T.token},
+			data : {"addressCode":addressCode,state:1},
+			success : function(reservation) {
+				if (reservation.code == 0) {
+					var reservationGuids = new Array();
+					$.each(reservation.data, function(i, obj) {
+						reservationGuids.push(obj.guid);
+					});
+					if(reservationGuids.length > 0){
+						//加载特惠场地列表
+						$.ajax({
+							type : "POST",
+							url : T.serverurl + "/business/introduction/listByReservations",
+							headers : {token:T.token},
+							data : {reservationGuids:reservationGuids,type:2,state:1},
+							traditional: true,
+							async:false,
+							success : function(r) {
+								if (r.code == 0) {
+									$.each(r.data, function(i, obj) {
+										if(i < 3){//默认加载3条
+											var li = $('<li>');
+											var li_ul = $('<ul>');
+											li_ul.append('<li class="logo" id="img-'+obj.guid+'"></li>');
+											li_ul.append('<li class="title">'+obj.name + '</li>');
+											li_ul.append('<li class="price">'+obj.price/100+'元</li>');
+											li_ul.append('<li class="buying"><a href="javascript:;" onclick="reserve(\''+obj.guid+'\')">抢购</a></li>');
+											li.append(li_ul);
+											$(".news").append(li);
+											$("#img-"+obj.guid).css("background-image","url("+T.serverurl+obj.img.replace(/\\/g, "/")+")");
+										}
+									});
+								} else {
+									alert(r.msg);
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	}
+
+	//加载特惠下面显示列表
+	function th2(){
+		$(".list").empty();
+		listdate($(".list"));
+		//根据地区加载球场列表，然后根据球场列表查询产品
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/reservation/selectlist",
+			headers : {token:T.token},
+			data : {/*"addressCode":addressCode,*/state:1},
+			success : function(reservation) {
+				if (reservation.code == 0) {
+					var reservationGuids = new Array();
+					$.each(reservation.data, function(i, obj) {
+						reservationGuids.push(obj.guid);
+					});
+					if(reservationGuids.length > 0){
+						//加载场地列表
+						$.ajax({
+							type : "POST",
+							url : T.serverurl + "/business/introduction/listByReservations",
+							headers : {token:T.token},
+							data : {reservationGuids:reservationGuids,type:2,state:1},
+							traditional: true,
+							async:false,
+							success : function(r) {
+								if (r.code == 0) {
+									showthlist(r.data);
+								} else {
+									alert(r.msg);
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	}
+	function showthlist(data){
+		if(!data)
+			return;
+		var list = $(".list");
+		$.each(data, function(i, obj) {
+		    var li = $('<li class="displayLili" guid="'+obj.guid+'" >');
+		    li.append('<div class="logo" style="background-image: url(' + T.serverurl+obj.img.replace(/\\/g, '/') + ');"></div>');
+		    var li_ui = $('<ul class="item">');
+		    //判断是否可用优惠券
+		    if(obj.preferential == 1){
+		        li_ui.append('<li class="coupon"><span>'+obj.name + '</span></li>');//标题
+		    }else{
+		        li_ui.append('<li>'+obj.name+'</li>');//标题
+		    }
+		    var li_ui_li = $('<li>');//
+
+		    if(isNull(obj.priceInclude)){
+		        //li_ui_li.append('价格包含：');
+		        var priceIncludes = obj.priceInclude.split(",");
+		        for(var priceInt=0;priceInt < priceIncludes.length;priceInt++){
+		            $.each(paramList,function (parint, parObj) {
+		                if(isNull(parObj.guid) && parObj.guid == priceIncludes[priceInt]){
+		                    li_ui_li.append('<span>'+parObj.name+'</span>');
+		                }
+		            });
+		        }
+		    }
+		    li_ui.append(li_ui_li);
+		    var tiemJsonArr = JSON.parse(obj.timeJson);
+		    var timeJsonStr = "";
+		    for(var i=0; i<tiemJsonArr.length; i++){
+		        timeJsonStr += tiemJsonArr[i].startTime+'-'+tiemJsonArr[i].endTime+' ';
+		    }
+		    var timeJsonLi = $('<li>');
+			timeJsonLi.append(timeJsonStr);
+		    li_ui.append(timeJsonLi);//
+		    li_ui.append('<li><span>'+obj.price/100+'元<span class="rise">起</span></span></li>');
+		    //li_ui.append('<li class="gold"><div class="price"><span>'+obj.price/100+'元<br>抵扣：30 <img src="fonts/svg/jb1.svg"></span><a>订场</a></div></li>');
+		    li_ui.append('<li class="price"><a>订场</a></li>');
+		    li.append(li_ui);
+		    if(obj.cycleSetting == 1){
+				var cycleSettingDateArr = obj.cycleSettingDate.split(',');
+				$.each(cycleSettingDateArr,function (c, dateArr) {
+					if(isNull(dateArr)){
+						var dates = $("#day_" + dateArr).attr("name").substring(5,15);
+						if(new Date(dates.replace(/\-/g, '/')) >= new Date(obj.startTime.replace(/\-/g, '/'))){
+							list.find("#day_" + dateArr).children("ul").append(li.clone());
+						}
+					}
+				});
+			}else if(obj.cycleSetting == 2){
+				var cycleSettingDateArr = obj.cycleSettingDate.split(',');
+				$.each(cycleSettingDateArr,function (c,dateArr) {
+					if(isNull(dateArr)){
+						if(new Date(dateArr.replace(/\-/g, '/')) >= new Date(obj.startTime.replace(/\-/g, '/'))){
+							list.find("li[name=date_" + dateArr + "]").children("ul").append(li.clone());
+						}
+					}
+				});
+			} else {
+				var dayli = list.children("li");
+				dayli.each(function(){
+					//$(this).children("ul").append(li.clone());
+				});
+			}
+		    //$(".list").append(li);
+		});
+
+		$(".displayLili").on("click",function(){
+			var str = $(this).parent().parent().attr("name").substring(5,15);
+			location.href = "H5_introduction_pay.html?footer=1&guid="+$(this).attr("guid")+"&cycleDate="+str;
+		});
+	}
+	//跳转到支付页面
+	function reserve(guid) {
+		location.href = "H5_introduction_pay.html?footer=1&guid="+guid;
+	}
+
+	//搜索按钮
+	function fuzzyQuery() {
+		location.href = "H5_reservation_query.html?footer=1&addressCode="+$("#area").attr("code")+"&selectName="+$("#selectName").val()+"&addressName="+$("#area").html();
+		/*$(".menu").children().each(function(){
+			$(this).parent().children().removeClass("select");
+		});
+		$(".menu").find('li').eq(2).addClass("select");
+		loadReservationList('createTime desc');*/
+	}
+
+	//加载省份城市
+	function loadArea(){
+		if(!isNull(localStorage.getItem("areaobj"))){
+			function dataformat(){
+				if(!isNull(areaobj.province) || !isNull(areaobj.city)){
+					return;
+				}
+				$.each(areaobj.city, function(i, city) {
+					if(city.name != '市辖区' && city.name != '县'){
+						var code = parseInt(city.code / 100);
+						$.each(areaobj.province, function(j, province) {
+							if(province.code == code){
+								if(!province.city){
+									province.city = new Array();
+								}
+								province.city.push(city);
+							}
+						})
+					}
+				})
+				areaobj.city = null;
+				initArea();
+			}
+			//加载中国省列表
+			$.ajax({
+				type : "POST",
+				url : T.serverurl + "/security/area/list",
+				headers : {token:T.token},
+				data : {"level":1, "countryCode":86},
+				success : function(r) {
+					if (r.code == 0) {
+						areaobj.province = r.data;
+						//dataformat();
+						initArea();
+					} else {
+						alert(r.msg);
+					}
+				}
+			});
+			//加载中国市级列表
+			/*
+            $.ajax({
+                type : "POST",
+                url : T.serverurl + "/security/area/list",
+                headers : {token:T.token},
+                data : {"level":2, "countryCode":86},
+                success : function(r) {
+                    if (r.code == 0) {
+                        areaobj.city = r.data;
+                        dataformat();
+                    } else {
+                        alert(r.msg);
+                    }
+                }
+            });
+            */
+		}else{
+			areaobj = JSON.parse(localStorage.getItem("areaobj"));
+			initArea();
+		}
+	}
+
+	function initArea(){
+		var arealist = $("#arealist");
+		$.each(areaobj.province, function(i, province) {
+			var li = $('<li>');
+			li.attr('code', province.code);
+			li.append('<a>' + province.name + '</a>');
+			var cityul =  $('<ul>');
+			if(isNull(province.city)){
+				$.each(province.city, function(j, city) {
+					var cityli = $('<li>');
+					cityli.append('<a>' + city.name + '</a>');
+					cityli.attr('code', city.code);
+					cityul.append(cityli);
+				})
+			} else {
+				/*
+                var cityli = $('<li>');
+                cityli.append('<a>' + province.name + '</a>');
+                cityli.attr('id', province.code);
+                cityul.append(cityli);
+                */
+			}
+			li.append(cityul);
+			arealist.append(li);
+		});
+		lodaEvent();
+	}
+
+	//球场点击进行跳转
+	function reservationInfo(reservationGuid) {
+		location.href = "H5_introduction_list.html?footer=1&guid="+reservationGuid;
+	}
+
+
+	$(function(){
+		//加载参数表数据  费用包含
+		$.ajax({
+			type : "post",
+			async:false,
+			url : T.serverurl + "security/param/list",
+			success : function(res) {
+				paramList = res.data;
+			}
+		});
+
+		var locat = wxapi.getLocation();
+		var res = sessionStorage.getItem("selectarea");
+		if(res){
+			res = JSON.parse(res);
+			setArea(res.province, res.code);
+		} else {
+			setArea(locat.province, locat.code);
+		}
+		loadArea();
+
+		$("#back").click(function(){
+			if($('#arealist').is(':hidden')){
+				history.go(-1);
+			} else {
+				$('#arealist').hide("slow");
+			}
+
+		})
+		$(".menu").children().click(function(){
+			if($(this).index() % 2 == 0){
+				$(this).parent().children().removeClass("select");
+				$(this).addClass("select");
+			}
+		});
+		wxapi.setShare({
+			title:"一周高尔夫特惠订场",
+			desc:"天天特惠，尽在九洲高尔夫",
+			link:location.href,
+			imgUrl:'http://wap.oneagles.com/wap/common/images/logo.png'
+		});
+	});
+
+	//地区数据加载后  在加载方法
+	function lodaEvent(){
+		$("#area").parent().click(function(){
+			$('#arealist').show("slow");
+			$('#arealist').css("overflow","auto");
+		})
+		$('#arealist').children("li").children("a").click(function(){
+			/*
+            if(!$(this).hasClass("select")){
+                $('#arealist').find("ul").hide("slow");
+                $(this).next().show("slow");
+                $('#arealist').children("li").children("a").removeClass("select");
+                $(this).addClass("select");
+            }
+            */
+			$('#arealist').hide("slow");
+			var area = {province:$(this).html(), code:$(this).parent().attr("code")};
+			sessionStorage.setItem("selectarea", JSON.stringify(area));
+			setArea($(this).html(), $(this).parent().attr("code"));
+		})
+		/*
+        $('#arealist').children("li").children("ul").find("a").click(function(){
+            $('#arealist').hide("slow");
+            $("#area").attr("code", $(this).attr("code"));
+            $("#area").html($(this).html());
+
+            //选择地区后重新加载球场列表  重新设置样式 智能推荐
+            $(".select").removeClass("select");
+            $(".menu li:first").addClass("select");
+            addressCode = $(this).attr("code");
+            loadReservationList('createTime desc');
+        })*/
+	}
+
+	//getAreaInfo(39.984154,116.307490);
+	//getAreaInfoByIp();
+
+	//加载默认数据，切换地区后也调用此方法
+	function setArea(name, code){
+		$("#area").attr("code", code);
+		$("#area").html(name);
+		addressCode = "86"+code;
+		if($(".select").attr("singType") == 2){
+			//loadReservationList('createTime desc')  球场直达改为特惠产品
+			loadIntroductionList('createTime desc')
+		}else if($(".select").attr("singType") == 3){
+			loadReservationListClosest('createTime desc')
+		}else if($(".select").attr("singType") == 1){
+			th2();
+		}
+		//th();//放到下面展示  改为th2()
+	}
+
+	//计算距离
+	function distanceMethods(coordinate){
+		if(userCode != null && coordinate != null){
+			var coordinates = coordinate.split(",");
+			return parseInt((coordtransform.getDisance(userCode.result.location.lng,userCode.result.location.lat, coordinates[1], coordinates[0])/1000));
+		}
+		return 0;
+	}
+	
+	//加载7天列表
+	function listdate(ul){
+		var date = new Date();
+		var li = null;
+		for(i = 0; i < 7; i++){
+			date=date.setDate(date.getDate()+1);
+			date=new Date(date);
+			li = $("<li>");
+			li.attr("id", "day_" + date.getDay());
+			li.attr("name", "date_" + formatdate(date));
+			li.addClass("day");
+			li.attr("data-title", formatdate(date) + " " + formatday(date.getDay()));
+			li.append($("<ul>"));
+			ul.append(li);
+		}
+	}
+	function formatdate(date){
+		var mon = date.getMonth()  + 1;         //getMonth()返回的是0-11，则需要加1
+		if(mon <=9){                                     //如果小于9的话，则需要加上0
+			mon = "0" + mon;
+		}
+		var day = date.getDate();
+		if(day <=9){                                     //如果小于9的话，则需要加上0
+			day = "0" + day;
+		}
+		return date.getFullYear() + "-" +mon + "-" + day;
+	}
+	function formatday(day){
+		var str = "";
+		switch(day) {
+		     case 1:
+		        str = "星期一";
+		        break;
+		     case 2:
+		        str = "星期二";
+		        break;
+			case 3:
+			   str = "星期三";
+				break;
+			case 4:
+				str = "星期四";
+				break;
+			case 5:
+				str = "星期五";
+				break;
+			case 6:
+				str = "星期六";
+				break;
+		    default:
+		        str = "星期日";
+		} 
+		return str;
+	}
+</script>

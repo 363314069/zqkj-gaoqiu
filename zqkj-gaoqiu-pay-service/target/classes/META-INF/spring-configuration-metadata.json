@@ -1,0 +1,79 @@
+{
+  "groups": [
+    {
+      "name": "oauth",
+      "type": "com.zqkj.bean.WxPayBean",
+      "sourceType": "com.zqkj.bean.WxPayBean"
+    },
+    {
+      "name": "sms",
+      "type": "com.zqkj.bean.SmsBean",
+      "sourceType": "com.zqkj.bean.SmsBean"
+    }
+  ],
+  "properties": [
+    {
+      "name": "oauth.app-id",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.WxPayBean"
+    },
+    {
+      "name": "oauth.app-secret",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.WxPayBean"
+    },
+    {
+      "name": "oauth.cert-path",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.WxPayBean"
+    },
+    {
+      "name": "oauth.domain",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.WxPayBean"
+    },
+    {
+      "name": "oauth.mch-id",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.WxPayBean"
+    },
+    {
+      "name": "oauth.notify-url",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.WxPayBean"
+    },
+    {
+      "name": "oauth.partner-key",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.WxPayBean"
+    },
+    {
+      "name": "sms.appid",
+      "type": "java.lang.Integer",
+      "sourceType": "com.zqkj.bean.SmsBean",
+      "defaultValue": 0
+    },
+    {
+      "name": "sms.appkey",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.SmsBean"
+    },
+    {
+      "name": "sms.phone-numbers",
+      "type": "java.lang.String[]",
+      "sourceType": "com.zqkj.bean.SmsBean"
+    },
+    {
+      "name": "sms.sms-sign",
+      "type": "java.lang.String",
+      "sourceType": "com.zqkj.bean.SmsBean"
+    },
+    {
+      "name": "sms.template-id",
+      "type": "java.lang.Integer",
+      "sourceType": "com.zqkj.bean.SmsBean",
+      "defaultValue": 0
+    }
+  ],
+  "hints": []
+}

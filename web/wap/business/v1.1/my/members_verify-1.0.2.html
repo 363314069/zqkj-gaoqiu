@@ -1,0 +1,188 @@
+<html style="font-size: 100px;"><head design-width="750">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<title>护照领取</title>
+	<link rel="stylesheet" href="../css/members_verify.css"><!--页面样式-->
+
+	<style>
+		@media screen and (min-width:750px){.center{width:750px;margin-left:-375px;left:50%;}}
+		.hotelType{
+			width: 4rem;
+			height: .5rem;
+			line-height: .5rem;
+			border: none;
+			background: none;
+			margin-top: .16rem;
+			color: #333;
+			font-size: .26rem;
+		}
+	</style><!--设置字体大小-->
+
+	<script type="text/javascript" src="./../../res/js/jquery-1.8.3.min.js"></script>
+	<script type="text/javascript" src="./../../res/js/cookie/js.cookie.min.js"></script>
+	<script type="text/javascript" src="./../../res/js/layer/mobile/layer.js"></script>
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+	<script src="./../js/zqkj/common-1.1.js?v=1"></script>
+	<script src="./../js/zqkj/wx_api-1.0.js"></script>
+	<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+</head>
+<body>
+	<div class="mobile-wrap center mobile-wrap-mb">
+        
+        <header>
+        	<span class="return">
+        		<!--返回-->
+        	</span>
+        </header>
+        <main>
+        	<div class="inform">
+        		<h3>护照领取</h3>
+        		<!--<div class="inform-list">
+        			<ul>
+        				<li class="acti">个人信息</li>
+        				<li class="">修改资料</li>
+        				<li class="">修改密码</li>
+        			</ul>
+        		</div>-->
+        		<div class="inform-text show" style="display: table;">
+        			<p>
+        				<span>
+        					姓&#12288;名：
+        				</span>
+        				<input type="text" id="userName">
+        			</p>
+        			<p>
+        				<span>
+        					手机号：
+        				</span>
+        				<input type="text" id="userPhone">
+        			</p>
+        			<p>
+        				<span>
+        					身份证：
+        				</span>
+        				<input type="text" id="idCard">
+        			</p>
+        			<p>
+        				<span>
+        					地&#12288;址：
+        				</span>
+        				<input type="text" id="address">
+        			</p>
+					<p>
+        				<span>
+        					酒&#12288;店：
+        				</span>
+						<select id="hotelType" class="hotelType">
+							<option value="0">请选择</option>
+							<option value="1">海陵岛公寓酒店&#12288;10张</option>
+							<option value="2">保利“N+”酒店&#12288;5张</option>
+							<option value="3">涛景球会酒店&#12288;3张</option>
+							<option value="4">北洛秘境&#12288;5张</option>
+						</select>
+					</p>
+        			<h4>
+        				<input type="button" name="" id="" value="立即领取" onclick="submintInfo()">
+        			</h4>
+        		</div>
+        	</div>
+        </main>
+   </div><!--mobile_wrap-->
+
+
+<script type="text/javascript">
+	//设置字体大小
+	var designWidth=document.getElementsByTagName("head")[0].getAttribute("design-width");
+	font_size(designWidth);
+	function font_size(devwidth){
+		function _size(){
+			var deviceWidth = document.documentElement.clientWidth;
+			if(deviceWidth>=devwidth) deviceWidth=devwidth;
+			document.documentElement.style.fontSize = deviceWidth/(devwidth/100) + 'px';
+		}
+		_size();
+		window.onresize=function(){
+			_size();
+		};
+	}
+	var media = document.createElement('style');
+	media.innerHTML = "@media screen and (min-width:" + designWidth + "px){.center{width:"+designWidth+"px;margin-left:-"+designWidth/2+"px;left:50%;}}";
+	document.getElementsByTagName('head')[0].appendChild(media);
+	//设置字体大小
+
+
+	$(function () {
+		//判断用户是否已经验证，验证过直接进行跳转
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/security/membersverify/info",
+			headers : {token:T.token},
+			data : {bindGuid:T.usermsg.guid,type:2},
+			success : function(r) {
+				if (r.code == 0 && r.data) {
+					layer.open({
+						type: 2
+						,content: '您已成功领取护照，可预订使用'
+						,shadeClose : false
+						,time : 2.5
+						,end : function(){
+							jump.to("my_card");
+						}
+					});
+				}
+			}
+		});
+	});
+
+	function submintInfo() {
+		if(!isNull($("#userName").val())){
+			alert("请填入名称");
+			return false;
+		}
+		if(!isNull($("#userPhone").val())){
+			alert("请填入电话");
+			return false;
+		}
+		if(!isNull($("#idCard").val())){
+			alert("请填入身份证号码");
+			return false;
+		}
+		if($("#hotelType").val() == 0){
+			alert("请选择酒店优惠券");
+		}else{
+			layer.open({type: 2,shadeClose: false});
+			$.ajax({
+				type : "POST",
+				url : T.serverurl + "/security/membersverify/verifybin",
+				headers : {token:T.token},
+				data : {name:$("#userName").val(),phone:$("#userPhone").val(),idCard:$("#idCard").val(),address:$("#address").val(),hotelType:$("#hotelType").val()},
+				success : function(r) {
+					layer.closeAll();
+					if (r.code == 0) {
+						layer.open({
+							content: '验证成功！'
+							,btn: '确认'
+							,yes: function(index){
+								jump.to("my_card");
+							}
+						});
+					} else {
+						alert(r.msg);
+					}
+				}
+			});
+		}
+	}
+
+
+
+	//判断是否为空
+	function isNull(data) {
+		return (data == "" || data == undefined || data == null || data == 'null') ? false : true;
+	}
+</script>
+</body>
+</html>

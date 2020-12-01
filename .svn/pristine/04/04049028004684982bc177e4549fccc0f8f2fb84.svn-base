@@ -1,0 +1,374 @@
+//加载场地时间设置表
+function introductionTimeJson(date) {
+    //重置日期列表
+    $("#afternoonTime").html('');
+    $("#morningTime").html('');
+
+    //重选日期后 数量和优惠券重置
+    //$(".num").text(1);
+    $("input[name='faceValue']").each(function(){
+        $(this).prop("checked",false);
+    });
+    $("#goldCheckbox").prop("checked",false);
+
+    $.ajax({
+        type: "POST",
+        url: T.serverurl + "/business/reservationdate/info",
+        headers: {token: T.token},
+        data: {"introductionGuid": introductionGuid,"date":date},
+        success: function(r) {
+            if (r.code == 0) {
+                queryTeatimeList(date);//加载关闭的时间段
+                //判断当天是否有设置时间段，如果有就加载，没有就加载场地默认设置的时间段
+                if(isNull(r.data)){
+                    test(JSON.parse(r.data.timeJson),date,teaArr);
+                }else{
+                    test(timeJsonArr,date,teaArr);
+                }
+                queryReserveTime(date);
+            } else {
+                alert(r.msg);
+            }
+        }
+    });
+}
+
+
+//加载T-time列表
+function test(jsonObj,date,teaArr) {//传入时间段json JSON对象   日期（查询那天的T_time）  teaArr 关闭的时间段数组
+    var signTime = 0;//初始默认标记，用来做页面显示时间默认值  0未设置  1已设置   如果时间段都加载完后还是0，说明今天没有场地可定。
+    for(var j=0;j<jsonObj.length;j++){
+        var timeArr = getIntervalArr(jsonObj[j]);//
+        for(var i=0;i<timeArr.length-1;i++){
+            //标记球位数量
+            var timestamp = Date.parse(new Date(date.replace(/\-/g, '/')+' '+timeArr[i])) / 1000;
+            var price = jsonObj[j].price/100;
+            if(timeArr[i].substring(0,2) > 12){//设置上下午
+                if(!compareDate(formatDateTime(new Date()),timeArr[i],new Date(date))){//判断当前时间是否大于时间段
+                    if(teaArr.indexOf(timeArr[i]) > -1){//该时间段是否在关闭的数组中
+                        $("#afternoonTime").append('<a><span class="not-time">'+timeArr[i]+'</span><span class="not-icon-time-price">'+price+'</span><span style="display: none" id="peopleNumber-'+timestamp+'">'+jsonObj[j].peopleNumber+'</span></a>');
+                    }else{
+                        if(signTime == 0){
+                            timeItemOn(price,timeArr[i],jsonObj[j].peopleNumber);
+                            signTime = 1;
+                        }
+                        $("#afternoonTime").append('<a onclick="timeItemOn(\''+price+'\',\''+timeArr[i]+'\',null,this)"><span>'+timeArr[i]+'</span><span class="icon-price">'+price+'</span><span id="peopleNumber-'+timestamp+'">'+jsonObj[j].peopleNumber+'</span></a>');
+                    }
+                }else{
+                    $("#afternoonTime").append('<a><span class="not-time">'+timeArr[i]+'</span><span class="not-icon-time-price">'+price+'</span><span style="display: none" id="peopleNumber-'+timestamp+'">'+jsonObj[j].peopleNumber+'</span></a>');
+                }
+            }else{
+                if(!compareDate(formatDateTime(new Date()),timeArr[i],new Date(date))){
+                    if(teaArr.indexOf(timeArr[i]) > -1){//该时间段是否在关闭的数组中
+                        $("#morningTime").append('<a><span class="not-time">'+timeArr[i]+'</span><span class="not-icon-time-price">'+price+'</span><span style="display: none" id="peopleNumber-'+timestamp+'">'+jsonObj[j].peopleNumber+'</span></a>');
+                    }else{
+                        if(signTime == 0){
+                            timeItemOn(price,timeArr[i],jsonObj[j].peopleNumber);
+                            signTime = 1;
+                        }
+                        $("#morningTime").append('<a onclick="timeItemOn(\''+price+'\',\''+timeArr[i]+'\',null,this)"><span>'+timeArr[i]+'</span><span class="icon-price">'+price+'</span><span id="peopleNumber-'+timestamp+'">'+jsonObj[j].peopleNumber+'</span></a>');
+                    }
+                }else{
+                    $("#morningTime").append('<a><span class="not-time">'+timeArr[i]+'</span><span class="not-icon-time-price">'+price+'</span><span style="display: none" id="peopleNumber-'+timestamp+'">'+jsonObj[j].peopleNumber+'</span></a>');
+                }
+            }
+        }
+    }
+    if(signTime == 0){
+        timeItemOn(priceCommon,"暂无",0);
+    }
+}
+
+//选择时间
+function timeItemOn(price,time,sum,thisA) {
+
+    /*var time = $(thisA).children("span").eq(0).text();
+    var price = $(thisA).children("span").eq(2).text();
+    var sum = $(thisA).children("span").eq(2).text();*/
+    $("#price").text(price);//设置这个时间段的价格
+    $("#paramTime").text(time);//设置这个时间显示
+    if(isNull(sum)){
+        $("#buy-num").attr('max',sum);//设置时间最大值
+    }else{
+        sum = $(thisA).children("span").eq(2).text();
+        $("#buy-num").attr('max',sum);//设置时间最大值
+    }
+    $(".buy-reserve").empty();
+    $(".buy-reserve").append("可预订球位："+sum);//加载可预订球位数
+
+    timeItemClose();//隐藏T-time
+
+    //取消所有选中的优惠券和金币
+    $("#goldCheckbox").prop("checked",false);
+    $("input[name='faceValue']").each(function(){
+        $(this).prop("checked",false);
+    });
+
+    countPrice();//重新计算 选择的数量*选择时间段的金额
+}
+
+
+//统计价格
+function countPrice(sgin){
+    //获取所有选中的优惠券
+    var face = 0;
+    $('input[name="faceValue"]:checked').each(function(){
+        face += parseInt($(this).val());//向数组中添加元素
+    });
+    //var price = parseFloat($("#price").text()) * parseFloat($("#buy-num").text());
+    var price = $("#price").text()*100 * $("#buy-num").text();
+    if(price != 0 && face >= price*100){
+        if(sgin == "+"){
+            var numdom = $("#buy-num");
+            var num = parseInt(numdom.text());
+            numdom.text(num - 1);
+        }else{
+            var numdom = $("#buy-num");
+            var num = parseInt(numdom.text());
+            numdom.text(num + 1);
+        }
+        alert('订单金额不能小于优惠金额！');
+    }else{
+        $("#puyprice").text((price - face*100)/100);
+    }
+}
+
+//加载关闭时间段的数据
+function queryTeatimeList(date) {
+    $.ajax({
+        type:"POST",
+        url: T.serverurl + "/business/teatime/list",
+        data:{date:date,type:2,introductionGuid:introductionGuid},
+        async:false,
+        success: function(r) {
+            if(r.code == 0){
+                teaArr = new Array();
+                $.each(r.data,function (teaInt, teaObj) {
+                    teaArr.push(teaObj.time);
+                });
+            }
+        }
+    })
+}
+
+//关闭T-time显示
+function timeItemClose(){
+    $('#timeItem').append($("#layui-m-layer" + pagetime).find(".layui-m-layercont").children());
+    layer.close(pagetime);
+}
+
+
+//根据日期加载已经被预定的时间段
+function queryReserveTime(date) {
+    $.ajax({
+        type:"POST",
+        url: T.serverurl + "/pay/order/list",
+        data:{date:date,type:0,state:1,goodsGuid:introductionGuid},
+        async:false,
+        success: function(r) {
+            if(r.code == 0){
+                $.each(r.data,function (teaInt, teaObj) {
+                    var timestamp = Date.parse(new Date(date.replace(/\-/g, '/')+' '+teaObj.time));
+                    timestamp = timestamp / 1000;
+                    var maxSum = parseInt($("#peopleNumber-"+timestamp).text())-teaObj.buySum;
+                    if(maxSum <= 0){
+                        maxSum = 0;
+                        //设置改时间段不可选中
+                        var a = $("#peopleNumber-"+timestamp).parent();
+                        a.removeAttr("onclick");//删除选中事件
+                        a.children("span").eq(0).addClass("not-time");
+                        a.children("span").eq(1).addClass("not-icon-time-price");
+                    }
+                    $("#peopleNumber-"+timestamp).text(maxSum);
+                    //获取默认的时间段，进行比较如果相同，赋值最大求位数
+                    if($("#paramTime").text() == teaObj.time){
+                        $("#buy-num").attr('max',maxSum);
+                        if(maxSum == 0){
+                            timeItemOn(0,"",0);
+                        }
+                    }
+                });
+            }
+        }
+    })
+}
+
+
+//获取其他数据start
+function paramListFunc(){
+    //加载参数表数据
+    $.ajax({
+        type : "post",
+        async:false,
+        url : T.serverurl + "security/param/list",
+        success : function(res) {
+            paramList = res.data;
+        }
+    });
+}
+
+function userInfo() {
+    //加载用户信息
+    $.ajax({
+        type : "GET",
+        url : T.serverepay + "/security/user/selectUserMessage",
+        headers : {token:T.token},
+        success : function(res) {
+            if (res.code == 0) {
+                var data = res.data;
+                if(!isNull(data.phone)){
+                    $(".list-userinfo").show();
+                    $("#name").val();
+                }
+            } else {
+                layer.open({
+                    content: res.msg
+                    ,btn: '我知道了'
+                });
+            }
+        }
+    });
+}
+
+function couponsuserList() {
+    //加载用户的优惠券
+    $.ajax({
+        type: "POST",
+        url: T.serverurl + "/business/couponsuser/couponsUserAct",
+        headers: {token: T.token},
+        data: {"actGuid":introductionGuid},
+        success: function(r) {
+            if(r.code == 0){
+                if(isNull(r.data)){
+                    $.each(r.data,function (i, obj) {
+						if(obj.couponsEntity.type == 2){
+							$("#discount").append('<div><input type="checkbox" useType="' + obj.couponsEntity.useType + '" ctype="' + obj.couponsEntity.type + '" class="mybox" value="'+obj.couponsEntity.faceValue+'" name="faceValue" guid="'+obj.guid+'" onclick="checkboxFaceValue($(this),1)">'+obj.couponsEntity.name+'<span>'+obj.couponsEntity.faceValue/100+'场</span></div>');
+						} else {
+							$("#discount").append('<div><input type="checkbox" useType="' + obj.couponsEntity.useType + '" class="mybox" value="'+obj.couponsEntity.faceValue+'" name="faceValue" guid="'+obj.guid+'" onclick="checkboxFaceValue($(this),1)">'+obj.couponsEntity.name+'<span>'+obj.couponsEntity.faceValue/100+'元</span></div>');
+						}
+                        
+                    })
+                }else{
+                    $("#discount").append('<div>优惠卷<span>无可用</span></div>');
+                }
+            }
+        }
+    });
+}
+
+//加载用户金币
+function userGold(){
+    $.ajax({
+        type : "POST",
+        url : T.serverurl + "/integral/userextend/info",
+        headers : {token:T.token},
+        data : {type:5,userGUID:T.usermsg.guid},
+        success : function(r) {
+            if (r.code == 0) {
+                $("#gold").show();
+                if(isNull(r.data)){
+                    $("#gold").append('<div><input type="checkbox" class="mybox" id="goldCheckbox" onclick="checkboxFaceValue($(this),2)"><span style="float: initial;" id="availableGoldSum">金币(可抵扣'+availableGold+'个)</span><span id="userGoldSum" goldSum="'+r.data.extLong+'">'+r.data.extLong+'个</span></div>');
+                }else{
+                    $("#gold").append('<div>金币<span>无可用</span></div>');
+                }
+            }
+        }
+    });
+}
+//获取其他数据end
+
+
+
+
+
+
+
+
+
+
+//工具方法staet
+//比较时分大小
+function compareDate(t1,t2,date1){
+    var date = new Date();
+    var a = t1.split(":");
+    var b = t2.split(":");
+    return date.setHours(a[0],a[1]) > date1.setHours(b[0],b[1]);
+}
+//生成当前时间的时分
+var formatDateTime = function (date) {
+    //var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    var d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    var h = date.getHours();
+    var minute = date.getMinutes();
+    minute = minute < 10 ? ('0' + minute) : minute;
+    var second= date.getSeconds();
+    second = minute < 10 ? ('0' + second) : second;
+    //return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;
+    return h+':'+minute;
+};
+//获取间隔数组
+function getIntervalArr(param) {
+    var date = new Date();
+    var arr = new Array();
+    if(param.interval <= 0){
+        arr.push(param.startTime);
+    }else{
+        var startTime = getMill(param.startTime);
+        var endTime = getMill(param.endTime);
+        var interval = param.interval*60*1000;
+
+        for(var i = startTime; i <= endTime; i+=interval){
+            date.setTime(i);
+            if(date.getHours() < 10){
+                time = "0"+date.getHours() + ":";
+            }else{
+                time = date.getHours() + ":";
+            }
+            if(date.getMinutes() < 10){
+                time += "0"+date.getMinutes();
+            }else{
+                time += date.getMinutes();
+            }
+            arr.push(time);
+        }
+    }
+    return arr;
+}
+//获取毫秒数
+function getMill(time) {
+    var arr = time.split(":");
+    var a = new Date();
+    a.setHours(arr[0]);
+    a.setMinutes(arr[1]);
+    a.setSeconds(0)
+    return a.getTime();
+}
+//时间格式化
+var formatDate = function (date) {
+    var y = date.getFullYear();
+    var m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    var d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    var h = date.getHours();
+    var minute = date.getMinutes();
+    minute = minute < 10 ? ('0' + minute) : minute;
+    var second= date.getSeconds();
+    second = minute < 10 ? ('0' + second) : second;
+    //return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;
+    return y + '-' + m + '-' + d;
+};
+//获取今天,明天，后天的日期
+function getDate(index){
+    //获取选择项的下标（今0 明1 后2）；
+    //一整天换算成毫秒是86400000；
+    var time = new Date().getTime()+parseInt(index)*86400000;
+    //将毫秒转换成日期（YYYY-MM-DD）
+    var date= new Date(time).toLocaleString().replace(/\//g,'-').split(" ")[0].toString();
+    return date;
+}
+//工具方法end
+

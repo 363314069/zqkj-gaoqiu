@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>我的</title>
+		<script type="text/javascript" src="./../../res/js/flexible.js"></script>
+		<script type="text/javascript" src="./../../res/js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/cookie/js.cookie.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/mobile/layer.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/laydate/laydate.js"></script>
+		<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<link href="./../../res/fonts/font-zqkj-1.2/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="./../../res/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		
+		<link href="./../css/default-1.1.css?v=2" rel="stylesheet" type="text/css">
+		<script src="./../js/zqkj/common-1.1.js?v=1"></script>
+		<script src="./../js/zqkj/load-1.1.js"></script>
+		<script src="./../js/zqkj/wx_api-1.0.js"></script>
+		<!--
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=Eo0EMvydXBWKhzAX40eUjN7eOIx0ISxV"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=E7JBZ-5UO3R-NIJWJ-WXGP5-P2R5V-IKFZY"></script>
+		-->
+	</head>
+	<style>
+		body{background-image: linear-gradient(#f7f2f8 0rem, #dee8ee 4.7rem, #848c9c 5.32rem, #ffffff 5.32rem); padding: 0 0 1.2rem 0;}
+		.wrap{display: block;}
+		.my-head {	
+			color: #30364b;
+			position: relative;
+			font-size: .32rem;
+			overflow: hidden;
+			height: 5.32rem;
+		}
+		
+		.my-head li div{
+			display: inline-block;
+			text-align: left;
+		}
+		.my-head .my-head-img{
+			background: url(../images/logo.png);
+			background-size: cover;
+			width: 1.1rem;
+			height: 1.1rem;
+			border-radius: 50%;
+			margin: .2rem .3rem .2rem .3rem;
+		}
+		.my-head .my-head-msg{
+			padding-top: .3rem;
+			display: inline-block;
+			vertical-align: top;
+		}
+		.my-head .my-head-msg span{
+			display: block;
+		}
+		.my-head .my-head-msg span:nth-child(2){
+			font-size: .24rem;
+		}
+		.my-head .my-head-vip{
+			width: 2rem;
+			padding-top: .2rem;
+			display: inline-block;
+			vertical-align: top;
+		}
+		.my-head .my-head-vip img{
+			margin-top: .1rem;
+			height: .4rem;
+			width: auto;
+		}
+		.my-head .my-head-ceng{
+			padding-top: .3rem;
+			display: inline-block;
+			vertical-align: top;
+			float: right;
+			margin-right: .3rem;
+		}
+		.my-head .my-head-ceng span{
+			display: block;
+			text-align: center;
+		}
+		.my-head .nav .iconfont{
+			font-size: .49rem;
+			line-height: .7rem;
+			color: #999999;
+		}
+		.my-head li:nth-child(2){
+			position: relative;
+			z-index: 999;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			padding: .3rem 0;
+			
+		}
+		.my-head li:nth-child(2) a{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			display: block;
+			color: #30364b;
+			font-size: .28rem;
+			line-height: .35rem;
+		}
+		.my-head li:nth-child(2) a span{
+			display: block;
+			text-align: center;
+		}
+		.my-head li:nth-child(2) a span:nth-child(2){
+			font-size: .28rem;
+		}
+		
+		.my-head li:nth-child(3){
+			position: relative;
+			z-index: 999;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			margin: .2rem .5rem;
+			background-color: #282c35;
+			border-radius: .2rem .2rem 0 0;
+			padding: .3rem 0;
+			line-height: .48rem;
+		}
+		.my-head li:nth-child(3) .icon{
+			text-align: center;
+			width: 1.6rem;
+		}
+		.my-head li:nth-child(3) .title{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+		}
+		.my-head li:nth-child(3) .btn{
+			text-align: center;
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+		}
+		.my-head li:nth-child(3) .icon img{
+			width: 1rem;
+			height: 1rem;
+		}
+		.my-head li:nth-child(3) .title span:nth-child(1){
+			display: block;
+			font-size: .28rem;
+			color: #e5c17f;
+		}
+		.my-head li:nth-child(3) .title span:nth-child(2){
+			display: block;
+			font-size: .22rem;
+			color: #828797;
+		}
+		.my-head li:nth-child(3) .btn a{
+			margin: 0 auto;
+			background-color: #01ba70;
+			color: #ffffff;
+			display: block;
+			height: .5rem;
+			line-height: .5rem;
+			width: 1.8rem;
+			border-radius: .25rem;
+			margin-top: .2rem;
+			font-size: .24rem;
+		}
+		.list{
+			
+			min-height: 100%;
+		}
+		.list > li{
+			padding: .2rem .5rem;
+			border-bottom: 1px solid #F1F1F1;
+		}
+		
+		.list > li a{
+			display: block;
+			position: relative;
+		}
+
+		.code{
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			padding: 1rem .5rem;
+			z-index: 99990;
+			background-color: #00000099;
+		}
+		.code .close{
+			position: absolute;
+			top: .7rem;
+			right: .2rem;
+			z-index: 99991;
+			background-color: #00000099;
+			border-radius: 50%;
+			color: #fff;
+			width: .6rem;
+			height: .6rem;
+			line-height: .6rem;
+			text-align: center;
+		}
+		.code .describe{
+			position: absolute;
+			bottom: 1rem;
+			left: .5rem;
+			width: calc(100% - 1rem);
+			z-index: 99992;
+			color: #fff;
+			background-color: #00000099;
+			line-height: .6rem;
+		}
+		.font-36{
+			font-size: .36rem;
+		}
+		.font-32{
+			font-size: .32rem;
+		}
+		.font-28{
+			font-size: .28rem;
+		}
+		.font-24{
+			font-size: .24rem;
+		}
+		.myitem .item{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			text-align: center;
+			font-size: .24rem;
+		}
+		.myitem .item .iconfont{
+			font-size: .64rem;
+			display: block;
+		}
+	</style>
+	<body>
+		<div class="wrap">
+			<ul class="my-head">
+				<li>
+					<div class="my-head-img">
+						
+					</div>
+					<div class="my-head-msg">
+						<!--<span>万花筒</span>
+						<span>2020-04-27</span>-->
+					</div>
+					<div class="my-head-vip">
+						<!--<img src="../images/vip/yjvip.png" />-->
+					</div>
+					<div class="my-head-ceng">
+						<a href="javascript:;" onclick="Ceng()">
+							<span><i class="iconfont">&#xe6b9;</i></span>
+							<span class="font-24">邀请码</span>
+						</a>
+					</div>
+				</li>
+				<li class="nav">
+					<a>
+						<span class="iconfont">&#xe6c7;</span>
+						<span>余额</span>
+						<span id="balance">0</span>
+					</a>
+					<a>
+						<span class="iconfont">&#xe6bd;</span>
+						<span>金币</span>
+						<span id="gold">0</span>
+					</a>
+					<a>
+						<span class="iconfont">&#xe6c8;</span>
+						<span>优惠券</span>
+						<span id="couponsSum">0</span>
+					</a>
+					<a>
+						<span class="iconfont">&#xe6c9;</span>
+						<span>积分</span>
+						<span id="integral">0</span>
+					</a>
+					<!--<a>
+						<span id="commission">0</span>
+						<span>佣金</span>
+					</a>-->
+				</li>
+				<li>
+					<div  class="icon">
+						<img src="../images/vip/vipcode.png" />
+					</div>
+					<div class="title">
+						<span>高尔夫护照权益</span>
+						<span>高尔夫护照系列卡包</span>
+					</div>
+					<div class="btn">
+						<a href="my_card">点击查看</a>
+					</div>
+				</li>
+			</ul>
+			<ul class="list myitem">
+				<li class="title">
+					<span>我的服务</span><!--<a>查看全部</a>-->
+				</li>
+				<li>
+					<ul class="item">
+						<li>
+							<a href="my_order">
+							<i class="iconfont">&#xe6bf;</i>
+							订单查看</a>
+						</li>
+						<!--<li>
+							<a>佣金查看</a>
+						</li>-->
+						<li>
+							
+							<a href="my_invite">
+								<i class="iconfont">&#xe6c4;</i>
+								我的邀请
+							</a>
+						</li>
+						<!--<li>
+							<a>身份管理</a>
+						</li>-->
+						<li>
+							<a href="my_coupons">
+							<i class="iconfont">&#xe6c8;</i>
+							优惠券</a>
+						</li>
+						<li style="display: none" id="memberAreaLi">
+							<a href="memberArea_list.html">
+							<i class="iconfont">&#xe6bc;</i>
+							会员产品</a>
+						</li>
+						<li id="teamLi" style="display: none">
+							<a href="my_team.html">
+							<i class="iconfont">&#xe6c9;</i>
+							球队活动</a>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<id id="footer"></id>
+		<div id="close" class="code">
+			<a onclick="closeCeng()" class="close">
+				<i class="iconfont">&#xe632;</i>
+			</a>
+			<img id="invitecode" alt="" src="" style="height: 100%; width: 100%">
+			<div class="describe">
+				<p>您的专属邀请二维码</p>
+				<p>长按图片，保存到手机</p>
+			</div>
+		</div>
+	</body>
+</html>
+<script>
+	$(function () {
+		$(".my-head-msg").append('<span>'+T.usermsg.name+'</span><span>'+formatDate(new Date(T.usermsg.createTime.replace(/\-/g, '/')))+'</span>');
+		$(".my-head-img").css({"background-image":"url("+T.usermsg.image+")"});
+		//扩展表信息查询
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/integral/commission/selectcommission",
+			headers : {token:T.token},
+			data : {"state":0},
+			success : function(r) {
+				if(r.code == 0){
+					$("#commission").text(parseInt(r.data.commission)/100);
+					$("#balance").text(parseInt(r.data.balance)/100);
+					$("#gold").text(r.data.gold);
+				}
+			}
+		});
+
+		//球队查询
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/business/team/list",
+			headers : {token:T.token},
+			data : {"userGuid":T.usermsg.guid},
+			success : function(r) {
+				if(r.code == 0 && r.data.length > 0){
+					$("#teamLi").show();
+				}
+			}
+		});
+
+		//查询会员卡
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/integral/userextend/selectlist",
+			headers : {token:T.token},
+			data : {"userGUID":T.usermsg.guid,"type":6},
+			success : function(r) {
+				if(r.code == 0){
+					var vipGuids = new Array();
+					$.each(r.data,function (i,obj) {
+						vipGuids.push(obj.extStr);
+					});
+					if(vipGuids.length > 0){
+						$.ajax({
+							type: "POST",
+							traditional: true,
+							url: T.serverurl + "/security/vipcard/listByGuids",
+							data : {"guids":vipGuids},
+							success : function(r) {
+								if (r.code == 0) {
+									$.each(r.data,function (v, vobj) {
+										if(vobj.svgPath){
+											var img = $('<img src="'+T.serverurl + vobj.svgPath+'">');
+											$(".my-head-vip").append(img);
+										}
+									})
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+
+		//优惠券数量查询
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/business/couponsuser/selectusercoupons",
+			headers : {token:T.token},
+			data : {"state":0},
+			success : function(r) {
+				if(r.code == 0){
+					var countCoupons = 0;
+					$.each(r.data,function (i, obj) {
+						countCoupons += obj.countUserCoupons;
+					})
+					$("#couponsSum").text(countCoupons);
+				}
+			}
+		});
+		var userType = parseInt(T.usermsg.type);
+		if(userType == 1 || userType == 2 || userType == 5 || userType == 6){
+			$("#memberAreaLi").show();
+		}
+	});
+
+
+	//二维码弹窗
+	function Ceng() {
+		var domain = T.basepath +"/sub.html";
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/security/wxoauth/invitecode",
+			headers : {token:T.token},
+			data : {codeUrl:domain},
+			success : function(r) {
+				if (r.code == 0) {
+					$("#invitecode").attr("src",T.serverurl + r.data);
+					//$("#close").css("background-image","url('"+T.serverurl + r.data+"')");
+					$("#close").show();
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	}
+	function closeCeng() {
+		$("#close").hide();
+	}
+
+	//时间格式化
+	var formatDate = function (date) {
+		date = new Date(date);
+		var mon = date.getMonth()  + 1;         //getMonth()返回的是0-11，则需要加1
+		if(mon <=9){                                     //如果小于9的话，则需要加上0
+			mon = "0" + mon;
+		}
+		var day = date.getDate();
+		if(day <=9){                                     //如果小于9的话，则需要加上0
+			day = "0" + day;
+		}
+		var dateRetu = date.getFullYear() + "-" +mon + "-" + day;
+		return dateRetu;
+	};
+</script>

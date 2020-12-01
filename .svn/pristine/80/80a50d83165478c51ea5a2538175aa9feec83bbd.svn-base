@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/DrawingManager.css">
+    <style>
+        html,body,#map {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+        }
+        .selectbox_Drawing {
+            position: relative;
+            width: 400px;
+            top: 20px;
+            left: 50px;
+        }
+		.info {
+			z-index: 999;
+			width: auto;
+			min-width: 150px;
+			padding: 12px 20px;
+			margin-left: 20px;
+			position: fixed;
+			top: 80px;
+			background-color: #fff;
+			border-radius: 4px;
+			font-size: 14px;
+			color: #666;
+			box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+		}
+		.drawing-panel {
+			z-index: 999;
+			position: fixed;
+			bottom: 56px;
+			margin-left: 48px;
+			padding: 16px 16px;
+			border-radius: 4px;
+			background-color: #fff;
+			box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+		}
+		.draw-btn {
+			width: 75px;
+			height: 30px;
+			background-color: #fff;
+			color: rgba(27, 142, 236, 1);
+			border:1px solid rgba(27, 142, 236, 1);
+			border-radius: 5px;
+			margin: 0 5px;
+		}
+		.draw-input {
+			width: 220px;
+			height: 30px;
+			background-color: #fff;
+			color: rgba(27, 142, 236, 1);
+			border:1px solid rgba(27, 142, 236, 1);
+			border-radius: 5px;
+			margin: 0 5px;
+		}
+		.search{
+			position: relative;
+			display: none;
+			min-height: 50px;
+		}
+		.search .colse, .overlay .colse{
+			position: absolute;
+			top: 0;
+			right: 0;
+			padding: 5px;
+			border:1px solid rgba(27, 142, 236, 1);
+			background-color: #D2D2D2;
+		}
+		
+		.overlay {
+			z-index: 1001;
+			width: 50%;
+			height: 50%;
+			padding: 12px 20px;
+			position: fixed;
+			top: 20%;
+			left: 25%;
+			background-color: #fff;
+			border-radius: 4px;
+			font-size: 14px;
+			color: #666;
+			box-shadow: 0 2px 6px 0 rgba(27, 142, 236, 0.5);
+			display: none;
+		}
+    </style>
+    <script src="https://api.map.baidu.com/api?v=3.0&ak=1zCurcFsElvz9ppBbGznbioXHDX82Tyw"></script>
+	<!--加载鼠标绘制工具-->
+	<script type="text/javascript" src="//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.js"></script>
+	<link rel="stylesheet" href="//api.map.baidu.com/library/DrawingManager/1.4/src/DrawingManager_min.css" />
+	<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+    <title>DrawingManager Example</title>
+</head>
+<body>
+    <div id="selectbox_Drawing" class="selectbox_Drawing"></div>
+    <div id="map"></div>
+	<div class = "info">
+		<div><input type="text" id="keyword" class="draw-input"><input type="button" class="draw-btn" value="搜索" onclick="search()"></div>
+		<div class="search">
+			<div class="colse" onclick="$(this).parent().hide()">X</div>
+			<div id="search">
+				
+			</div>
+		</div>
+	</div>
+	<div id="overlay" class="overlay">
+		<div class="colse" onclick="$(this).parent().hide()">X</div>
+		<div class="content"></div>
+	</div>
+	<ul class = "drawing-panel">
+		<input type="button" class="draw-btn" value="编辑" onclick="editEditing(this)">
+		<input type="button" class="draw-btn" value="坐标" onclick="showOverlay()">
+		<input type="button" class="draw-btn" value="清除" onclick="clearAll()">
+	</ul>
+	<script type="text/javascript">
+		// 百度地图API功能
+		var map = new BMap.Map('map');
+		var poi = new BMap.Point(119.33946477716133,39.740035364125006);
+		var bottom_right_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT});// 左上角，添加比例尺
+		var bottom_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_BOTTOM_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+		map.centerAndZoom(poi, 16);
+		map.enableScrollWheelZoom();  
+		map.addControl(bottom_right_control);        
+		map.addControl(bottom_right_navigation);
+		map.addControl(new BMap.MapTypeControl());
+		var overlays = [];
+		var overlaycomplete = function(e){
+			e.overlay.drawingMode = e.drawingMode;
+			e.overlay.setzi
+			overlays.push(e.overlay);
+		};
+		var styleOptions = {
+			strokeColor:"#5E87DB",    //边线颜色。
+			fillColor:"#5E87DB",      //填充颜色。当参数为空时，圆形将没有填充效果。
+			strokeWeight: 2,       //边线的宽度，以像素为单位。
+			strokeOpacity: 0.8,	   //边线透明度，取值范围0 - 1。
+			fillOpacity: 0.6,      //填充的透明度，取值范围0 - 1。
+			strokeStyle: 'solid' //边线的样式，solid或dashed。
+		}
+
+		//实例化鼠标绘制工具
+		var drawingManager = new BMapLib.DrawingManager(map, {
+			isOpen: false, //是否开启绘制模式
+			enableDrawingTool: true, //是否显示工具栏
+			drawingToolOptions: {
+				anchor: BMAP_ANCHOR_TOP_LEFT, //位置
+				offset: new BMap.Size(5, 5), //偏离值
+			},
+			circleOptions: styleOptions, //圆的样式
+			polylineOptions: styleOptions, //线的样式
+			polygonOptions: styleOptions, //多边形的样式
+			rectangleOptions: styleOptions //矩形的样式
+		});  
+		 //添加鼠标绘制工具监听事件，用于获取绘制结果
+		drawingManager.addEventListener('overlaycomplete', overlaycomplete);
+		function clearAll() {
+			for(var i = 0; i < overlays.length; i++){
+				map.removeOverlay(overlays[i]);
+			}
+			overlays.length = 0   
+		}
+		
+		function editEditing(that) {
+			if($(that).val() == "编辑"){
+				$(that).val("关闭");
+				for(var i = 0; i < overlays.length; i++){
+					 overlays[i].enableEditing();
+				}
+			} else {
+				$(that).val("编辑");
+				for(var i = 0; i < overlays.length; i++){
+					 overlays[i].disableEditing();
+				}
+			}
+		}
+		
+		var showOverlay = function(){
+			var div = $("#overlay");
+			var content = div.find(".content");
+			content.empty();
+			var overlaysjson = new Array();
+			$.each(overlays, function(i, obj){
+				//alert(overlay instanceof BMap.Polygon)
+				var overlay = {type:obj.drawingMode};
+				switch(obj.drawingMode) {
+					case 'marker': {
+						overlay.point = obj.getPosition();
+						break;
+					}
+					case 'polyline': {
+						overlay.point = obj.getPath();
+						break;
+					}
+					case 'rectangle': {
+						overlay.point = obj.getBounds();
+						break;
+					}
+					case 'polygon': {
+						overlay.point = obj.getPath();
+						break;
+					}
+					case 'circle': {
+						//中心点
+						overlay.point = obj.getCenter();
+						overlay.radius = obj.getRadius();
+						break;
+					}
+				}
+				overlaysjson.push(overlay);
+			});
+			content.text(JSON.stringify(overlaysjson));
+			//content.append(marker2.getPoint().getLng() + "," + marker2.getPoint().getLat());
+			div.show();
+		}
+		var local = new BMap.LocalSearch(map, {
+			renderOptions: {map: map, panel: "search"}
+		});
+		var search = function(){
+			$("#search").parent().show();
+			var keyword = document.getElementById('keyword').value;
+			local.search(keyword);
+		}
+		//119.33946477716133,"lat":39.740035364125006
+		//var pt = new BMap.Point(119.34762139119185,39.735589729563586);
+		//var myIcon = new BMap.Icon("1.png", new BMap.Size(1155,865));
+		//var marker2 = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+		//marker2.setZIndex(0);
+		//marker2.enableDragging();
+		//map.addOverlay(marker2);              // 将标注添加到地图中
+	</script>
+</body>
+</html>

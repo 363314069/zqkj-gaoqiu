@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>用户登录</title>
+		<script type="text/javascript" src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="../common/js/flexible.js"></script>
+		<script type="text/javascript" src="../common/js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="assets/js/common.js"></script>
+		<script type="text/javascript" src="../common/js/layui/mobile/layer.js" ></script>
+		<script type="text/javascript" src="../common/js/layui/laydate/laydate.js" ></script>
+		<link href="../common/fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="../common/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="assets/css/default.css">
+		<style>
+			body{background-color: #00aa65;}
+			.logo img{width: 4rem;}
+			.login{border-radius: .3rem; padding: .3rem; margin: .3rem; background-color: #fff;}
+			.login li{padding: .2rem .5rem; text-align: left;}
+			.login li input{width: 100%; height: .8rem; line-height: .8rem;}
+			.login li.code input{width: 2rem;}
+			.login li.code img{width: 2rem; vertical-align: top; height: .8rem; margin: 0 .2rem;}
+			.login li.un-login{display: none;}
+			.login li.un-login input{width: .4rem; height: .4rem; vertical-align: middle;}
+			.login li.btn{text-align: center;}
+			.login li.btn a{display: block; background-color: #00aa65; color: #fff; line-height: .8rem;}
+		</style>
+		<script>
+			if(self!=top) top.location=self.location;
+			var time = null;
+			var url = T.p("u");
+			var setCodeImg = function(){
+				time = (new Date()).getTime();
+				$("#codeimg").attr("src", T.serverurl + "security/oauth/img?t=" + time);
+			}
+			var submit = function(data) {
+				$.ajax({
+					type : "POST",
+					url : T.serverurl + "security/oauth/login",
+					data : data,
+					success : function(r) {
+						if(r.code == 0){
+							//alert(JSON.stringify(r));
+							if($("#un-login").prop("checked")){
+								//localStorage.setItem("usermsg", JSON.stringify(r.data));
+								Cookies.set('token', r.toke, {expires: 10});
+								sessionStorage.setItem('token', r.token);
+							} else {
+								//sessionStorage.setItem("usermsg", JSON.stringify(r.data));
+								//sessionStorage.setItem("token", r.token);
+								Cookies.set('token', r.token);
+								sessionStorage.setItem('token', r.token);
+							}
+							url = null;
+							if(url){
+								location.href = decodeURIComponent(url);
+							} else {
+								location.href = "H5_order_list.html";
+							}
+						} else {
+							setCodeImg();
+							alertMsg(r);
+						}
+					}
+				});
+			}
+			$(function(){
+				setCodeImg();
+				$("#codeimg").click(function(){
+					setCodeImg();
+				});
+				$("#submit").click(function(){
+					var data = {};
+					data.loginName = $('input[name="loginName"]').val();
+					data.loginPassword = $('input[name="loginPassword"]').val();
+					data.code = $('input[name="code"]').val();
+					data.time = time;
+					submit(data);
+				});
+			});
+			
+		</script>
+	</head>
+	<body style="font-size: 0.32rem;">
+		<div class="wrap">
+			<ul class="head">
+				<li class="l"><a href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">用户登录</li>
+				<li class="r"></li>
+			</ul>
+			<div class="logo">
+				<img src="../common/images/logo.png">
+			</div>
+			<form id="login">
+			<ul class="login">
+				<li><input type="text" name="loginName" placeholder="登录帐号"/></li>
+				<li><input type="password" name="loginPassword" placeholder="登录密码"/></li>
+				<li class="code"><input type="text" name="code" placeholder="验证码"/><img id="codeimg" src="../common/images/code.jpg"/><a>刷新</a></li>
+				<li class="btn"><a id="submit">登录</a></li>
+				<li class="un-login"><input type="checkbox" id="un-login" title="十天内免登录">十天内免登录</li>
+			</ul>
+			</form>
+		</div>
+	</body>
+</html>

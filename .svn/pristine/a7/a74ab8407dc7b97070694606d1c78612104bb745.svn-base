@@ -1,0 +1,168 @@
+spring:
+  datasource:
+    driver-class-name : com.mysql.cj.jdbc.Driver
+    url : jdbc:mysql://127.0.0.1:3306/gaoqiu?useSSL=false&serverTimezone=UTC&characterEncoding=utf8
+    username : root
+    password : "root"
+    type : com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size : 20
+      min-idle : 1
+      max-active : 500
+      max-wait : 60000
+      time-between-eviction-runs-millis : 60000
+      min-evictable-idle-time-millis : 300000
+      max-evictable-idle-time-millis : 1800000
+      validation-query : SELECT 1
+      validation-query-timeout : 30000
+      test-while-idle : true
+      test-on-borrow : false
+      test-on-return : false
+      pool-prepared-statements : false
+      max-pool-prepared-statement-per-connection-size : 20
+      max-open-prepared-statements : 20
+      filters : stat,slf4j
+      filter:
+        slf4j:
+          enabled: true
+          statement-executable-sql-log-enable: true
+  server:
+    tomcat:
+      remote_ip_header: x-forwarded-for
+      protocol_header: x-forwarded-proto
+      port-header: X-Forwarded-Port
+    use-forward-headers: true
+  jackson:
+    date-format: "yyyy-MM-dd HH:mm:ss"
+    time-zone: "GMT+08"
+    default-property-inclusion: non-null
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
+  mvc:
+    throw-exception-if-no-handler-found: true #出现 404 错误时, 直接抛出异常
+  resources:
+    add-mappings: false   #不要为我们工程中的资源文件建立映射
+    
+#  data:
+#    mongodb:
+#      host: localhost
+#      port: 27017
+#      username: root
+#      password: 123456
+#      database: db0
+#      authentication-database: local
+#  rabbitmq:
+#    host: localhost
+#    port: 5672
+#    virtual-host: /vhost_db0
+#    username: logan
+#    password: 12345678
+#    publisher-confirms: true      # P端收到回调，确认消息接收
+#    publisher-returns: true
+#    template:
+#      mandatory: true
+#  redis:
+    # Redis服务器地址
+#    host: 192.168.0.242
+    # Redis数据库索引（默认为0）
+#    database: 0
+    # Redis服务器连接端口
+#    port: 6379
+    #这里是redis的密码
+#    password: 
+    #连接超时时间（毫秒）
+#    timeout: 10000ms    
+    
+  freemarker:
+    # 禁用模板缓存
+    cache: false
+    # 编码格式
+    charset: UTF-8
+    # freemarker模板后缀 默认是 .ftl
+    suffix: .html
+    # 是否为此技术启用MVC视图分辨率。
+    enabled: true
+    # Content-Type值
+    content-type: text/html
+    # #模板加载路径 按需配置 ,默认路径是 classpath:/templates/
+    template-loader-path: classpath:/templates/
+
+server:
+  port: 5203
+  
+eureka:
+  client:
+    registerWithEureka: true   #false:不作为一个客户端注册到注册中心
+    fetchRegistry: true        #为true时，可以启动，但报异常：Cannot execute request on any known server
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+  instance:
+#    use-only-site-local-interfaces: true
+    instance-id: ${spring.cloud.client.ip-address}:${spring.application.name}:${server.port}
+    preferIpAddress: true
+      
+jwt:
+  token-header: auth-token
+  expire: 864000            #10天有效期  60*60*24*10=864000   60天60*60*24*60=5184000
+  pri-key:
+    path: key/private.key
+  pub-key:
+    path: key/public.key
+
+feign:
+  hystrix:
+    enabled: false
+    
+logging:
+  level:
+    com.zqkj: DEBUG
+
+#mybatis:
+#  mapper-locations: classpath:com/zqkj/mapper/*.xml
+#  type-aliases-package: com.zqkj.entity
+mybatis:
+  mapper-locations: classpath:com/zqkj/mapper/*.xml
+  type-aliases-package: com.zqkj.entity
+  configuration:
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  
+# 通用 Mapper 配置
+mapper:
+  mappers: tk.mybatis.mapper.common.Mapper
+  not-empty: false
+  identity: MYSQL
+#style：实体和表转换时的规则，默认驼峰转下划线，可选值为normal用实体名和字段名;camelhump是默认值，驼峰转下划线;uppercase转换为大写;lowercase转换为小写
+  style: normal
+  
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+  
+api:
+  url:
+    cousult: http://info.yfzxmn.cn:18083/YFConsult/user_singleLogin.action
+    
+ueditor:
+  uploadPath: E:/work/zqkj-gaoqiu/web/upload
+
+web:
+  statics:
+    htmlpath: file:E:/work/zqkj-gaoqiu/web/
+
+oauth:
+  appid: wx0ef31000c2905a4b
+  appsecret: 080a2ba7bd0dfbf37077538e03eca4b1
+  callback: http://rcj.free.idcfengye.com/wxoauth/wxcallback
+
+sms:
+  #短信应用 SDK AppID
+  appid: 1400330653
+  #短信应用 SDK AppKey
+  appkey: 1492daa09c7980ee540cd5902b95e4f3
+  #签名
+  smsSign: 中秦科技

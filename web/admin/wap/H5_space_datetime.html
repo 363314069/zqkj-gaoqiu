@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>订单</title>
+		<script type="text/javascript" src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="../common/js/flexible.js"></script>
+		<script type="text/javascript" src="../common/js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="assets/js/common.js"></script>
+		<script type="text/javascript" src="../common/js/layui/mobile/layer.js" ></script>
+		<script type="text/javascript" src="../common/js/layui/laydate/laydate.js" ></script>
+		<link href="../common/fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="../common/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="assets/css/default.css">
+	</head>
+	<style>
+		.wrap{padding-bottom: .88rem;}
+		.module{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			padding: .2rem;
+			font-size: .32rem;
+			background-color: #fff;
+			border-bottom: 1px solid #eee;
+		}
+		
+		.module a{
+			display: block;
+			color: #2d9de7;
+		}
+		
+		.list{
+			background-color: #fff;
+			height: calc(100% - 1.6rem);
+			overflow-y:auto; 
+			font-size: .28rem;
+		}
+		.list > li div{
+			padding: 0.2rem;
+			text-align: left;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			line-height: .5rem;
+			
+		}
+		.list > li:nth-child(n + 2){
+			border-top: 1px solid #eee;
+		}
+		.list > li input{
+			width: .4rem;
+			height: .4rem;
+			margin-right: .2rem;
+			vertical-align: middle;
+		}
+		.list > li div:first-child{
+			background-color: #eee;
+		}
+		.list > li div:last-child{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: flex-start;
+			flex-direction:row;
+			flex-wrap:wrap;
+		}
+		.boxtype{
+			height: .8rem;
+			font-size: .32rem;
+			background-color: #fff;
+			border-bottom: 1px solid #ccc;
+			text-align: left;
+		}
+		.boxtype i{display: inline-block; text-align: center; margin-left: .3rem;}
+		.boxtype span{display: inline-block; text-align: center; background-color: #fff; border: 1px solid #ccc; margin: .1rem .2rem 0 0; line-height: .5rem; font-size: .28rem; padding:0 .12rem; border-radius: .1rem;}
+		.boxtype span.close{background-color: #ccc; color: #fff;}
+		.boxtype span.select{background-color: #00aa65; border: 1px solid #00aa65; color: #fff;}
+		
+		.times span{text-align: center; background-color: #fff; border: 1px solid #ccc; margin: .2rem; padding:.1rem .1rem; border-radius: .1rem;}
+		.times span.close{background-color: #ccc; color: #fff;}
+		.times span.select{background-color: #00aa65; border: 1px solid #00aa65; color: #fff;}
+		
+		.bottom{
+			border-top: 1px solid #eee;
+			padding: .1rem .3rem; 
+			position: fixed; left: 0; 
+			bottom: 0; height: 0.88rem; 
+			background-color: #fff; 
+			z-index: 999; 
+			width: 100%; 
+			font-size: 0.36rem; 
+			line-height: 0.68rem;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+		}
+		.bottom li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+		}
+
+		.boxtype span.stateClose{
+			background-color: #ccc;
+			color: #fff;
+		}
+		.boxtype span.stateSelect{
+			background-color: #00aa65;
+			border: 1px solid #00aa65;
+			color: #fff;
+		}
+	</style>
+	<script>
+		var introductionId = getQueryString("id");
+		var introductionGuid = getQueryString("guid");
+		var defaultTimeJson = '';//场地默认T-time
+
+		function closeOpen(that) {
+			var msg = $(that).text();
+			var state = 0;
+			if(msg == "开启"){
+				state = 1;
+			}else{
+				state = 0;
+			}
+			$.ajax({
+				type: "post",
+				url:T.serverurl + "/business/introduction/update",
+				data : {"id":introductionId,"state":state},
+				headers : {token:T.token},
+				success : function(res) {
+					if (res.code == 0) {
+						console.log(123)
+						closeOpenStyle(state);
+						alert(msg+"成功");
+					}else{
+						alert(msg+"失败");
+					}
+				}
+			});
+		}
+
+
+		function bindEvent(){
+			var list = $('.list');
+			list.find("input:checkbox").click(function(){
+				if($(this).is(':checked')){
+					$(this).parent().next().find("span").addClass("select");
+				} else {
+					$(this).parent().next().find("span").removeClass("select");
+				}
+			});
+			
+			list.find('div[name=times] span').click(function(){
+				if($(this).is(".select")){
+					$(this).removeClass("select");
+					$(this).parent().prev().find("input:checkbox").prop("checked", false);
+				} else {
+					$(this).addClass("select");
+				}
+			})
+		}
+		$(function(){
+			laydate.render({
+				elem: '#dateTime'
+				,value: new Date()
+				,done: function(value, date, endDate){//日期时间被切换后的回调
+					loadUlList(introductionGuid,10,value);
+				}
+			});
+
+			//查询场地信息获取默认timeJson
+			$.ajax({
+				type : 'post',
+				url : T.serverurl + "business/introduction/info",
+				data : {guid:introductionGuid},
+				headers : {token:T.token},
+				async: false,
+				success : function(r) {
+					if(r.code == 0 && r.data){
+						defaultTimeJson = r.data.timeJson;
+					} else {
+						alertMsg(r.msg);
+					}
+				}
+			});
+
+			//加载列表数据
+			loadUlList(introductionGuid,10,$("#dateTime").text());
+
+			//前10天
+			$('#reduce').on('click', function(data) {
+				var dateTimes = getDateStr(-10,$("#dateTime").text());
+				$("#dateTime").text(dateTimes[dateTimes.length-1]);
+				//加载列表数据
+				loadUlList(introductionGuid,10,$("#dateTime").text());
+			});
+			//后10天
+			$('#increase').on('click', function(data) {
+				var dateTimes = getDateStr(10,$("#dateTime").text());
+				$("#dateTime").text(dateTimes[dateTimes.length-1]);
+				//加载列表数据
+				loadUlList(introductionGuid,10,dateTimes[dateTimes.length-1]);
+			});
+		});
+
+
+
+
+
+		//加载列表数据
+		function loadUlList(introductionGuid,sum,date){
+			//根据场地guid查询，时间段设置，渲染页面
+			$.ajax({
+				type : "post",
+				url : T.serverurl + "business/reservationdate/list",
+				data : {t:(new Date()), introductionGuid:introductionGuid},
+				headers : {token:T.token},
+				async: false,
+				success : function(r) {
+					if(r.code == 0 && r.data){
+						loadDateList(r.data,sum,date);
+					} else {
+						alertMsg(r.msg);
+					}
+				}
+			});
+		}
+
+		//加载日期数据列表
+		function loadDateList(jsonData,sum,date) {
+			$(".list").empty(); //先清空列表
+			var defaultTimeJsonarr;
+			if (isNull(defaultTimeJson)) {
+				defaultTimeJsonarr = JSON.parse(defaultTimeJson);
+			}
+			var dateArr = getDateStr(sum,date);
+			//循环10天数据
+			for(var dateInt = 0; dateInt < dateArr.length; dateInt++){
+				var sgin = 0;//标记用来跳出循环
+				//判断这个10天中是否有日期设置
+				$.each(jsonData,function (i, obj) {
+					if(dateArr[dateInt] == formatDate(obj.date,"yyyy-MM-dd")){
+						//有这个元素，加载后跳出循环进行下一次
+						var li = $("<li>");
+						li.append('<div name="date"><input type="checkbox" name="dateCheckbox" id="'+dateArr[dateInt]+'">'+dateArr[dateInt]+'</div>');
+						var li_div2 = $('<div name="times" class="times" date="'+dateArr[dateInt]+'">');
+						//循环默认时间数据填充
+						var timeJsonarr = JSON.parse(obj.timeJson);
+						for(var j=0;j<timeJsonarr.length;j++){
+							var timeArr = getIntervalArr(timeJsonarr[j]);
+							for(var c=0;c<timeArr.length-1;c++){
+								var timestamp = Date.parse(new Date(dateArr[dateInt].replace(/\-/g, '/')+' '+timeArr[c]));
+								timestamp = timestamp / 1000;
+								li_div2.append('<span id="'+timestamp+'">'+timeArr[c]+'</span>');
+							}
+						}
+						$(".list").append(li.append(li_div2));
+						sgin = 1;
+						return false;
+					}
+				});
+
+				//没有这个元素进行，默认数据加载
+				if(sgin == 0){
+					var li = $("<li>");
+					li.append('<div name="date"><input type="checkbox" name="dateCheckbox" id="'+dateArr[dateInt]+'">'+dateArr[dateInt]+'</div>');
+					var li_div2 = $('<div name="times" class="times" date="'+dateArr[dateInt]+'">');
+					//循环默认时间数据填充
+					for(var j=0;j<defaultTimeJsonarr.length;j++){
+						var timeArr = getIntervalArr(defaultTimeJsonarr[j]);
+						for(var c=0;c<timeArr.length-1;c++){
+							//var startTime = defaultTimeJsonarr[defaultInt].startTime;
+							var timestamp = Date.parse(new Date(dateArr[dateInt].replace(/\-/g, '/')+' '+timeArr[c]));
+							timestamp = timestamp / 1000;
+							li_div2.append('<span id="'+timestamp+'">'+timeArr[c]+'</span>');
+						}
+					}
+					$(".list").append(li.append(li_div2));
+				}
+			}
+			//设置时间段样式和触发函数
+			bindEvent();
+
+			//加载关闭的时间段
+			teatimeList();
+		}
+
+
+		//加载关闭的时间段
+		function teatimeList() {
+			var dateArr = new Array();
+			$('input[name="dateCheckbox"]').each(function () {
+				dateArr.push($(this).attr("id"));
+			});
+			$.ajax({
+				type : "post",
+				url : T.serverurl + "business/teatime/selectDateTimeGroupBy",
+				data : {introductionGuid:introductionGuid,type:2,startDate:dateArr[0],endDate:dateArr[dateArr.length-1]},
+				headers : {token:T.token},
+				async: false,
+				success : function(r) {
+					if(r.code == 0 && r.data){
+						$.each(r.data,function (i, obj) {
+							$.each(obj.teatimeEntityList,function (j, objs) {
+								var timeArr = objs.time.split(",");
+								for(var i=0; i<timeArr.length;i++){
+									var timestamp = Date.parse(new Date(formatDate(objs.date,"yyyy-MM-dd").replace(/\-/g, '/')+' '+timeArr[i]));
+									timestamp = timestamp / 1000;
+									$("#"+timestamp).addClass('close');
+								}
+							});
+						})
+					}
+				}
+			});
+		}
+
+		function setDate(state){
+			var msg = "";
+			if(state == 1){
+				msg = "开启";
+			}else{
+				msg = "关闭";
+			}
+			var map = new Object();
+			$('span.select').each(function(){//遍历每一个名字为interest的复选框，其中选中的执行函数
+				if(isNull($(this).parent().attr("date"))){
+					var values = map[$(this).parent().attr("date")];
+					if(!isNull(values)){
+						var valuess = new Array();
+						valuess.push($(this).text());
+						map[$(this).parent().attr("date")] = valuess;
+					}else{
+						values.push($(this).text());
+						map[$(this).parent().attr("date")] = values;
+					}
+				}
+			});
+			if(getLength(map) <= 0){
+				alert('请选择要'+msg+'的时间段')
+			}else{
+				//询问框
+				layer.open({
+					content: '确认'+msg+'选中的时间段吗？'
+					,btn: ['确认', '取消']
+					,yes: function(index){
+						if(state == 1){
+							setUpDateTime(map,1);
+							layer.close(index);
+							//重新加载列表数据
+							loadUlList(introductionGuid,10,$("#dateTime").text());
+						}else{
+							setUpDateTime(map,2);
+							layer.close(index);
+							//重新加载列表数据
+							loadUlList(introductionGuid,10,$("#dateTime").text());
+						}
+					}
+				});
+			}
+		}
+		
+		//开启关闭请求后台
+		function setUpDateTime(map,type) {
+			$.ajax({
+				type : 'post',
+				url : T.serverurl + "business/teatime/setUpDateTime",
+				data : {map:JSON.stringify(map),introductionGuid:introductionGuid,type:type},
+				headers : {token:T.token},
+				async: false,
+				success : function(r) {
+					if(r.code == 0){
+						alert('修改成功');
+					} else {
+						alert('修改失败');
+					}
+				}
+			});
+		}
+		
+
+		//获取map长度
+		function getLength(n){
+			var count = 0;
+			for(var i in n){
+				count++;
+			}
+			return count;
+		}
+
+
+		//获取指定时间多少天后（前）的数组  dayCount 天数条件   date  时间条件
+		function getDateStr(dayCount,date) {
+			//日期条件为空的话获取当前时间
+			if(!isNull(date)){
+				var myDate = new Date();
+				var month = myDate.getMonth()+1;
+				date = myDate.getFullYear() +"-"+ month +"-"+ myDate.getDate();
+			}
+			var dates = new Array();
+			if(dayCount > 0){
+				for(var i=0; i<dayCount; i++){
+					var dd = new Date(date.replace(/\-/g, '/'));
+					dd.setDate(dd.getDate()+i);//获取AddDayCount天后的日期
+					var y = dd.getFullYear();
+					var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
+					var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
+					dates.push(y+"-"+m+"-"+d);
+				}
+			}else{
+				for(var i=0; i>dayCount; i--){
+					var dd = new Date(date.replace(/\-/g, '/'));
+					dd.setDate(dd.getDate()+i);//获取AddDayCount天后的日期
+					var y = dd.getFullYear();
+					var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);//获取当前月份的日期，不足10补0
+					var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();//获取当前几号，不足10补0
+					dates.push(y+"-"+m+"-"+d);
+				}
+			}
+			return dates;
+		}
+
+		//格式化日期字符串
+		function formatDate(date, format) {
+			if (!date) return;
+			if (!format) format = "yyyy-MM-dd";
+			switch(typeof date) {
+				case "string":
+					date = new Date(date.replace(/\-/g, '/'));
+					break;
+				case "number":
+					date = new Date(date);
+					break;
+			}
+			if (!date instanceof Date) return;
+			var dict = {
+				"yyyy": date.getFullYear(),
+				"M": date.getMonth() + 1,
+				"d": date.getDate(),
+				"H": date.getHours(),
+				"m": date.getMinutes(),
+				"s": date.getSeconds(),
+				"MM": ("" + (date.getMonth() + 101)).substr(1),
+				"dd": ("" + (date.getDate() + 100)).substr(1),
+				"HH": ("" + (date.getHours() + 100)).substr(1),
+				"mm": ("" + (date.getMinutes() + 100)).substr(1),
+				"ss": ("" + (date.getSeconds() + 100)).substr(1)
+			};
+			return format.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, function() {
+				return dict[arguments[0]];
+			});
+		}
+
+
+		//获取url参数
+		function getQueryString(name) {
+			var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+			var r = window.location.search.substr(1).match(reg);
+			if (r != null) return unescape(r[2]);
+			return null;
+		}
+
+		//底部跳转
+		function bottomSkip(html) {
+			location.href = html;
+		}
+
+
+		//获取间隔数组
+		function getIntervalArr(param) {
+			var date = new Date();
+			var arr = new Array();
+			if(param.interval <= 0){
+				arr.push(param.startTime);
+			}else{
+				var startTime = getMill(param.startTime);
+				var endTime = getMill(param.endTime);
+				var interval = param.interval*60*1000;
+
+				for(var i = startTime; i <= endTime; i+=interval){
+					date.setTime(i);
+					if(date.getHours() < 10){
+						time = "0"+date.getHours() + ":";
+					}else{
+						time = date.getHours() + ":";
+					}
+					if(date.getMinutes() < 10){
+						time += "0"+date.getMinutes();
+					}else{
+						time += date.getMinutes();
+					}
+					arr.push(time);
+				}
+			}
+			return arr;
+		}
+		//获取毫秒数
+		function getMill(time) {
+			var arr = time.split(":");
+			var a = new Date();
+			a.setHours(arr[0]);
+			a.setMinutes(arr[1]);
+			a.setSeconds(0)
+			return a.getTime();
+		}
+	</script>
+	<body>
+		<div class="wrap">
+			<ul class="head">
+				<li class="l"><a href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">产品列表</li>
+				<li class="r"></li>
+			</ul>
+			<div class="module"><!--<a>全选</a>--><a id="reduce">前10天</a><a id="dateTime"></a><a id="increase">后10天</a><!--<a href="javascript:setDate()">设置</a>--></div>
+			<!--<div class="boxtype"><i>状态：</i><span>开启</span> <span class="close">关闭</span> <span class="select">选中</span> </div>-->
+			<div class="boxtype"><i></i><span onclick="setDate(1)">开启</span> <span onclick="setDate(2)" class="close">关闭</span>
+				<i>产品开启状态：</i><span id="closeopen" onclick="closeOpen(this)"></span>
+			</div>
+			<!--<span class="layui-form">
+					<label>开关</label>
+					<input type="checkbox" id="state" checked="" name="open" lay-skin="switch" lay-filter="switchState" lay-text="ON|OFF">
+				</span>-->
+			<ul class="list">
+				<!--<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>-->
+			</ul>
+			<ul class="bottom">
+				<li onclick="bottomSkip('H5_order_list.html')">订单</li>
+				<li onclick="bottomSkip('H5_space_list.html')">产品</li>
+				<li onclick="bindWXUser()">绑定微信</li>
+			</ul>
+		</div>
+	</body>
+</html>
+<script>
+	var introductionState = getQueryString("state");
+	closeOpenStyle(introductionState);
+	//设置产品状态按钮样式
+	function closeOpenStyle(introductionState) {
+		if(introductionState == 0){
+			//关闭状态
+			$("#closeopen").removeClass();
+			$("#closeopen").addClass("stateClose");
+			$("#closeopen").text("开启");
+		}else{
+			//开启状态
+			$("#closeopen").removeClass();
+			$("#closeopen").addClass("stateSelect");
+			$("#closeopen").text("关闭");
+		}
+	}
+</script>

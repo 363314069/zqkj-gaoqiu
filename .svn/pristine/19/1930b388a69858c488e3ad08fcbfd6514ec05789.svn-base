@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>九洲高尔夫—球场预订</title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="js/common.js"></script>
+		<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="js/H5_introduction_pay_1.js?v=0.10" ></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<script src="js/wx_api.js?v=6"></script>
+	</head>
+	<style>
+		html,body{color: #333;}
+		/*.wrap{padding-bottom: 0.88rem; }*/
+		.menu {
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #e7e7e7;
+			font-size: 0.32rem;
+			line-height: 0.8rem;
+			background-color: #fff;
+		}
+		.menu > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+			height: 0.8rem;
+			padding: 0 0.1rem;
+		}
+		.menu .select{
+			border-bottom: 0.04rem solid #2d9de7;
+			color: #2d9de7;
+		}
+		.list{
+			height: calc(100% - 0.8rem);
+			overflow-y:auto;
+		}
+		.list .title{
+			font-size: 0.24rem;
+			line-height: 0.5rem;
+			border-bottom: 1px solid #e7e7e7;
+			margin-bottom: 0.2rem;
+		}
+		.list .content{
+			display: -webkit-flex;
+			display: flex;
+		}
+		.list > li{
+			padding: 0.3rem;
+			overflow: hidden;
+			border-radius: .3rem;
+			background-color: #fff;
+			margin: 0.2rem;
+			font-size: 0.32rem;
+			color: #333;
+			text-align: left;
+		}
+		.list .list-head .logo{
+			width: 2.2rem;
+			height: 2.2rem;
+			overflow: hidden;
+			position: relative;
+			background: url(images/share/bg.jpg) no-repeat center center;
+			background-size: auto 100%;
+		}
+		.list .list-head .item {
+			width:calc(100% - 1.6rem);
+			text-align: left;
+			overflow: hidden;
+			line-height: .5rem;
+			padding-left: 0.2rem;
+		}
+		
+		.list .list-head .title .number{float: left;}
+		.list .list-head .title .state{float: right;}
+		.list .list-head .title::after{display: block; content: ''; clear: both;}
+		.list .list-head .logo img{display: none;}
+		.list .list-head .logo .times{position: absolute;left: 0; bottom: 0; display: none; width: 100%; height: 0.5rem; z-index: 999; font-size: 0.2rem; line-height: 0.5rem; background-color: #00ab65; color: #fff;}
+		.list .list-head .item .item1{font-size: 0.32rem; /*height: 1rem;*/ margin: 0.1rem 0; box-sizing: border-box; overflow: hidden;display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 3;}
+		.list .list-head .item .item2 span{color: #DB0415; font-size: 0.28rem;}
+		.list .list-head .item .item3{font-size: 0.28rem;}
+		.list .list-head .btn {margin-top: 0.3rem;}
+		.list .list-head .btn .pay{background-color: #DB0415;border: 1px solid #DB0415;}
+		.list .list-head .btn .cancel{border: 1px solid #666; color: #666;}
+		.list .list-head .btn::after{display: block; content: ''; clear: both;}
+		.list .list-head .btn .buy-prices{color: #DB0415; float: left; font-size: 0.36rem;}
+		.list .list-head .btn .buy-prices .original{text-decoration: line-through; color: #999; margin-left: 0.05rem; font-size: 0.2rem; display: none;} 
+		.list .list-head .btn .buy-num{float: right; font-size: 0.28rem;}
+		.list .list-head .btn .buy-num span{border: 1px solid #666; width: 0.4rem; text-align: center; line-height: 0.4rem; display: inline-block;}
+		.list .list-head .btn .buy-num .num{border-left: none; border-right: none; width: 0.8rem;}
+		.list .list-head .describe{font-size: .2rem; text-align: left; padding: .2rem 0; color: #666;}
+		.list .list-head .describe textarea{width: 100%; height: 1.2rem; text-align: left; font-size: 0.32rem;}
+		.list .list-params{
+			line-height: 0.5rem;
+			font-size: 0.28rem;
+		}
+		.list .list-params span{
+			float: right;
+		}
+		.list .list-params span::after{
+			font-family: "iconfont" !important;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			content: '\e662';
+			font-size: 0.32rem;
+			margin-left: 0.1rem;
+			color: #999;
+		}
+		.list .list-params div::after {display: block; content: ''; clear: both;}
+		.bottom{padding: .1rem .3rem; position: fixed; left: 0; /*bottom: 0;*/ height: 0.88rem; background-color: #fff; z-index: 999; width: 100%; font-size: 0.36rem; line-height: 0.68rem;}
+		.bottom .bottom-prices{color: #DB0415; float: left;}
+		.bottom .bottom-btn{color: #fff; background-color: #DB0415; float: right; padding: 0 .8rem; border-radius: .34rem;}
+		
+		.timeItem li{text-align: left;}
+		.timeItem li .itemtop{background-color: #eee; text-align: center; font-size: 0.32rem; line-height: 0.6rem;}
+		.timeItem .title{
+			height: .88rem;
+			position: relative;
+			line-height: .88rem;
+			font-size: 0.36rem;
+			color: #fff;
+			text-align: center;
+			background-color: #2d9de7;
+		}
+		.timeItem .title a{
+			line-height: .88rem;
+			font-size: 0.32rem;
+			position: absolute;
+			left: 0.4rem;
+			top: 0;
+			color: #fff;
+		}
+		.timeItem li div{
+			font-size: 0;
+		}
+		.timeItem li div a{
+			display: inline-block; width: 20%;
+			line-height: 0.4rem;
+			text-align: center;
+			padding: 0.2rem;
+			box-sizing: border-box;
+			font-size: 0.32rem;
+			position: relative;
+		}
+		.timeItem li div a span{display: block;}
+		/*.timeItem li div a span:last-child{display: none;}*/
+		
+		
+		.timeItem .closetime {
+			background-color:#FBFBFB;
+			color: #C9C9C9;
+		}
+		.timeItem .closetime span:nth-child(3){
+			display: none;
+		}
+		.icon-price::before{
+			font-family: "iconfont" !important;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			content: '\e6a0';
+			font-size: 0.32rem;
+		}
+		.list .list-userinfo div{padding: 0.2rem 0;}
+		.list .list-userinfo input{background:none;  outline:none;  border:1px solid #ccc; width: calc(100% - 2rem); height: 0.6rem; line-height: 0.6rem;}
+		.list .list-userinfo .code input{width: 2rem; margin-right: .4rem; }
+		.list .list-userinfo .code button{background:#fff; background:none;  outline:none;  border:1px solid #ccc; text-align: center; padding: 0 0.2rem; height: 0.6rem; line-height: 0.6rem;}
+		.list .list-userinfo span{display: inline-block; width: 1.4rem; text-align: right; margin-right: .2rem;}
+
+
+		.btn-li{ margin-top: 0.3rem; font-size: .28rem;}
+		.btn-li div:last-child div{margin-top: 0.2rem; font-size: .28rem;}
+		.btn-li .buy-reserve{color: #5fb878; float: left; font-size: 0.3rem;}
+		.btn-li .buy-num{float: right; font-size: 0.28rem;}
+		.btn-li .buy-num span{border: 1px solid #666; width: 0.4rem; text-align: center; line-height: 0.4rem; display: inline-block;}
+		.btn-li .buy-num .num{border-left: none; border-right: none; width: 0.8rem;}
+
+		.not-time{
+			background-color:#FBFBFB;
+			color: #C9C9C9
+		}
+		
+		.timeItem li div a span:nth-child(3){
+			position: absolute;
+			top: 0rem;
+			right: .2rem;
+			background-color: #ff0000;
+			color: #fff;
+			border-radius: 50%;
+			width: .35rem;
+			/* height: .35rem; */
+			line-height: .35rem;
+			font-size: .20rem;
+		}
+		.not-icon-time-price{
+			background-color:#FBFBFB;
+			color: #C9C9C9
+		}
+		
+		.list .coupon span::after{
+			font-family: "iconfont" !important;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			content: '';
+			font-size: 0.32rem;
+			margin-left: 0.1rem;
+			color: #999;
+		}
+	</style>
+
+	<body>
+		<div class="wrap">
+			<ul class="head">
+				<li class="l"><a href="javascript:goBack()"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">填写订单</li>
+				<li class="r"></li>
+			</ul>
+			<ul class="list">
+				<li class="list-head">
+					<div class="title"><!--<span class="number">流水号：<i>JD202003291</i></span>-->  <span class="state">待付款</span></div>
+					<div class="content">
+						<div class="logo">
+							<img id="introductionImg" src="images/share/bg.jpg">
+							<span id="times" class="times">11天19时36分</span>
+						</div>
+						<ul class="item">
+							<li id="title" class="item1"></li>
+							<li id="paramList" style="font-size: 0.25rem;">价格包含：</li>
+							<li class="btn">
+								<div class="buy-prices"><span id="price" class="icon-price">0</span><span class="original icon-price" id="original">0</span><!--原价--></div>
+								<!--<div class="buy-num">预定球位：<span id="buy-num-reduce">-</span><span id="buy-num" class="num" max="4" min="1">1</span><span id="buy-num-add">+</span></div>-->
+							</li>
+						</ul>
+					</div>
+					<div>
+						
+					</div>
+					<!--<div class="describe">备注：<br>
+						<textarea placeholder="如果购买了多份请输入其他人信息!" id="remark"></textarea>
+					</div>-->
+				</li>
+				<li class="list-params">
+					<div>选择打球日期<span id="paramDate"></span></div>
+				</li>
+				<li class="list-params">
+					<div>选择打球时间<span id="paramTime"></span></div>
+				</li>
+				<li class="btn-li">
+					<div style="overflow:hidden">
+						<div class="buy-reserve">可预订球位：<!--<span id="price" class="icon-price">0</span>--></div>
+						<div class="buy-num">预定球位：<span id="buy-num-reduce">-</span><span id="buy-num" class="num" max="4" min="1">1</span><span id="buy-num-add">+</span></div>
+					</div>
+					<div id="remarks">
+						<div name="remarkName"><span>同组人姓名：</span><input type="text" name="remark" id="defaultName"></div>
+					</div>
+				</li>
+				<li class="list-params coupon" id="discount">
+					<!--<div>优惠卷<span>无可用</span></div>
+					<div>积分<span>无可用</span></div>
+					<div>会员卡<span>无可用</span></div>
+					-->
+				</li>
+				<li class="list-params coupon" id="gold" style="display: none">
+					<!--<div>优惠卷<span>无可用</span></div>
+					<div>积分<span>无可用</span></div>
+					<div>会员卡<span>无可用</span></div>
+					-->
+				</li>
+				<li class="list-userinfo" style="display: none">
+					<div><span>姓　名：</span><input type="text" name="name" id="name"></div>
+					<div><span>差　点：</span><input type="text" name="chad" id="chad"></div>
+					<div><span>手　机：</span><input type="text" name="phoe" id="phoe"></div>
+					<div class="code"><span>验证码：</span><input type="text" name="code" id="code"><input type="button" id="dynamic" onclick="authCode();" value="发送验证码"></div>
+				</li>
+			</ul>
+			<div class="bottom"><span class="bottom-prices icon-price" id="puyprice">0</span><a class="bottom-btn" onclick="compareSum()">支付</a></div>
+		</div>
+		<div id="timeItem" style="display: none;" >
+			<ul class="timeItem">
+				<li class="title">选择时间 <a id="timeCancel">取消</a></li>
+				<li>
+					<div class="itemtop">
+						上午
+					</div>
+					<div id="morningTime">
+						<!--<a guid='xss-ds-d'><span>9:00</span><span class="icon-price">100</span></a>-->
+					</div>
+				</li>
+				<li>
+					<div class="itemtop">
+						下午
+					</div>
+					<div id="afternoonTime">
+						<!--<a guid='xss-ds-d'><span>9:00</span><span class="icon-price">100</span><span>30</span></a>-->
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>
+<script type="text/javascript" src="../pay/js/common-pay.js"></script>
+<script>
+	var introductionGuid = getQueryString('guid');	//获取球场guid
+	var cycleDate = getQueryString('cycleDate');	//获取球场guid
+	var timeJsonArr;
+	var paramList = null;//参数表数据
+	var endTime = null;
+	var teaArr = new Array(); //记录选择的日期是否有关闭的时间段
+	var availableGold = 0; //订场可用金币
+	var pagetime = null;
+	var priceCommon = 0;
+
+	var availableGoldCount = 0;
+	$(function(){
+		footer.hide();
+		$("#defaultName").val(T.usermsg.name);
+		paramListFunc();//加载参数
+		userInfo();
+		couponsuserList();
+
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/introduction/info",
+			headers : {token:T.token},
+			data : {"guid":introductionGuid},
+			async:false,
+			success : function(r) {
+				if (r.code == 0) {
+					wxapi.setShare({
+						title: r.data.name+"预订",
+						desc: r.data.name+"预订",
+						link:location.href,
+						imgUrl:T.serverurl + r.data.img.replace(/\\/g, '/')
+					});
+					$("#title").html(r.data.name);
+					priceCommon = r.data.price/100;
+					//$("#price").text(r.data.price/100);
+					$("#puyprice").text(r.data.price/100);
+					timeJsonArr = JSON.parse(r.data.timeJson);
+					availableGold = r.data.goldSum;
+					availableGoldCount = r.data.goldSum;//人数增加用来计算
+					if(availableGold > 0){//可用金币数量大于0加载个人金币
+						userGold();
+					}
+					//加载费用包含
+					if(isNull(r.data.priceInclude)){
+						var priceIncludes = r.data.priceInclude.split(",");
+						for(var priceInt=0;priceInt < priceIncludes.length;priceInt++){
+							$.each(paramList,function (parint, parObj) {
+								if(isNull(parObj.guid) && parObj.guid == priceIncludes[priceInt]){
+
+									$("#paramList").append('<span>'+parObj.name+'</span>');
+								}
+							});
+						}
+					}
+					endTime = r.data.endTime;
+					if(isNull(r.data.img)){
+						$(".logo").css("background-image","url("+T.serverurl + r.data.img.replace(/\\/g, '/')+")");
+					}
+
+					if(isNull(cycleDate)){
+						bindDate(cycleDate,cycleDate,new Date(cycleDate));
+						//加载时间段
+						introductionTimeJson(formatDate(new Date(cycleDate)));
+					}else{
+						bindDate(0,r.data.days,new Date());
+						//加载时间段
+						introductionTimeJson(formatDate(new Date()));
+					}
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+
+
+		$(".menu").children().click(function(){
+			$(this).parent().children().removeClass("select");
+			$(this).addClass("select");
+		});
+		$("#buy-num-reduce").click(function(){
+			// 先把所有的优惠checkbox 都设置为不选种
+			$('input.mybox').prop('checked', false);
+
+			var numdom = $("#buy-num");
+			var num = parseInt(numdom.text());
+			var min = parseInt(numdom.attr('min'));
+			if(num > min){
+				numdom.text(num - 1);
+				availableGold -= availableGoldCount;
+				$("#availableGoldSum").text("金币(可抵扣"+availableGold+"个)");
+				$("*[name='remarkName']:last").remove();
+				countPrice("-");
+			} else {
+				alert('最少预定'+ min + '个球位');
+			}
+			$("#puyprice").text(parseFloat(countPrice() / 100));
+		});
+		
+		$("#buy-num-add").click(function(){
+			// 先把所有的优惠checkbox 都设置为不选种
+			$('input.mybox').prop('checked', false);
+			var numdom = $("#buy-num");
+			var num = parseInt(numdom.text());
+			var max = parseInt(numdom.attr('max'));
+			if(num < max){
+				numdom.text(num + 1);
+				availableGold += availableGoldCount;
+				$("#availableGoldSum").text("金币(可抵扣"+availableGold+"个)");
+				$("#remarks").append('<div name="remarkName"><span>同组人姓名：</span><input type="text" name="remark"></div>');
+				countPrice("+");
+			} else {
+				alert('最多可预定'+ max + '个球位');
+			}
+			$("#puyprice").text(parseFloat(countPrice() / 100));
+		});
+
+		$("#paramTime").click(function(){
+			//closeCurTeatime($("#paramDate").text());
+			pagetime = layer.open({
+				type: 1
+				,content: ''
+				,anim: 'up'
+				,style: 'position:fixed; left:0; top:0; width:100%; height:100%; border: none; -webkit-animation-duration: .5s; animation-duration: .5s; overflow-y:auto;'
+			});
+			$("#layui-m-layer" + pagetime).find(".layui-m-layercont").append($('#timeItem').children('ul'));
+		})
+		$('#timeCancel').click(function(){
+			timeItemClose();
+		})
+	});
+
+	//设置日期插件
+	function bindDate(min,days,minDate){
+		laydate.render({
+			elem: '#paramDate'
+			,theme: '#2d9de7'
+			,value: minDate
+			,min: min //7天前
+			,max: days //几天后天后
+			,showBottom: false
+			,done: function(value, date, endDate){
+				// 回调函数
+				introductionTimeJson(value)
+			}
+		});
+	}
+
+	//支付
+	function payIntroduction() {
+		layer.open({
+			type: 2
+			,content: '加载中'
+			,shadeClose: false
+		});
+		var remark = new Array();
+		var remarkIsEmpty = false;
+		var selecttime = $("#paramTime").text();
+		var t = $("#time" + selecttime.replace(":","s")) ;
+		if(t.is('.closetime')){
+			alert('当前时间不可预定！');
+			layer.closeAll();
+			return;
+		}
+		$("input[name='remark']").each(function(){
+			if($(this).val() == ''){
+				remarkIsEmpty = true;
+			}
+			remark.push($(this).val());
+		});
+		if(remarkIsEmpty){
+			alert('同组人姓名必填！');
+			layer.closeAll();
+			return;
+		}
+		var couponsUserGuid = new Array();
+		var faceValue = 0; //优惠金额
+
+		var price = parseInt($("#price").text()*100)*$(".num").text();//订单总金额
+		var count = $(".num").text();//购买数量
+
+		$('input[name="faceValue"]:checked').each(function(){
+			couponsUserGuid.push($(this).attr("guid"));//向数组中添加元素
+			faceValue += parseInt($(this).val());
+		});
+		
+		//判断是否选中金币抵扣
+		var goldSums = 0;
+		if($('#goldCheckbox').is(':checked')) {
+			//获取抵扣的金币
+			goldSums = $('#goldCheckbox').val();
+		}
+		
+		if(faceValue > price){
+			alert("优惠券使用金额不能大于订单金额");
+			layer.closeAll();
+			return false;
+		}else{
+			if($("#paramTime").text() == "暂无"){
+				alert("请选择订场时间段");
+				layer.closeAll();
+				return false;
+			}else{
+				$.ajax({
+					type : "POST",
+					url : T.serverepay + "/pay/order/addintroductionorderpay",
+					headers : {token:T.token},
+					traditional: true,
+					data : {introductionGuid:guid,date:$("#paramDate").text(),time:$("#paramTime").text(),price:price,couponsUserGuid:couponsUserGuid,remark:remark.toString(),buySum : count,goldSum : goldSums},
+					success : function(res) {
+						layer.closeAll();
+						if (res.code == 0) {
+							
+							if(res.type && res.type == 1){
+								layer.open({
+								    content: res.msg
+								    ,skin: 'msg'
+								    ,time: 3 //2秒后自动关闭
+								});
+								location.href = "success.html?orderGuid="+res.data.guid;
+								return;
+							}
+							var data = $.parseJSON(res.msg);
+							if (typeof WeixinJSBridge == "undefined") {
+								if (document.addEventListener) {
+									document.addEventListener('WeixinJSBridgeReady',
+											onBridgeReady(data), false);
+								} else if (document.attachEvent) {
+									document.attachEvent('WeixinJSBridgeReady',
+											onBridgeReady(data));
+									document.attachEvent('onWeixinJSBridgeReady',
+											onBridgeReady(data));
+								}
+							} else {
+								onBridgeReady(data);
+							}
+						} else if (res.code == 500) {
+							alert("提交订单失败！请重试");
+						}else{
+							alert(res.msg);
+						}
+					}
+				});
+			}
+		}
+	}
+
+	//选择优惠券计算
+	function checkboxFaceValue(checkbox,type){
+		// 只有当选中的时候才会去掉其他已经勾选的checkbox，所以这里只判断选中的情况
+		if (checkbox.is(":checked")) {
+			// 先把所有的checkbox 都设置为不选种
+			if(checkbox.attr('useType') != 1){
+				$('input.mybox').prop('checked', false);
+			}
+			var price = 0;
+			if(type == 1){//type 1优惠券  2金币
+				checkbox.prop('checked',true);
+				price = countPrice();
+				if(price < 0){
+					checkbox.prop("checked", false);
+					alert("优惠券使用总金额不能大于等于订单金额！");
+					return;
+				}
+			}else if(type == 2){
+				if(availableGold > 0){//订场可用金币必须大于0才能使用
+					var userGoldSum = $("#userGoldSum").attr('goldSum');//获取用户的金币数量
+					//判断订场可用金额是否大于等于用户金币数量
+					if(availableGold >= userGoldSum){
+						//订场可用金币大于用户拥有金币直接订单金额减去用户金币
+						$('#goldCheckbox').val(userGoldSum);
+					} else {
+						$('#goldCheckbox').val(availableGold);
+					}
+					checkbox.prop('checked',true);
+					price = countPrice();
+					if(price < 0){
+						checkbox.prop("checked", false);
+						alert("当前金额不可使用金币！");
+						return;
+					}
+				}
+			}
+			$("#puyprice").text(parseFloat(price / 100));
+		}else{
+			$('#goldCheckbox').val(0);
+			if($("#price").text() > 0) {
+				var price = $("#price").text() * $(".num").text();//订单总金额
+				$("#puyprice").text(Math.round(price * 100) / 100);
+			}
+			checkbox.prop('checked',false);
+		}
+	}
+	
+	function countPrice(){
+		var price = parseInt($("#price").text() * $(".num").text() * 100);//订单总金额
+		$("#discount").find("input:checked").each(function(i, input){
+			var obj = $(input);
+			var cprice = parseInt(obj.val());
+			if(obj.attr('ctype') == 2){
+				cprice = parseInt($("#price").text()*100);
+			}
+			price = price - cprice;//订单总金额 - 优惠券金额
+		})
+		$("#gold").find("input:checked").each(function(i, input){
+			var obj = $(input);
+			var cprice = parseInt(obj.val());
+			price = price - cprice*100;
+		})
+		return price
+	}
+	//判断用户选中的人数和最大值比较
+	function compareSum() {
+		var buyNum = $("#buy-num").text();
+		var max = $("#buy-num").attr('max');
+		if(parseInt(buyNum) > parseInt(max)){
+			alert("该时间段可预订"+max+"位,请修改您的预订人数！");
+			return false;
+		}else{
+			userMessage();
+		}
+	}
+	
+
+	//付款时先进行查询信息是否完善
+	function userMessage() {
+		$.ajax({
+			type : "GET",
+			url : T.serverepay + "/security/user/selectUserMessage",
+			headers : {token:T.token},
+			async: false,
+			success : function(res) {
+				if (res.code == 0) {
+					var data = res.data;
+					if(!isNull(data.phone)){
+						//进行完善信息并支付
+						submitUserOrder();
+					}else{
+						//已有信息直接提交订单
+						payIntroduction();
+					}
+				} else {
+					layer.open({
+						content: res.msg
+						,btn: '我知道了'
+					});
+				}
+			}
+		});
+	}
+
+	//完善信息
+	function submitUserOrder(){
+		if(!isNull($("#code").val())){
+			layer.open({
+				content: '验证码不能为空'
+				,skin: 'msg'
+				,time: 3 //2秒后自动关闭
+			});
+			return false;
+		}else if(!isNull($("#phoe").val())){
+			layer.open({
+				content: '手机号不能为空'
+				,skin: 'msg'
+				,time: 3 //2秒后自动关闭
+			});
+			return false;
+		}else if(isPhoneNo($("#phoe").val()) == false){
+			layer.open({
+				content: '请输入正确手机号'
+				,skin: 'msg'
+				,time: 3 //2秒后自动关闭
+			});
+			return false;
+		}else if(isNull($("#name").val()) == false){
+			layer.open({
+				content: '姓名不能为空'
+				,skin: 'msg'
+				,time: 3 //2秒后自动关闭
+			});
+			return false;
+		}
+		$.ajax({
+			type : "POST",
+			url : T.serverebusiness + "/security/wxoauth/register",
+			headers : {token:T.token},
+			async: false,
+			data : {name:$("#name").val(),chad:$("#chad").val(),phone:$("#phoe").val(),authCode:$("#code").val()},
+			success : function(r) {
+				if (r.code == 0) {
+					payIntroduction();
+				} else {
+					layer.open({
+						content: r.msg
+						,btn: '我知道了'
+					});
+				}
+			}
+		});
+	}
+
+	//验证码
+	var authCodeValue = "";
+	//电话号码验证
+	function isPhoneNo(phone) {
+		var pattern = /^1[34578]\d{9}$/;
+		return pattern.test(phone);
+	}
+	//发送短信
+	function authCode() {
+		var phoe  = $("#phoe").val();
+		if(!isNull(phoe)){
+			layer.open({
+				content: '手机号不能为空'
+				,skin: 'msg'
+				,time: 3 //2秒后自动关闭
+			});
+			return false;
+		}else if(isPhoneNo(phoe) == false){
+			layer.open({
+				content: '请输入正确手机号'
+				,skin: 'msg'
+				,time: 3 //2秒后自动关闭
+			});
+			return false;
+		}else {
+			$.ajax({
+				type : "POST",
+				url : T.serverebusiness + "/security/wxoauth/authcode",
+				headers : {token:T.token},
+				data : {phone:phoe},
+				success : function(r) {
+					if (r.code == 0) {
+						authCodeValue = r.msg;
+						var Time = 60;
+						var TimeDown = setInterval(timedown,1000);
+						//倒计时
+						function timedown(){
+							$("#dynamic").attr("disabled", true);
+							$("#dynamic").val(""+ Time + "s");
+							if(Time == 0){
+								$("#dynamic").val("重新获取").removeAttr("disabled");
+								clearInterval(TimeDown);
+							}
+							Time--;
+						}
+					} else {
+						$("#dynamic").val("重新获取").removeAttr("disabled");
+						layer.open({
+							content: r.msg
+							,btn: '我知道了'
+						});
+					}
+				}
+			});
+		}
+	}
+
+	function goBack() {
+		location.href = "H5_reservation_list.html?footer=1";
+	}
+</script>

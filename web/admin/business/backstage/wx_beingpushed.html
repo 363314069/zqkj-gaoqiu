@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title></title>
+	<link rel="stylesheet" href="../../common/css/common.css">
+	<link rel="stylesheet" href="../../common/js/layui/css/layui.css">
+	<script src="../../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../../common/js/common.js"></script>
+	<script src="js/wx_beingpushed.js"></script>
+</head>
+<body>
+<div class="wrap">
+<fieldset id="rrapp" class="layui-elem-field">
+	<legend></legend>
+	<form class="layui-form layui-elem-field-margin" lay-filter="form">
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">标题</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="title" placeholder="标题" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">产品名称</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="productName" placeholder="产品名称" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">跳转链接</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="url" placeholder="跳转链接" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">预约时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" id="date" name="date" placeholder="预约时间" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">内容</label>
+			<div class="layui-input-block">
+				<textarea class="layui-textarea" name="data" placeholder="内容" lay-verify="required"></textarea>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-input-block">
+		    	<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+		    	<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>
+		    </div>
+		</div>
+	</form>
+</fieldset>
+</div>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title></title>
+	<link rel="stylesheet" href="../../common/css/common.css">
+	<link rel="stylesheet" href="../../common/js/layui/css/layui.css">
+	<script src="../../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../../common/js/common.js"></script>
+<script src="js/reservationdate_form.js"></script>
+	<style>
+		.dataset a，.dataset div{display: inline-block;}
+		.dataset input{width: 160px;}
+		#dateList > li{border-bottom:  1px solid #999;}
+		.timeList .timeItems li{
+			display: inline-block;
+			padding: 12px;
+		}
+		.timeList{
+			display: inline-block;
+			vertical-align: middle;
+			border-left: 1px solid #999;
+		}
+		.block{
+			display: block;
+		}
+	</style>
+</head>
+<body>
+	<div id="rrapp" class="layui-elem-field">
+		<fieldset class="layui-elem-field">
+			<legend>时间段管理</legend>
+			<div class="layui-form-item">
+				<div class="dataset">
+					<a class="layui-btn" yf-opt="reduce" id="reduce"><i class="layui-icon">&#xe61f;</i>前10天 </a>
+					<div style="display: inline-block;">
+						<input type="text" class="layui-input" name="dateTime" id="dateTime" lay-verify="required" placeholder="开始时间" autocomplete="off"/>
+					</div>
+					<a class="layui-btn" yf-opt="increase" id="increase"><i class="layui-icon">&#xe61f;</i>后10天 </a>
+					<a class="layui-btn" yf-opt="add" id="addr"><i class="layui-icon">&#xe642;</i>设置 </a>
+					<a class="layui-btn layui-btn-danger" yf-opt="batchdel" id="dels"><i class="layui-icon">&#xe640;</i>删除 </a>
+					<a class="layui-btn layui-btn-warm" yf-opt="batchdel" id="update"><i class="layui-icon">&#xe640;</i>修改 </a>
+				</div>
+			</div>
+
+		</fieldset>
+		<div class="layui-form layui-elem-field-margin">
+			<input type="hidden" name="reservationGuid">	<!--//球场guid-->
+			<input type="hidden" name="introductionGuid">	<!--//场地guid-->
+			<!--<div class="layui-form-item">
+				<label class="layui-form-label">时间段json</label>
+				<div class="layui-input-block">
+				  <input type="text" class="layui-input" name="timeJson" placeholder="时间段json"/>
+				</div>
+			</div>-->
+			<!--<div class="layui-form-item">
+				<label class="layui-form-label">时间段</label>
+				<div class="layui-input-block">
+					<button type="button" class="layui-btn layui-btn-normal layui-btn-radius formadd">+添加时间段</button>
+					<input type="hidden" name="timeJson" value=""></input>
+				</div>
+			</div>-->
+			<ul id="dateList">
+				<!--<li>日期
+					<input name ="id" type ="checkbox" value ="666" date="2020-03-29" id="2020-03-29" />
+					<ul class="timeList">
+						<li>上午
+							<ul class="timeItems">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</li>
+						<li>下午
+							<ul class="timeItems">
+								<li></li>
+								<li></li>
+								<li></li>
+							</ul>
+						</li>
+					</ul>
+				</li>-->
+			</ul>
+			<form class="layui-form layui-elem-field-margin" lay-filter="form" id="formId" style="display: none">
+				<div class="layui-form-item">
+					<label class="layui-form-label">选择的时间</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input" name="chooseDate" id="chooseDate" placeholder="选择的时间" autocomplete="off"/>
+					</div>
+				</div>
+
+				<div class="layui-form-item" id="timeJsons">
+					<label class="layui-form-label">时间段</label>
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-radius formadd">+添加时间段</button>
+						<input type="hidden" name="timeJson" value=""></input>
+					</div>
+					<div id="timeJsonsAdd">
+
+					</div>
+					<!--<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">时间段</label>
+							<div class="layui-input-inline">
+								<input type="text" value="7:00 - 8:00" name="startEnd" id="startEnd" autocomplete="off" lay-verify="required" class="layui-input startEnd" lay-key="3">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">间隔分钟</label>
+							<div class="layui-input-inline">
+								<input type="text" value="30" name="intervals" autocomplete="off" lay-verify="required" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">价格</label>
+							<div class="layui-input-inline">
+								<input type="text" value="1" name="prices" autocomplete="off" lay-verify="required" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">原价</label>
+							<div class="layui-input-inline">
+								<input type="text" value="1" name="costPrices" lay-verify="required" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">折扣</label>
+							<div class="layui-input-inline">
+								<input type="text" value="0" name="discounts" lay-verify="required" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<button type="button" class="layui-btn layui-btn-sm layui-btn-normal editdelete"><i class="layui-icon"></i> 删除</button>
+					</div>-->
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+						<!--<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>-->
+					</div>
+				</div>
+			</form>
+
+			<form class="layui-form layui-elem-field-margin" lay-filter="formUpdate" id="formIdUpdate" style="display: none">
+				<div class="layui-form-item">
+					<label class="layui-form-label">选择的时间</label>
+					<div class="layui-input-block">
+						<input type="text" class="layui-input" name="chooseDate" id="chooseDateUpdate" placeholder="选择的时间" autocomplete="off"/>
+					</div>
+				</div>
+
+				<div class="layui-form-item" id="timeJsonsUpdate">
+					<label class="layui-form-label">时间段</label>
+					<div class="layui-input-block">
+						<button type="button" class="layui-btn layui-btn-normal layui-btn-radius formaUpdate">+添加时间段</button>
+						<!--<input type="hidden" name="timeJson" value=""></input>-->
+					</div>
+					<div id="listss">
+
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<a class="layui-btn" lay-submit="" lay-filter="saveUpdate" yf-opt="save">立即提交</a>
+						<!--<a class="layui-btn layui-btn-primary" id="backUpdate" yf-opt="back">返回</a>-->
+					</div>
+				</div>
+			</form>
+
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zqkj.dao.mapper.OrderDao">
+	<resultMap id="BaseResultMap" type="com.zqkj.entity.OrderEntity">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="GUID" property="guid" jdbcType="VARCHAR" />
+		<result column="OrderNumber" property="orderNumber" jdbcType="VARCHAR" />
+		<result column="OrganizationGuid" property="organizationGuid" jdbcType="VARCHAR" />
+		<result column="Openid" property="openid" jdbcType="VARCHAR" />
+		<result column="UserGuid" property="userGuid" jdbcType="VARCHAR" />
+		<result column="GoodsGuid" property="goodsGuid" jdbcType="VARCHAR" />
+		<result column="VipGuid" property="vipGuid" jdbcType="VARCHAR" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="OrderMoney" property="orderMoney" jdbcType="INTEGER" />
+		<result column="TotalOrderMoney" property="totalOrderMoney" jdbcType="INTEGER" />
+		<result column="Type" property="type" jdbcType="INTEGER" />
+		<result column="State" property="state" jdbcType="INTEGER" />
+		<result column="PayType" property="payType" jdbcType="INTEGER" />
+		<result column="PayMoney" property="payMoney" jdbcType="INTEGER" />
+		<result column="PayTime" property="payTime" jdbcType="VARCHAR" />
+		<result column="CallbackUrl" property="callbackUrl" jdbcType="VARCHAR" />
+		<result column="Date" property="date" jdbcType="VARCHAR" />
+		<result column="Time" property="time" jdbcType="VARCHAR" />
+		<result column="BusinConfi" property="businConfi" jdbcType="INTEGER" />
+		<result column="InviterGuid" property="inviterGuid" jdbcType="VARCHAR" />
+		<result column="SerialNumber" property="serialNumber" jdbcType="VARCHAR" />
+		<result column="DiscountJson" property="discountJson" jdbcType="VARCHAR" />
+		<result column="BuySum" property="buySum" jdbcType="INTEGER" />
+		<result column="GroupBuyingState" property="groupBuyingState" jdbcType="INTEGER" />
+		<result column="Remark" property="remark" jdbcType="VARCHAR" />
+		<result column="Creator" property="creator" jdbcType="VARCHAR" />
+		<result column="CreateTime" property="createTime" jdbcType="VARCHAR" />
+		<result column="CheckUser" property="checkUser" jdbcType="VARCHAR" />
+		<result column="CheckTime" property="checkTime" jdbcType="VARCHAR" />
+		<result column="ExtInt" property="extInt" jdbcType="INTEGER" />
+		<result column="ExtStr" property="extStr" jdbcType="VARCHAR" />
+		<association property="placeOrderEntity" select="com.zqkj.service.OrderService.selectOneActivity"  column="GoodsGuid"/>
+	</resultMap>
+
+
+    <resultMap id="BaseResultMapPage" type="com.zqkj.entity.OrderEntity">
+        <id column="ID" property="id" jdbcType="INTEGER" />
+        <result column="GUID" property="guid" jdbcType="VARCHAR" />
+        <result column="OrderNumber" property="orderNumber" jdbcType="VARCHAR" />
+        <result column="OrganizationGuid" property="organizationGuid" jdbcType="VARCHAR" />
+        <result column="Openid" property="openid" jdbcType="VARCHAR" />
+        <result column="UserGuid" property="userGuid" jdbcType="VARCHAR" />
+        <result column="GoodsGuid" property="goodsGuid" jdbcType="VARCHAR" />
+        <result column="VipGuid" property="vipGuid" jdbcType="VARCHAR" />
+        <result column="Name" property="name" jdbcType="VARCHAR" />
+        <result column="OrderMoney" property="orderMoney" jdbcType="INTEGER" />
+		<result column="TotalOrderMoney" property="totalOrderMoney" jdbcType="INTEGER" />
+        <result column="Type" property="type" jdbcType="INTEGER" />
+        <result column="State" property="state" jdbcType="INTEGER" />
+        <result column="PayType" property="payType" jdbcType="INTEGER" />
+        <result column="PayMoney" property="payMoney" jdbcType="INTEGER" />
+        <result column="PayTime" property="payTime" jdbcType="VARCHAR" />
+        <result column="CallbackUrl" property="callbackUrl" jdbcType="VARCHAR" />
+        <result column="Date" property="date" jdbcType="VARCHAR" />
+        <result column="Time" property="time" jdbcType="VARCHAR" />
+        <result column="BusinConfi" property="businConfi" jdbcType="INTEGER" />
+		<result column="InviterGuid" property="inviterGuid" jdbcType="VARCHAR" />
+		<result column="SerialNumber" property="serialNumber" jdbcType="VARCHAR" />
+		<result column="DiscountJson" property="discountJson" jdbcType="VARCHAR" />
+		<result column="BuySum" property="buySum" jdbcType="INTEGER" />
+		<result column="GroupBuyingState" property="groupBuyingState" jdbcType="INTEGER" />
+        <result column="Remark" property="remark" jdbcType="VARCHAR" />
+        <result column="Creator" property="creator" jdbcType="VARCHAR" />
+        <result column="CreateTime" property="createTime" jdbcType="VARCHAR" />
+        <result column="CheckUser" property="checkUser" jdbcType="VARCHAR" />
+        <result column="CheckTime" property="checkTime" jdbcType="VARCHAR" />
+        <result column="ExtInt" property="extInt" jdbcType="INTEGER" />
+        <result column="ExtStr" property="extStr" jdbcType="VARCHAR" />
+    </resultMap>
+
+
+
+	<sql id="Base_Column_List">
+		ID AS id,
+		GUID AS guid,
+		OrderNumber AS orderNumber,
+		OrganizationGuid AS organizationGuid,
+		Openid AS openid,
+		UserGuid AS userGuid,
+		GoodsGuid AS goodsGuid,
+		VipGuid AS vipGuid,
+		Name AS name,
+		OrderMoney AS orderMoney,
+		TotalOrderMoney AS totalOrderMoney,
+		Type AS type,
+		State AS state,
+		PayType AS payType,
+		PayMoney AS payMoney,
+		PayTime AS payTime,
+		CallbackUrl AS callbackUrl,
+		Date AS date,
+		Time AS time,
+		BusinConfi AS businConfi,
+		InviterGuid AS inviterGuid,
+		SerialNumber AS serialNumber,
+		DiscountJson AS discountJson,
+		BuySum AS buySum,
+		GroupBuyingState AS groupBuyingState,
+		Remark AS remark,
+		Creator AS creator,
+		CreateTime AS createTime,
+		CheckUser AS checkUser,
+		CheckTime AS checkTime,
+		ExtInt AS extInt,
+		ExtStr AS extStr
+	</sql>
+
+	<sql id="where">
+		<if test="id != null">
+			and ID = #{id}
+		</if>
+		<if test="guid != null">
+			and GUID = #{guid}
+		</if>
+		<if test="orderNumber != null">
+			and OrderNumber = #{orderNumber}
+		</if>
+		<if test="organizationGuid != null">
+			and OrganizationGuid = #{organizationGuid}
+		</if>
+		<if test="openid != null">
+			and Openid = #{openid}
+		</if>
+		<if test="userGuid != null">
+			and UserGuid = #{userGuid}
+		</if>
+		<if test="goodsGuid != null">
+			and GoodsGuid = #{goodsGuid}
+		</if>
+		<if test="vipGuid != null">
+			and VipGuid = #{vipGuid}
+		</if>
+		<if test="name != null">
+			and Name = #{name}
+		</if>
+		<if test="orderMoney != null">
+			and OrderMoney = #{orderMoney}
+		</if>
+		<if test="totalOrderMoney != null">
+			and TotalOrderMoney = #{totalOrderMoney}
+		</if>
+		<if test="type != null">
+			and Type = #{type}
+		</if>
+		<if test="state != null">
+			and State = #{state}
+		</if>
+		<if test="payType != null">
+			and PayType = #{payType}
+		</if>
+		<if test="payMoney != null">
+			and PayMoney = #{payMoney}
+		</if>
+		<if test="payTime != null">
+			and PayTime = #{payTime}
+		</if>
+		<if test="callbackUrl != null">
+			and CallbackUrl = #{callbackUrl}
+		</if>
+		<if test="time != null">
+			and Time = #{time}
+		</if>
+		<if test="date != null">
+			and Date = #{date}
+		</if>
+		<if test="businConfi != null">
+			and BusinConfi = #{businConfi}
+		</if>
+		<if test="inviterGuid != null">
+			and InviterGuid = #{inviterGuid}
+		</if>
+		<if test="serialNumber != null">
+			and SerialNumber = #{serialNumber}
+		</if>
+		<if test="discountJson != null">
+			and DiscountJson = #{discountJson}
+		</if>
+		<if test="buySum != null">
+			and BuySum = #{buySum}
+		</if>
+		<if test="groupBuyingState != null">
+			and GroupBuyingState = #{groupBuyingState}
+		</if>
+		<if test="remark != null">
+			and Remark = #{remark}
+		</if>
+		<if test="creator != null">
+			and Creator = #{creator}
+		</if>
+		<if test="createTime != null">
+			and CreateTime = #{createTime}
+		</if>
+		<if test="checkUser != null">
+			and CheckUser = #{checkUser}
+		</if>
+		<if test="checkTime != null">
+			and CheckTime = #{checkTime}
+		</if>
+		<if test="extStr != null">
+			and ExtStr = #{extStr}
+		</if>
+		<if test="extInt != null">
+			and ExtInt = #{extInt}
+		</if>
+		<if test="page != null and limit != null">
+			<!--<if test="page.sortname != null"> order by ${page.sortname} ${page.sortorder}</if>-->
+			limit ${page}, ${limit}
+		</if>
+	</sql>
+
+	<select id="selectList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from ordertab
+		<where>
+			<include refid="where" />
+		</where>
+	</select>
+
+
+	<select id="selectListPage" resultMap="BaseResultMapPage" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from ordertab
+		<where>
+			1=1
+			<include refid="where" />
+		</where>
+	</select>
+
+
+	<select id="selectTimeoutOrder" resultMap="BaseResultMapPage">
+		select
+		<include refid="Base_Column_List"/>
+		from ordertab
+		<where>
+			state = 0 and now() > SUBDATE(createTime,interval -15 minute);
+		</where>
+	</select>
+
+	<select id="selectOrderFailsNotify" resultMap="BaseResultMapPage">
+		select
+		<include refid="Base_Column_List"/>
+		from ordertab
+		<where>
+			type = 0 and createTime > '2020-05-18' and state = 1 and businConfi = 1 and  date != '' and time != '' and now() > SUBDATE(createTime,interval -10 minute);
+		</where>
+	</select>
+</mapper>

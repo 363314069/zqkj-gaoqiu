@@ -1,0 +1,210 @@
+//jump 统一跳转
+var jump = {
+	basepath: jumpbasepath,
+	link: {
+		snapUp:{
+			describe: "劲爆抢购",
+			uris: {
+				"1.1.0": "v1.1/snapUp/snapUp.html"
+			},
+			version: false
+		},
+		snapUp_info:{
+			describe: "去抢购",
+			uris: {
+				"1.1.0": "v1.1/snapUp/snapUp_info.html",
+				"1.0.0": "snapUp_info.html"
+			},
+			version: false
+		},
+		activity:{
+			describe: "活动报名",
+			uris: {
+				"1.1.0": "v1.1/activity/activity.html",
+				"0.0.2": "H5_activity_list.html",
+				"0.0.1": "activity.html"
+			},
+			version: false
+		},
+		activity_info:{
+			describe: "活动报名详情页",
+			uris: {
+				"1.1.0": "v1.1/activity/activity_info.html",
+				"1.0.1": "H5_activity_info.html"
+			},
+			version: false
+		},
+		activity_lvyou:{
+			describe: "旅游报名详情页",
+			uris: {
+				"1.1.0": "v1.1/activity/activity_lvyou.html"
+			},
+			version: false
+		},
+		activity_info:{
+			describe: "活动报名详情页",
+			uris: {
+				"1.1.0": "v1.1/activity/activity_info.html",
+				"1.0.1": "H5_activity_info.html"
+			},
+			version: false
+		},
+		preferential:{
+			describe: "每周特惠",
+			uris: {
+				"1.1.0": "v1.1/preferential/preferential.html"
+			},
+			version: false
+		},
+		introduction_pay:{
+			describe: "订场订单页",
+			uris: {
+				"1.1.0": "H5_introduction_pay.html",
+				"1.1.1": "v1.1/pay/pay_introduction_pay.html"
+			},
+			version: "1.1.1"
+		},
+		reservation_query:{
+			describe: "搜索页",
+			uris: {
+				"1.1.0": "H5_introduction_query.html"
+			},
+			version: false
+		},
+		booking:{
+			describe: "球场预订",
+			uris: {
+				"1.1.0": "v1.1/booking/booking.html"
+			},
+			version: false
+		},
+		booking_info:{
+			describe: "球场预订详情",
+			uris: {
+				"1.1.0": "v1.1/booking/booking_info.html"
+			},
+			version: false
+		},
+		my_info:{
+			describe: "我的",
+			uris: {
+				"1.1.1": "v1.1/my/my_info-1.1.1.html",
+				"1.1.0": "v1.1/my/my_info.html"
+			},
+			version: false
+		},
+		my_order:{
+			describe: "我的订单",
+			uris: {
+				"1.1.0": "v1.1/my/my_order.html"
+			},
+			version: false
+		},
+		my_invite:{
+			describe: "我的邀请",
+			uris: {
+				"1.1.0": "v1.1/my/my_invite.html"
+			},
+			version: false
+		},
+		my_coupons:{
+			describe: "我的优惠卷",
+			uris: {
+				"1.1.0": "v1.1/my/my_coupons.html",
+				"1.0.0": "my_coupons.html"
+			},
+			version: "1.1.0"
+		},
+		my_order_info:{
+			describe: "订单详情",
+			uris: {
+				"1.1.0": "v1.1/my/my_order_info.html"
+			},
+			version: false
+		},
+		introduction_list:{
+			describe: "球场列表",
+			uris: {
+				"1.0.0": "H5_introduction_list.html"
+			},
+			version: false
+		},
+		coupons_introduction_pay:{
+			describe: "订场订单页（优惠券跳转）",
+			uris: {
+				"1.1.0": "v1.1/pay/coupons_introduction_pay.html"
+			},
+			version: false
+		},
+		my_card:{
+			describe: "会员卡列表",
+			uris: {
+				"1.0.1": "v1.1/my/my_card-1.0.1.html"
+			},
+			version: false
+		},
+		coupons_activity_pay:{
+			describe: "酒店下单（优惠券跳转）",
+			uris: {
+				"1.0.1": "v1.1/pay/coupons_activity_pay.html"
+			},
+			version: false
+		},
+		pay_success:{
+			describe: "支付成功跳转",
+			uris: {
+				"1.0.0": "success.html"
+			},
+			version: false
+		}
+	},
+	geturi:function(key, version){
+		if(!key)
+			return false;
+		var uri = null;
+		var url = false;
+		try{
+			if(version){
+				uri = this.link[key].uris[version];
+			} else {
+				if(this.link[key].version){
+					uri = this.link[key].uris[this.link[key].version];
+				} else {
+					uri = this.link[key].uris[Object.keys(this.link[key].uris)[0]] ;
+				}
+			}
+			if(uri){
+				url = jump.basepath + uri;
+			}
+		}catch(err){}
+		return url;
+	},
+	to: function(url, version, target){
+		var key = url;
+		var parm = "";
+		var i = url.indexOf("?");
+		if(i > 0){
+			key = url.substring(0,i);
+			parm = url.substring(i);
+		}
+		var href = this.geturi(key, version);
+		if(href){
+			url = href + parm;
+		}
+		var m = document.createElement("a");
+		m.href = url;
+		if(target)
+			m.target = target;
+		$("body").append(m);
+		m.click();
+	}
+}
+if(!document.referrer || document.referrer == location.href){
+	console.log(document.referrer);
+	history.go = function(){
+		jump.to("snapUp");
+	}
+	history.back = function(){
+		jump.to("snapUp");
+	}
+}

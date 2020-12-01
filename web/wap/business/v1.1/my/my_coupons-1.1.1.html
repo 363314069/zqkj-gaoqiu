@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta content="telephone=no" name="format-detection">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+	<title>我的卡券</title>
+	<script type="text/javascript" src="./../../js/flexible.js"></script>
+	<script type="text/javascript" src="./../../js/jquery.min.js"></script>
+	<script type="text/javascript" src="./../../js/cookie/js.cookie.min.js" ></script>
+	<script src="./../js/zqkj/common-1.1.js?v=1.1"></script>
+	<script type="text/javascript" src="./../../layer/mobile/layer.js" ></script>
+	<script type="text/javascript" src="./../../layer/laydate/laydate.js" ></script>
+	<link href="./../../fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+	<link href="./../../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="../css/default-1.1.css">
+	<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+	<script src="./../../js/wx_api.js?v=6"></script>
+	<script src="./../js/zqkj/load-1.1.js"></script>
+	<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+	<script type="text/javascript" src="./../../res/js/zqkj/jump.js"></script>
+
+</head>
+<style>
+	body{background-color: #00a964;}
+	ul.footer{border: none; background-color: #00a964;}
+	ul.footer .iconfont, ul.footer a{color: #fff;}
+	ul.footer .select .iconfont, ul.footer .select a{ color: #fff;}
+	.wrap{
+		background-color: #f0f0f0;
+		border-radius: 0 0 1rem 1rem;
+		height: calc(100% - .2rem);
+		overflow-y:auto;
+	}
+
+	.menu {
+		/*display: -webkit-flex;
+        display: flex;
+        justify-content: space-around;
+        border-bottom: 1px solid #e7e7e7;*/
+		font-size: 0.32rem;
+		line-height: 0.8rem;
+		text-align: left;
+		padding: 0 .5rem;
+	}
+	.menu > li{
+		/*-webkit-box-flex: 1;
+        -webkit-flex: 1;
+        flex: 1;*/
+		display: inline-block;
+		text-align: center;
+		height: 0.8rem;
+		padding: 0 0.1rem;
+	}
+	.menu > li:nth-child(2n){
+		padding: 0;
+	}
+	.menu .select{
+		border-bottom: 0.04rem solid #2d9de7;
+		color: #2d9de7;
+	}
+
+	.list{
+		height: 10rem;
+	}
+	.list > li{
+		margin: 0.5rem;
+		position: relative;
+	}
+	.list > li::after{
+		content: '';
+		width: .2rem;
+		height: .4rem;
+		border-radius: .2rem 0 0 .2rem;
+		background-color: #f0f0f0;
+		position: absolute;
+		right: 0;
+		top: 1.2rem;
+		display: block;
+		z-index: 999;
+	}
+	.list > li::before{
+		content: '';
+		width: .2rem;
+		height: .4rem;
+		border-radius: 0 .2rem .2rem 0;
+		background-color: #f0f0f0;
+		position: absolute;
+		left: 0;
+		top: 1.2rem;
+		display: block;
+		z-index: 999;
+	}
+	.list > li > ul{
+		height: 1.4rem;
+		color: #fff;
+		position: relative;
+		text-align: left;
+		padding-left: .4rem;
+		border-radius:.2rem .2rem 0 0;
+	}
+	.list > li > div{
+		height: 1rem;
+		background-color: #FFF;
+		font-size: .42rem;
+		line-height: 1rem;
+		border-radius: 0 0 .2rem .2rem;
+	}
+	.list > li > ul > li{font-size: 0.32rem;}
+	.list > li > ul > li:first-child{font-size: .5rem; line-height: 1.4rem;}
+	.list > li > ul > li:nth-child(2){position: absolute; left: 1.3rem; top: calc(65% - .45rem);}
+	.list > li > ul > li:nth-child(3){position: absolute; right: .4rem; top: calc(50% - .45rem); text-align: right;}
+
+	.list > li > ul > li > span:nth-child(1){font-size: .36rem; display: block; padding-bottom: .1rem;}
+	.list > li > ul > li > span:nth-child(2){font-size: .24rem; display: block;}
+
+	.list > li:nth-child(6n + 1) > ul{
+		background-color: #99CC33;
+	}
+	.list > li:nth-child(6n + 2) > ul{
+		background-color: #FF9900;
+	}
+	.list > li:nth-child(6n + 3) > ul{
+		background-color: #FFCC00;
+	}
+	.list > li:nth-child(6n + 4) > ul{
+		background-color: #FF6666;
+	}
+	.list > li:nth-child(6n + 5) > ul{
+		background-color: #66CCCC;
+	}
+	.list > li:nth-child(6n + 6) > ul{
+		background-color: #0099CC;
+	}
+	.list > li:nth-child(6n + 1) > div{
+		color: #99CC33;
+	}
+	.list > li:nth-child(6n + 2) > div{
+		color: #FF9900;
+	}
+	.list > li:nth-child(6n + 3) > div{
+		color: #FFCC00;
+	}
+	.list > li:nth-child(6n + 4) > div{
+		color: #FF6666;
+	}
+	.list > li:nth-child(6n + 5) > div{
+		color: #66CCCC;
+	}
+	.list > li:nth-child(6n + 6) > div{
+		color: #0099CC;
+	}
+	.head{
+		background-color: #00a964;
+	}
+</style>
+<body>
+<div class="main-head">
+	<ul class="top">
+		<li class="l"><a id="back" href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+		<li class="c">
+			<a>我的卡券</a>
+		</li>
+		<li class="r"></li>
+	</ul>
+</div>
+<div class="wrap">
+	<ul class="menu">
+		<li class="select" state="0">未使用</li>
+		<li>|</li>
+		<li  state="1">已使用</li>
+		<li>|</li>
+		<li  state="2">已过期</li>
+		<!--<li onclick="nearestDistance()">距离最近</li>-->
+	</ul>
+	<ul class="list">
+		<!--<li>
+            <ul>
+                <li>50</li>
+                <li><span>元</span><span>满500元使用</span></li>
+                <li><span>全场通用</span><span>2020.04.27-2020.08.27</span></li>
+            </ul>
+            <div>立即使用</div>
+        </li>-->
+	</ul>
+</div>
+<div id="footer"></div>
+</body>
+</html>
+<script>
+	var vipCarGuid = T.p('vipCardGuid');
+
+	$("#back").click(function(){
+		if($('#arealist').is(':hidden')){
+			history.go(-1);
+		} else {
+			$('#arealist').hide("slow");
+		}
+	})
+
+	$(".menu").children().click(function(){
+		if($(this).index() % 2 == 0){
+			$(this).parent().children().removeClass("select");
+			$(this).addClass("select");
+			selectUserCoupons($(this).attr("state"),vipCarGuid);
+		}
+	});
+
+
+
+	$(function () {
+		selectUserCoupons(0,vipCarGuid);
+	});
+	//优惠券数量查询
+	function selectUserCoupons(state){//state  0未使用  1已使用  2已过期
+		$(".list").empty();
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/business/couponsuser/selectusercoupons",
+			headers : {token:T.token},
+			data : {"state":state,"vipCardGuid":vipCarGuid},
+			success : function(r) {
+				if(r.code == 0){
+					$.each(r.data,function (i, obj) {
+						var li = $('<li onclick="linkOrder(\''+obj.productGuid+'\',\''+obj.guid+'\')">');
+						var ul = $('<ul>');
+						if(obj.type == 2) {
+							ul.append('<li>'+obj.countUserCoupons+'</li>');
+							//设置单位，暂时替换，后续优惠券添加单位字段，后台进行设置
+							if(obj.unit){
+								ul.append('<li><span>'+obj.unit+'</span></li>');
+							}else{
+								ul.append('<li><span>场</span></li>');
+							}
+							/*if(obj.guid == '98f5ce73-a457-4f87-83c7-520edf675abd'){//海陵岛保利36洞  次
+								ul.append('<li><span>次</span></li>');
+							}else if(obj.guid == '95cdc32a-4ab0-4211-8bcc-7157e2892a45' || obj.guid == '0d2eb515-c759-4500-8322-bf1e3e666b38' || obj.guid == 'a0bae99a-c443-41ef-ac6d-d9b5262da77e'){
+								ul.append('<li><span>间/夜</span></li>');
+							}else{
+								ul.append('<li><span>场</span></li>');
+							}*/
+						}else{
+							ul.append('<li>'+obj.faceValue/100+'</li>');
+							ul.append('<li><span>元</span></li>');
+						}
+						var ul_li = $('<li>');
+						//1、全品类 2、指定商品 3、指定商家全品类 4、指定商家指定商品
+						ul_li.append('<span>'+obj.name+'</span>');
+						ul_li.append('<span>'+formatDate(new Date(obj.startTime.replace(/\-/g, '/')))+'-'+formatDate(new Date(obj.endTime.replace(/\-/g, '/')))+'</span>');
+						ul.append(ul_li);
+						li.append(ul);
+						$(".list").append(li);
+					})
+					if(state == 1 || state == 2){
+						$(".list li > ul").css("background-color","#CCC");
+						$(".list li > div").css("color","#CCC");
+					}
+					//点击使用跳转页面
+					/*$(".use").click(function(){
+						location.href = "/wap/business/H5_reservation_list.html?footer=1";
+					});*/
+				}
+			}
+		});
+	}
+	//时间格式化
+	var formatDate = function (date) {
+		var y = date.getFullYear();
+		var m = date.getMonth() + 1;
+		m = m < 10 ? ('0' + m) : m;
+		var d = date.getDate();
+		d = d < 10 ? ('0' + d) : d;
+		var h = date.getHours();
+		var minute = date.getMinutes();
+		minute = minute < 10 ? ('0' + minute) : minute;
+		var second= date.getSeconds();
+		second = minute < 10 ? ('0' + second) : second;
+		//return y + '-' + m + '-' + d+' '+h+':'+minute+':'+ second;
+		var dates = (y + '-' + m + '-' + d).replace(/\-/g, "/")
+		return dates;
+	};
+
+	function linkOrder(guid,couponsGuid) {
+		//guid不为空的话，就是酒店产品，
+		if(isNull(guid)){
+			$.ajax({
+				type : "POST",
+				url : T.serverurl + "/business/activity/info",
+				headers : {token:T.token},
+				data : {guid:guid},
+				success : function(r) {
+					if(r.code == 0 && r.data){
+						jump.to("coupons_activity_pay?guid="+guid+"&couponsGuid="+couponsGuid);
+					}
+				}
+			});
+		}else{
+			//guid为空，就根据优惠券guid查询，优惠券和产品关联表
+			$.ajax({
+				type : "POST",
+				url : T.serverurl + "/business/couponsactmap/list",
+				headers : {token:T.token},
+				data : {"couponsGuid":couponsGuid},
+				success : function(r) {
+					if(r.code == 0){
+						if(r.data && r.data.length == 1){
+							//跳转到订场下单页面
+							jump.to("introduction_pay?guid="+r.data[0].activityGuid);
+						}else{
+							//跳转到订场列表页面
+							jump.to("booking");
+						}
+					}
+				}
+			});
+		}
+	}
+	//判断是否为空
+	function isNull(data) {
+		return (data == "" || data == undefined || data == null || data == 'null' || data == 'undefined') ? false : true;
+	}
+</script>

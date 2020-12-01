@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<script src="../src/GeoUtils.js"></script>
+	<body>
+		<canvas id="canvas"width="300"height="300">
+			
+		</canvas>
+		<script>
+			//ocation lat 纬度坐标 lng 经度坐标 
+			//lat Y  lng x
+			var ctx = document.getElementById("canvas").getContext("2d");
+			//var data = [{"type":"polyline","point":[{"lat":39.953294004517765,"lng":116.48028626120775},{"lat":39.95415342820247,"lng":116.48370605359386},{"lat":39.95281057391148,"lng":116.48377584527522},{"lat":39.951897417813534,"lng":116.48566022067165},{"lat":39.9507962426456,"lng":116.48761438774942},{"lat":39.9498993991735,"lng":116.48824251288156},{"lat":39.94791487503697,"lng":116.48848678376629},{"lat":39.9471359511796,"lng":116.48702115845795},{"lat":39.94375155751575,"lng":116.49078990925081},{"lat":39.942596527404035,"lng":116.49072011756945},{"lat":39.940181626642264,"lng":116.4908597009322},{"lat":39.93980555270709,"lng":116.48768417943081},{"lat":39.93969810262868,"lng":116.48283365757705},{"lat":39.93983241520013,"lng":116.47992926674641},{"lat":39.941282974039005,"lng":116.47951051665832},{"lat":39.94399215389649,"lng":116.48161923418438},{"lat":39.94763772112644,"lng":116.48134905192465},{"lat":39.95161279574505,"lng":116.48047665590781},{"lat":39.953250803284064,"lng":116.48023238502309}]},{"type":"rectangle","point":{"sw":{"lat":39.93991671951577,"lng":116.4912526413394},"ne":{"lat":39.94854086943281,"lng":116.49599422334012},"minX":116.4912526413394,"minY":39.93991671951577,"maxX":116.49599422334012,"maxY":39.94854086943281}},{"type":"polygon","point":[{"lat":39.95576245775458,"lng":116.48975360835061},{"lat":39.95567181187412,"lng":116.48739797794029},{"lat":39.954488698444095,"lng":116.48512800227246},{"lat":39.95383150072944,"lng":116.4846568761904},{"lat":39.95238111083411,"lng":116.48592302753593},{"lat":39.951973183090196,"lng":116.48742474192251},{"lat":39.94932159298019,"lng":116.48925035549051},{"lat":39.94903941214586,"lng":116.49581419308436},{"lat":39.95096579933294,"lng":116.49549029390295},{"lat":39.95415347537365,"lng":116.49578991127706},{"lat":39.95458405186254,"lng":116.49537767595525},{"lat":39.95467469919625,"lng":116.49364039852765}]},{"type":"circle","point":{"lat":39.959480361524285,"lng":116.49105497102254,"radius":402}}]
+			//ctx.fillStyle = "#FFFFFF";
+			//var data =[{"type":"polyline","point":[{"lat":40.04457416601725,"lng":116.38686160391754},{"lat":40.04808129008309,"lng":116.37543571760958},{"lat":40.05515064929347,"lng":116.37543571760958},{"lat":40.06575330230471,"lng":116.40188183182333},{"lat":40.05868505174149,"lng":116.41452997340382},{"lat":40.0533833787795,"lng":116.4030316628761},{"lat":40.05426701981062,"lng":116.39268318340115},{"lat":40.0489650004024,"lng":116.398432338665},{"lat":40.043662565270104,"lng":116.39153335234838}]},{"type":"rectangle","point":{"sw":{"lat":40.04353204649892,"lng":116.40382188762311},"ne":{"lat":40.05229955269093,"lng":116.41621165605991},"minX":116.40382188762311,"minY":40.04353204649892,"maxX":116.41621165605991,"maxY":40.05229955269093}},{"type":"polygon","point":[{"lat":40.04242102329115,"lng":116.39202472504945},{"lat":40.04221345524334,"lng":116.38964828189565},{"lat":40.041341662487014,"lng":116.38791995960199},{"lat":40.03957728562461,"lng":116.38735285384939},{"lat":40.041943724998625,"lng":116.38656600946761},{"lat":40.04140404294134,"lng":116.38491870228147},{"lat":40.042089023278365,"lng":116.38327139509532},{"lat":40.041570099417584,"lng":116.37886957425381},{"lat":40.041819183367586,"lng":116.37886957425381},{"lat":40.03667126200516,"lng":116.37176724982831},{"lat":40.03355740976541,"lng":116.36990390235545},{"lat":40.029989174034064,"lng":116.37272721657502},{"lat":40.02643902047722,"lng":116.37834426402941},{"lat":40.0238451654157,"lng":116.38488334205934},{"lat":40.02791165551578,"lng":116.38334086431634},{"lat":40.03020178122832,"lng":116.38991597105108},{"lat":40.029246790471745,"lng":116.39388571131936},{"lat":40.02972428753467,"lng":116.39920570337952},{"lat":40.03123979937351,"lng":116.40025807643084},{"lat":40.03391781265301,"lng":116.40303959512221},{"lat":40.03769591469816,"lng":116.40514598791759},{"lat":40.03768831350667,"lng":116.3935370070564},{"lat":40.03999243726181,"lng":116.39337497684136}]},{"type":"circle","point":{"lat":40.042717155402016,"lng":116.39836649103215,"radius":366}}];
+			//var data = [{"type":"rectangle","point":{"sw":{"lat":40.04901378768745,"lng":116.06479983943217},"ne":{"lat":40.06668555618903,"lng":116.08779646048761},"minX":116.06479983943217,"minY":40.04901378768745,"maxX":116.08779646048761,"maxY":40.06668555618903}},{"type":"circle","point":{"lat":40.05830372962481,"lng":116.09904929639376,"radius":805}},{"type":"polygon","point":[{"lat":40.04368004888395,"lng":116.06389492440209},{"lat":40.04594786666526,"lng":116.06639157483052},{"lat":40.04777951013112,"lng":116.07093093924583},{"lat":40.045424530849424,"lng":116.08704568292019},{"lat":40.03574208784894,"lng":116.08670523058905},{"lat":40.0313801743069,"lng":116.08216586617371},{"lat":40.033822880533464,"lng":116.0776265017584},{"lat":40.03035501799532,"lng":116.07305404893847},{"lat":40.03115445184375,"lng":116.06800309457682},{"lat":40.03754958262772,"lng":116.06473482998987},{"lat":40.03949084201495,"lng":116.06176368036537},{"lat":40.042284430916276,"lng":116.06219266274636},{"lat":40.04368004888395,"lng":116.06389492440209}]},{"type":"polyline","point":[{"lat":40.043941790128436,"lng":116.09113111089391},{"lat":40.04603515479926,"lng":116.09567047530922},{"lat":40.046558485843285,"lng":116.10089074438682},{"lat":40.04446513737034,"lng":116.10350087892562},{"lat":40.041063307914555,"lng":116.1075863068994},{"lat":40.040563708876704,"lng":116.10742687456738},{"lat":40.03725822316586,"lng":116.10694906468868},{"lat":40.033208758309556,"lng":116.10493270506234},{"lat":40.03216188560145,"lng":116.09744275377707},{"lat":40.03390666445011,"lng":116.09176854825795},{"lat":40.040710872064544,"lng":116.09063370715411},{"lat":40.04367659455205,"lng":116.0900662866022}]}];
+			var data = [{"type":"polyline","point":[{"lat":40.01015804793081,"lng":116.20828483517671},{"lat":40.01212291394959,"lng":116.2080009291394},{"lat":40.01343279295457,"lng":116.2080009291394},{"lat":40.01452433943549,"lng":116.20672335197149},{"lat":40.01539669421504,"lng":116.20530382178492},{"lat":40.01626990747893,"lng":116.20331647952374},{"lat":40.01670650988758,"lng":116.2027486674491},{"lat":40.01561499858683,"lng":116.2017549963185},{"lat":40.01659735954937,"lng":116.19948374802},{"lat":40.017798003591054,"lng":116.19806421783343},{"lat":40.01976264791189,"lng":116.1989159359454},{"lat":40.020090083088824,"lng":116.19990960707598},{"lat":40.021181522240134,"lng":116.20090327820658},{"lat":40.02216380243028,"lng":116.2017549963185},{"lat":40.02292778827896,"lng":116.20445210367298},{"lat":40.02380090440446,"lng":116.2060135868782},{"lat":40.024674009267265,"lng":116.20771702310209},{"lat":40.024674009267265,"lng":116.21098194253119},{"lat":40.02445573410744,"lng":116.21311123781103},{"lat":40.02325520814587,"lng":116.21481467403491},{"lat":40.022054660890845,"lng":116.2165181102588},{"lat":40.01987179314685,"lng":116.21850545251998},{"lat":40.0192169190975,"lng":116.22091865383716},{"lat":40.01801630022006,"lng":116.22418357326626},{"lat":40.01670650988758,"lng":116.22759044571401},{"lat":40.01561499858683,"lng":116.2295777879752},{"lat":40.01539669421504,"lng":116.23071341212444},{"lat":40.014414315831324,"lng":116.22986169401253},{"lat":40.0122312017252,"lng":116.22886802288193},{"lat":40.011139618276864,"lng":116.22744849269534},{"lat":40.010702979970446,"lng":116.22645482156474},{"lat":40.00917472372627,"lng":116.22617091552743},{"lat":40.00873807275033,"lng":116.22546115043416},{"lat":40.00786476235213,"lng":116.22460943232223},{"lat":40.00688227469295,"lng":116.22361576119162},{"lat":40.00600894036375,"lng":116.22233818402371},{"lat":40.00436462213812,"lng":116.22133626565294},{"lat":40.00250870424104,"lng":116.22218798376487},{"lat":40.00130778909232,"lng":116.22389141998876},{"lat":39.99912425245719,"lng":116.22502704413802},{"lat":39.998578357301206,"lng":116.22346556093278},{"lat":39.997814096692714,"lng":116.22346556093278},{"lat":39.99661309831712,"lng":116.22516899715666},{"lat":39.995630447446814,"lng":116.22758219847384},{"lat":39.99377429025103,"lng":116.22857586960443},{"lat":39.99115374646638,"lng":116.22829196356712},{"lat":39.991044554942675,"lng":116.22559485621264},{"lat":39.99213646226213,"lng":116.22460118508205},{"lat":39.9926824093238,"lng":116.22232993678354},{"lat":39.993337539991536,"lng":116.21977478244771},{"lat":39.99464778232443,"lng":116.21934892339175},{"lat":39.996285549610576,"lng":116.2175035341492},{"lat":39.99846917774213,"lng":116.21679376905593},{"lat":40.001526138884806,"lng":116.21551619188801},{"lat":40.002399531016394,"lng":116.21494837981339},{"lat":40.00360042680967,"lng":116.21324494358952},{"lat":40.00447379219549,"lng":116.21154150736562},{"lat":40.007312151924715,"lng":116.21040588321638},{"lat":40.00807630537429,"lng":116.21125760132833},{"lat":40.00862212398794,"lng":116.20955416510445},{"lat":40.01036871398955,"lng":116.20955416510445},{"lat":40.01025955343417,"lng":116.2084185409552}]},{"type":"rectangle","point":{"sw":{"lat":39.991744538249854,"lng":116.2391595634288},"ne":{"lat":40.02641159036466,"lng":116.26850879145013},"minX":116.2391595634288,"minY":39.991744538249854,"maxX":116.26850879145013,"maxY":40.02641159036466}},{"type":"polygon","point":[{"lat":40.024739898308916,"lng":116.30886208360711},{"lat":40.0244607645927,"lng":116.2971230237335},{"lat":40.0213902177376,"lng":116.28937766464165},{"lat":40.01599316148057,"lng":116.28937766464165},{"lat":40.013106586240035,"lng":116.28941953550563},{"lat":40.01068697337367,"lng":116.29135587527858},{"lat":40.00808113974976,"lng":116.29377629999479},{"lat":40.00512767083915,"lng":116.29067025268272},{"lat":39.99954316048695,"lng":116.29296965616312},{"lat":40.014992513907345,"lng":116.2998678666043},{"lat":40.0064306570061,"lng":116.29817356930296},{"lat":39.99647148354518,"lng":116.30374054615024},{"lat":40.00121856193569,"lng":116.30555586468739},{"lat":40.00615144779487,"lng":116.30446667356512},{"lat":40.01192153757139,"lng":116.30470871603673},{"lat":40.01527168666762,"lng":116.30482973727254},{"lat":40.001963171501124,"lng":116.3103967141198},{"lat":40.00745441426602,"lng":116.31100182029887},{"lat":40.01257296843307,"lng":116.31439041490155},{"lat":40.01601614173403,"lng":116.31765798826844},{"lat":39.99740230944687,"lng":116.31911024309817},{"lat":40.000567021851644,"lng":116.32274088017246},{"lat":40.004755384472986,"lng":116.32383007129476},{"lat":40.01359663283934,"lng":116.32576641106773},{"lat":40.016932614014614,"lng":116.32709764466165},{"lat":40.02056166611327,"lng":116.3264925384826},{"lat":40.023065078744196,"lng":116.3264101627996},{"lat":40.02269289099077,"lng":116.31636540022734}]},{"type":"circle","point":{"lat":39.98158680293606,"lng":116.30169072897074,"radius":1578}},{"type":"marker","point":{"lat":40.013087911169166,"lng":116.21790096276119}},{"type":"marker","point":{"lat":40.014306451771404,"lng":116.25514085885412}},{"type":"marker","point":{"lat":40.01864732444483,"lng":116.30367157450712}},{"type":"marker","point":{"lat":39.986579227845894,"lng":116.30604858915135}},{"type":"marker","point":{"lat":40.006004709746065,"lng":116.30188881352396}},{"type":"marker","point":{"lat":39.99754959628903,"lng":116.25405139380885}},{"type":"marker","point":{"lat":39.9978543033926,"lng":116.22097127334332}},{"type":"marker","point":{"lat":40.006004709746065,"lng":116.3193202542483}},{"type":"marker","point":{"lat":39.98071239930152,"lng":116.29921467204919}},{"type":"marker","point":{"lat":40.00432900535138,"lng":116.29307405088494}},{"type":"marker","point":{"lat":40.00737570977742,"lng":116.20561972043268}},{"type":"marker","point":{"lat":40.00379581798608,"lng":116.2255272180781}},{"type":"marker","point":{"lat":40.01712424292166,"lng":116.2373132490224}},{"type":"marker","point":{"lat":40.00082512583071,"lng":116.27138379225634}},{"type":"marker","point":{"lat":40.00288177273775,"lng":116.29733286878918}},{"type":"marker","point":{"lat":40.00699487921927,"lng":116.3059495468745}},{"type":"marker","point":{"lat":40.00745187563205,"lng":116.31496239406721}},{"type":"marker","point":{"lat":39.981017182119984,"lng":116.28019855489536}},{"type":"marker","point":{"lat":39.991455166422085,"lng":116.3179336623725}},{"type":"marker","point":{"lat":40.01164086572147,"lng":116.28742864110488}}]
+  
+			var scope = {
+				bound:{maxX:0, maxY:0, minX:1000, minY:1000}, 
+				ratio:1, 
+				width:600, 
+				height:600, 
+				minX:1000, 
+				minY:1000,
+				setX:function(x){
+					if(this.bound.minX > x){
+						this.bound.minX = x;
+					}
+					if(this.bound.maxX < x){
+						this.bound.maxX = x;
+					}
+				},
+				setY:function(y){
+					if(this.bound.minY > y){
+						this.bound.minY = y;
+					}
+					if(this.bound.maxY < y){
+						this.bound.maxY = y;
+					}
+				},
+				toxy:function(lng, lat){
+					return {
+						x:(lng - this.bound.minX) * 10000,
+						y:(lat - this.bound.minY) * 10000
+					}
+				}
+			}
+			var testpoints = new Array();
+			data.forEach(function(overlay, i){
+				switch(overlay.type) {
+					case 'marker': {
+						//overlay.point = e.overlay.getPosition();
+						testpoints.push(overlay.point);
+						break;
+					}
+					case 'polyline': {
+						//overlay.point = e.overlay.getPath();
+						overlay.point.forEach(function(point, j){
+							scope.setX(point.lng);
+							scope.setY(point.lat);
+						})
+						break;
+					}
+					case 'rectangle': {
+						//ctx.fillStyle="#FF0000";
+						//overlay.point = e.overlay.getBounds();
+						scope.setX(overlay.point.minX);
+						scope.setY(overlay.point.minY);
+						scope.setX(overlay.point.maxX);
+						scope.setY(overlay.point.maxY);
+						break;
+					}
+					case 'polygon': {
+						overlay.point.forEach(function(point, j){
+							scope.setX(point.lng);
+							scope.setY(point.lat);
+						})
+						break;
+					}
+					case 'circle': {
+						//中心点
+						var r = overlay.point.radius / 111000;
+						scope.setX(overlay.point.lng - r);
+						scope.setY(overlay.point.lat - r);
+						scope.setX(overlay.point.lng + r);
+						scope.setY(overlay.point.lat + r);
+						break;
+					}
+				}
+			});
+			scope.width = (scope.bound.maxX - scope.bound.minX) * 10000;
+			scope.height = (scope.bound.maxY - scope.bound.minY) * 10000;
+			document.getElementById("canvas").width = scope.width;
+			document.getElementById("canvas").height = scope.height;
+			//alert(JSON.stringify(scope));
+			//ctx.fillRect(100, 100, 200, 200);
+			var sum = 1;
+			data.forEach(function(overlay, i){
+				switch(overlay.type) {
+					case 'marker': {
+						//overlay.point = e.overlay.getPosition();
+						break;
+					}
+					case 'polyline': {
+						//overlay.point = e.overlay.getPath();
+						overlay.point.forEach(function(point, j){
+							var p = scope.toxy(point.lng, point.lat);
+							if(j == 0){
+								ctx.fillText(sum++, p.x, p.y);
+								ctx.beginPath();
+								ctx.moveTo(p.x, p.y);
+							} else {
+								ctx.lineTo(p.x, p.y);
+							}
+						})
+						ctx.closePath();
+						//ctx.fill("#666666");
+						ctx.stroke();
+						
+						break;
+					}
+					case 'rectangle': {
+						//overlay.point = e.overlay.getBounds();
+						var minP = scope.toxy(overlay.point.minX, overlay.point.minY);
+						var maxP = scope.toxy(overlay.point.maxX, overlay.point.maxY);
+						ctx.fillText(sum++, minP.x, minP.y);
+						ctx.fillRect(minP.x, minP.y, maxP.x - minP.x, maxP.y - minP.y);
+						break;
+					}
+					case 'polygon': {
+						overlay.point.forEach(function(point, j){
+							var p = scope.toxy(point.lng, point.lat);
+							if(j == 0){
+								ctx.fillText(sum++, p.x, p.y);
+								ctx.beginPath();
+								ctx.moveTo(p.x, p.y);
+							} else {
+								ctx.lineTo(p.x, p.y);
+							}
+						})
+						ctx.closePath();
+						//ctx.fill("#999999");
+						ctx.stroke();
+						break;
+					}
+					case 'circle': {
+						//中心点
+						var d = overlay.point.radius / 111000;
+						var p = scope.toxy(overlay.point.lng, overlay.point.lat);
+						ctx.fillText(sum++, p.x, p.y);
+						ctx.beginPath();
+						ctx.arc(p.x, p.y, d * 10000, 0, Math.PI * 2, false);
+						ctx.stroke();
+						break;
+					}
+				}
+			});
+			//var point = {"lat":40.04168004888395,"lng":116.06489492440209};
+			
+			var BMapGL = {
+				Bounds: function(minX, minY, maxX, maxY){
+					//"sw":{"lat":40.04901378768745,"lng":116.06479983943217},"ne":{"lat":40.06668555618903,"lng":116.08779646048761},"minX":116.06479983943217,"minY":40.04901378768745,"maxX":116.08779646048761,"maxY":40.06668555618903}
+					var that = this;
+					this.sw = {"lat":minY,"lng":minX};
+					this.ne = {"lat":maxY,"lng":maxX};
+					this.minX = minX;
+					this.minY = minY;
+					this.maxX = maxX;
+					this.maxY = maxY;
+					this.getSouthWest = function(){return that.sw}
+					this.getNorthEast = function(){return that.ne}
+				},
+				Polygon: function(points){
+					var that = this;
+					this.points = points;
+					this.getPath =  function(){return that.points};
+					if(points.length > 0){
+						this.maxX = points[0].lng;
+						this.maxY = points[0].lat;
+						this.minX = points[0].lng;
+						this.minY = points[0].lat;
+					}
+					points.forEach(function(point, j){
+						if(that.maxX < point.lng){
+							that.maxX = point.lng;
+						}
+						if(that.maxY < point.lat){
+							that.maxY = point.lat;
+						}
+						if(that.minX > point.lng){
+							that.minX = point.lng;
+						}
+						if(that.minY > point.lat){
+							that.minY = point.lat;
+						}
+					})
+					this.getBounds = function(){
+						return new BMapGL.Bounds(this.minX, this.minY, this.maxX, this.maxY);
+					}
+				},
+				Point: function(lng, lat){
+					this.lng = lng;
+					this.lat = lat;
+					this.toString = function(){return "Point"};
+					this.equals = function(e){return(this.lat===e.lat&&this.lng===e.lng)}
+				},
+				Circle: function(point, radius){
+					this.point = point;
+					this.radius = radius;
+					this.getRadius = function(){return this.radius;}
+					this.getCenter = function(){return this.point;}
+				}
+			};
+			
+
+			
+			
+			
+			var weizhi = function(point){
+				var pt = new BMapGL.Point(point.lng, point.lat);
+				data.forEach(function(overlay, i){
+					switch(overlay.type) {
+						case 'polyline': {
+							//overlay.point = e.overlay.getPath();
+							var polygon = new BMapGL.Polygon(overlay.point);
+							var result = BMapGLLib.GeoUtils.isPointInPolygon(pt, polygon);
+							if(result){
+								if(overlay.sum){
+									overlay.sum++;
+								} else {
+									overlay.sum = 1;
+								}
+							}
+							break;
+						}
+						case 'rectangle': {
+							var bounds = new BMapGL.Bounds(overlay.point.minX, overlay.point.minY, overlay.point.maxX, overlay.point.maxY);
+							var result = BMapGLLib.GeoUtils.isPointInRect(pt, bounds);
+							if(result){
+								if(overlay.sum){
+									overlay.sum++;
+								} else {
+									overlay.sum = 1;
+								}
+							}
+							break;
+						}
+						case 'polygon': {
+							var polygon = new BMapGL.Polygon(overlay.point);
+							var result = BMapGLLib.GeoUtils.isPointInPolygon(pt, polygon);
+							if(result){
+								if(overlay.sum){
+									overlay.sum++;
+								} else {
+									overlay.sum = 1;
+								}
+							}
+							break;
+						}
+						case 'circle': {
+							//中心点
+							var circle = new BMapGL.Circle(overlay.point, overlay.radius);
+							var result = BMapGLLib.GeoUtils.isPointInCircle(pt, circle);
+							if(result){
+								if(overlay.sum){
+									overlay.sum++;
+								} else {
+									overlay.sum = 1;
+								}
+							}
+							break;
+						}
+					}
+				});
+			}
+			/*
+			var bounds = new BMapGL.Bounds(100, 100, 200, 200);
+			var pt = new BMapGL.Point(150, 150);
+			var result = BMapGLLib.GeoUtils.isPointInRect(pt, bounds);
+			alert(result);
+			*/
+			var huapoint = function(point, text){
+				var p = scope.toxy(point.lng, point.lat);
+				ctx.fillStyle = "#00ff00";
+				ctx.beginPath();
+				ctx.arc(p.x, p.y, 10, 0, Math.PI * 2, false);
+				ctx.stroke();
+				ctx.beginPath();
+				ctx.arc(p.x, p.y, 1, 0, Math.PI * 2, false);
+				ctx.stroke();
+				ctx.fillText(text, p.x - 5, p.y + 5);
+			}
+			//测试多边型
+			testpoints.forEach(function(point, j){
+				weizhi(point);
+				huapoint(point, j + 1);
+				
+			})
+			
+			data.forEach(function(overlay, i){
+				switch(overlay.type) {
+					case 'marker': {
+						//overlay.point = e.overlay.getPosition();
+						break;
+					}
+					case 'polyline': {
+						//overlay.point = e.overlay.getPath();
+						if(overlay.point.length > 0){
+							var point = overlay.point[0];
+							var p = scope.toxy(point.lng, point.lat);
+							ctx.fillText("/" + overlay.sum, p.x + 6, p.y);
+						}						
+						break;
+					}
+					case 'rectangle': {
+						//overlay.point = e.overlay.getBounds();
+						var minP = scope.toxy(overlay.point.minX, overlay.point.minY);
+						ctx.fillText("/" + overlay.sum, minP.x + 6, minP.y);
+						break;
+					}
+					case 'polygon': {
+						if(overlay.point.length > 0){
+							var point = overlay.point[0];
+							var p = scope.toxy(point.lng, point.lat);
+							ctx.fillText("/" + overlay.sum, p.x + 6, p.y);
+						}
+						break;
+					}
+					case 'circle': {
+						//中心点
+						var p = scope.toxy(overlay.point.lng, overlay.point.lat);
+						ctx.fillText("/" + overlay.sum, p.x + 6, p.y);
+						break;
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

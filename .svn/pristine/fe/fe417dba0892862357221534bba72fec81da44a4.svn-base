@@ -1,0 +1,206 @@
+function getQueryString(name) {
+	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+	var r = window.location.search.substr(1).match(reg);
+	if (r != null) return unescape(r[2]);
+	return null;
+};
+
+$(function(){
+
+	var type = getQueryString('type');
+	if(type == 1){
+		$("#titleName").html("抢购列表");
+	}else if(type == 2){
+		$("#titleName").html("团购列表");
+	}else if(type == 0){
+		$("#titleName").html("活动列表");
+	}else if(type == 7){
+		$("#titleName").html("酒店订单列表");
+	}
+	var api = {
+		info:{url:T.serverurl + "/pay/order/info", type:"get"},
+		list:{url:T.serverurl + "/pay/order/list", type:"post"},
+		pagelist:{url:T.serverurl + "/pay/order/listPage", type:"post"},
+		page:{url:T.serverurl + "/pay/order/page", type:"post"},
+		listByGuids:{url:T.serverurl + "/security/user/listByGuids", type:"post"},
+		orderExtendListByGuids:{url:T.serverurl + "/pay/orderextend/listByGuids", type:"post"},
+		activityList:{url:T.serverurl + "/business/activity/list", type:"post"}
+	};
+
+
+	if(type){
+		/*var _list = [];  //等价于 var _list=new Object();
+		for (var i = 0; i < 10; i++) {
+			_list[i] = "123456"; //设置对象的key=>value键值对，即类似于a[0]=0的内容塞入对象_list中，对于后台接收来说，就相当于List内容了
+		}*/
+		/*$.ajax({
+			type:api.pagelist.type,
+			url:api.pagelist.url,
+			traditional: true,
+			data : {goodsGuidList:_list},
+			success : function(r) {
+				if (r.code == 0) {
+					console.log(r);
+				} else {
+					alertMsg(r);
+				}
+			}
+		});*/
+
+		$.ajax({
+			type:api.activityList.type,
+			traditional: true,
+			url:api.activityList.url,
+			async:false,
+			data : {"type":type},
+			success : function(r) {
+				if (r.code == 0) {
+					$.each(r.data, function(i, obj){
+						$('select').append('<option value="'+obj.guid+'">'+obj.name+'</option>');
+						layui.form.render('select','myDiv');
+					});
+				} else {
+					alertMsg(r);
+				}
+			}
+		});
+	}
+
+
+
+
+	layui.use([ 'laypage', 'layer', 'table' ], function() {
+		var laypage = layui.laypage, // 分页
+			layer = layui.layer, // 弹层
+			table = layui.table; // 表格
+		$.tabfield = [
+			/*{ checkbox : true, fixed : true },*/
+			{ title: 'id', field: 'id', width: 50, fixed: 'left' },
+			{ title: '邀请人', field: 'inviterGuid', width: 150, templet: '<div><span name="inviterGuid-{{d.inviterGuid}}"></span></div>'},
+			{ title: '购买人', field: 'userName', width: 150, templet: '<div><span name="guid-{{d.userGuid}}">{{d.userGuid}}</span></div>'},
+			{ title: '名称', field: 'name', width: 300 },
+			{ title: '支付状态', field: 'state', width: 100 ,templet: function(d){
+					if(d.state == 0){
+						return '未支付'
+					}else if(d.state == 1){
+						return '已支付'
+					}else if(d.state == 2){
+						return '已取消'
+					}else if(d.state == 3){
+						return '超时自动取消'
+					}
+				}},
+			{ title: '流水号', field: 'serialNumber', width: 200 },
+			{ title: '备注', field: 'remark', width: 300 },
+			{ title: '报名人', field: 'guid', width: 300, templet: '<div><span name="name-{{d.guid}}"></span></div>'},
+			{ title: '订单金额', field: 'orderMoney', width: 100 ,templet: function(d){ return d.orderMoney/100}},
+			{ title: '支付时间', field: 'payTime', width: 100 }
+
+		];
+		// 执行一个 table 实例
+		table.render({
+			elem : '#table',
+			id : 'id',
+			url : api.page.url, // 数据接口
+			method : api.page.type,
+			//contentType : 'application/json',
+			headers : {token:T.token},
+			where: {"goodsGuid":$("select[name='typeSelect']").val(),"orderBy":"createTime desc"},
+			//where: userGroupGuid?{"userGroupGuid":userGroupGuid}:{},
+			page : true, // 开启分页
+			limit: 10,
+			cols : [ $.tabfield ],
+			done: function(res, page, count){
+				if($.isEmptyObject(res.data) || res.data.length == 0){
+					return;
+				}
+				var userGuids = new Array();
+				var inviterGuids = new Array();
+				var orderGuids = new Array();
+				$.each(res.data, function(i, obj){
+					orderGuids.push(obj.guid);
+					if(isNull(obj.userGuid)){
+						userGuids.push(obj.userGuid);
+					}
+					if(isNull(obj.inviterGuid)){
+						inviterGuids.push(obj.inviterGuid);
+					}
+				});
+				$.ajax({
+					type:api.listByGuids.type,
+					traditional: true,
+					url:api.listByGuids.url,
+					data : {"guids":userGuids},
+					success : function(r) {
+						if (r.code == 0) {
+							$.each(r.data, function(i, obj){
+								var tds = $("span[name=guid-" + obj.guid + "]");
+								tds.each(function(){
+									$(this).text(obj.name);
+									res.data[$(this).parent().parent().parent().attr("data-index")].provinceName = obj.name;
+								});
+							});
+						} else {
+							alertMsg(r);
+						}
+					}
+				});
+
+				$.ajax({
+					type:api.orderExtendListByGuids.type,
+					traditional: true,
+					url:api.orderExtendListByGuids.url,
+					data : {"guids":orderGuids},
+					success : function(r) {
+						if (r.code == 0) {
+							$.each(r.data, function(i, obj){
+								var name = "";
+								var arrObj = JSON.parse(obj.extStr);
+								$.each(arrObj, function(iArr, objArr){
+									name += objArr.name + "：" + objArr.phone + "，差点" + objArr.chad + "   ";
+								});
+								console.log(name);
+								var tds = $("span[name=name-" + obj.orderGUID + "]");
+								tds.each(function(){
+									$(this).text(name);
+									res.data[$(this).parent().parent().parent().attr("data-index")].provinceName = name;
+								});
+							});
+						} else {
+							alertMsg(r);
+						}
+					}
+				});
+
+				if(inviterGuids.length > 0){
+					$.ajax({
+						type:api.listByGuids.type,
+						traditional: true,
+						url:api.listByGuids.url,
+						data : {"guids":inviterGuids},
+						success : function(r) {
+							if (r.code == 0) {
+								$.each(r.data, function(i, obj){
+									var tds = $("span[name=inviterGuid-" + obj.guid + "]");
+									tds.each(function(){
+										$(this).text(obj.name);
+										res.data[$(this).parent().parent().parent().attr("data-index")].provinceName = obj.name;
+									});
+								});
+							} else {
+								alertMsg(r);
+							}
+						}
+					});
+				}
+			}
+		});
+
+		var form = layui.form;
+		form.on("select", function(data){
+			//执行重载
+			table.reload('id', {where:{"goodsGuid":data.value}});
+			//alert(data.value); // 获取选中的值
+		});
+	});
+});

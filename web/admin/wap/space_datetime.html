@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>订单</title>
+		<script type="text/javascript" src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+		<script type="text/javascript" src="../common/js/flexible.js"></script>
+		<script type="text/javascript" src="../common/js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="assets/js/common.js"></script>
+		<script type="text/javascript" src="../common/js/layui/mobile/layer.js" ></script>
+		<script type="text/javascript" src="../common/js/layui/laydate/laydate.js" ></script>
+		<link href="../common/fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="../common/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="assets/css/default.css">
+	</head>
+	<style>
+		.wrap{padding-bottom: .88rem;}
+		.module{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			padding: .2rem;
+			font-size: .32rem;
+			background-color: #fff;
+			border-bottom: 1px solid #eee;
+		}
+		
+		.module a{
+			display: block;
+			color: #2d9de7;
+		}
+		
+		.list{
+			background-color: #fff;
+			height: calc(100% - 1.6rem);
+			overflow-y:auto; 
+			font-size: .28rem;
+		}
+		.list > li div{
+			padding: 0.2rem;
+			text-align: left;
+			overflow: hidden;
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			line-height: .5rem;
+			
+		}
+		.list > li:nth-child(n + 2){
+			border-top: 1px solid #eee;
+		}
+		.list > li input{
+			width: .4rem;
+			height: .4rem;
+			margin-right: .2rem;
+			vertical-align: middle;
+		}
+		.list > li div:first-child{
+			background-color: #eee;
+		}
+		.list > li div:last-child{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: flex-start;
+			flex-direction:row;
+			flex-wrap:wrap;
+		}
+		.boxtype{
+			height: .8rem;
+			font-size: .32rem;
+			background-color: #fff;
+			border-bottom: 1px solid #ccc;
+			text-align: left;
+		}
+		.boxtype i{display: inline-block; text-align: center; margin-left: .3rem;}
+		.boxtype span{display: inline-block; text-align: center; background-color: #fff; border: 1px solid #ccc; margin: .1rem .2rem 0 0; padding:.05rem .1rem; border-radius: .1rem;}
+		.boxtype span.close{background-color: #ccc; color: #fff;}
+		.boxtype span.select{background-color: #00aa65; border: 1px solid #00aa65; color: #fff;}
+		
+		.times span{width: 1rem; text-align: center; background-color: #fff; border: 1px solid #ccc; margin: .2rem; padding:.1rem .2rem; border-radius: .1rem;}
+		.times span.close{background-color: #ccc; color: #fff;}
+		.times span.select{background-color: #00aa65; border: 1px solid #00aa65; color: #fff;}
+		
+		.bottom{
+			border-top: 1px solid #eee;
+			padding: .1rem .3rem; 
+			position: fixed; left: 0; 
+			bottom: 0; height: 0.88rem; 
+			background-color: #fff; 
+			z-index: 999; 
+			width: 100%; 
+			font-size: 0.36rem; 
+			line-height: 0.68rem;
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+		}
+		.bottom li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+		}
+	</style>
+	<script>
+		function bindEvent(){
+			var list = $('.list');
+			list.find("input:checkbox").click(function(){
+				if($(this).is(':checked')){
+					$(this).parent().next().find("span").addClass("select");
+				} else {
+					$(this).parent().next().find("span").removeClass("select");
+				}
+			})
+			
+			list.find('div[name=times] span').click(function(){
+				if($(this).is(".select")){
+					$(this).removeClass("select");
+					console.log($(this).parent().prev().html());
+					$(this).parent().prev().find("input:checkbox").prop("checked", false);
+				} else {
+					$(this).addClass("select");
+				}
+			})
+		}
+		$(function(){
+			bindEvent();
+		})
+	</script>
+	<body>
+		<div class="wrap">
+			<ul class="head">
+				<li class="l"><a href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">产品列表</li>
+				<li class="r"></li>
+			</ul>
+			<div class="module"><a>全选</a><a>前10天</a><a>后10天</a><a>2020-04-08</a><a>设置</a></div>
+			<div class="boxtype"><i>状态：</i><span>开通</span> <span class="close">关闭</span> <span class="select">选中</span> </div>
+			<ul class="list">
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+				<li id="guid-ss-dd1">
+					<div name="date"><input type="checkbox">2020-04-08</div>
+					<div name="times" class="times">
+						<span>6:00</span>
+						<span class="select">6:15</span>
+						<span class="select">6:30</span>
+						<span>6:45</span>
+						<span>7:00</span>
+						<span>7:15</span>
+						<span class="close">7:30</span>
+						<span>7:45</span>
+						<span>8:00</span>
+						<span class="close">8:15</span>
+						<span>8:30</span>
+						<span>8:45</span>
+					</div>
+				</li>
+			</ul>
+			<ul class="bottom">
+				<li>订单</li>
+				<li>场地</li>
+				<li>我的</li>
+			</ul>
+		</div>
+	</body>
+</html>

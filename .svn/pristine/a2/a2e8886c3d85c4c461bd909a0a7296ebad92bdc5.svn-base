@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>优惠券</title>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" name="viewport"/>
+        <meta content="yes" name="apple-mobile-web-app-capable"/>
+        <meta content="black" name="apple-mobile-web-app-status-bar-style"/>
+        <meta content="telephone=no" name="format-detection"/>
+        <link href="css/coupons_list.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript" src="js/jquery.min.js"></script>
+        <script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+        <script type="text/javascript" src="js/common.js"></script>
+    </head>
+    <body>
+        <section class="aui-flexView">
+            <header class="aui-navBar aui-navBar-fixed">
+                <a href="javascript:history.go(-1);" class="aui-navBar-item">
+                    <i class="icon icon-return"></i>
+                </a>
+                <div class="aui-center">
+                    <span class="aui-center-title">优惠券</span>
+                </div>
+                <!--<a href="javascript:;" class="aui-navBar-item">
+                    <i class="icon icon-more"></i>
+                </a>-->
+            </header>
+            <section class="aui-scrollView">
+                <div class="aui-tab" data-ydui-tab>
+                    <div class="tab-panel">
+                        <div class="tab-panel-item tab-active">
+                            <div class="tab-item">
+                                <!--<div class="tab-item-list">
+                                    <div class="aui-flex">
+                                        <div class="aui-left-change">
+                                            <h2>
+                                                <em>￥</em>
+                                                200
+                                            </h2>
+                                            <p>满299元可用</p>
+                                            <div class="aui-icon-circle"></div>
+                                        </div>
+                                        <div class="aui-flex-box aui-flex-box-two">
+                                            <h3>
+                                                <em>券票</em>
+                                                仅限购买阿迪达斯旗舰店商品
+                                            </h3>
+                                            <div class="aui-flex aui-flex-bor-bom">
+                                                <div class="aui-flex-box aui-flex-box-flow">2018.08.13-2018.08.31</div>
+                                                <div class="aui-btn-use">立即使用</div>
+                                            </div>
+                                            <div class="aui-flex aui-flex-show">
+                                                <div class="aui-flex-box">详细信息</div>
+                                                <div class="aui-show-btn">
+                                                    <i class="icon fa fa-angle-right"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="aui-show-box">
+                                        <p>默认隐藏内容</p>
+                                    </div>
+                                </div>
+                                <div class="tab-item-list tab-item-list-green">
+                                    <div class="aui-flex">
+                                        <div class="aui-left-change">
+                                            <h2>
+                                                <em>￥</em>100
+                                            </h2>
+                                            <p>特殊商品除外</p>
+                                            <div class="aui-icon-circle">
+
+                                            </div>
+                                        </div>
+                                        <div class="aui-flex-box aui-flex-box-two">
+                                            <h3>
+                                                <em>券票</em>100
+                                            </h3>
+                                            <div class="aui-flex aui-flex-bor-bom">
+                                                <div class="aui-flex-box aui-flex-box-flow">过期时间：2020-03-28</div>
+                                                <a href="javascript:getCoupons()">
+                                                    <div class="aui-btn-use">立即领取</div>
+                                                </a>
+                                            </div>
+                                            <div class="aui-flex">
+                                                <div class="aui-flex-box">详细信息</div>
+                                                <div class="aui-show-btn" onclick="detailed()">
+                                                    <i class="icon fa fa-angle-right"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="aui-show-box" id="">
+                                        <p>123123</p>
+                                    </div>
+                                </div>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+    </body>
+</html>
+<script type="text/javascript" src="js/coupons_list.js"></script>

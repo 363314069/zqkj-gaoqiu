@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.CouponsDao">
+	<sql id="insert_field">
+		`GUID`,`OrganizationGuid`,`Name`,`FaceValue`,`MoneyConform`,`FaceValueDiscount`,`StartTime`,`EndTime`,`UseRules`,`Price`,`UseType`,`MaxUseSum`,`Type`,`State`,`Unit`,`SeleaseNumber`,`ReceiveAmount`,`Term`,`TermType`,`Scope`,`ProductGuid`,`VipCardGuid`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_field">
+		`ID`,`GUID`,`OrganizationGuid`,`Name`,`FaceValue`,`MoneyConform`,`FaceValueDiscount`,`StartTime`,`EndTime`,`UseRules`,`Price`,`UseType`,`MaxUseSum`,`Type`,`State`,`Unit`,`SeleaseNumber`,`ReceiveAmount`,`Term`,`TermType`,`Scope`,`ProductGuid`,`VipCardGuid`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_list_field">
+		`ID`,`GUID`,`OrganizationGuid`,`Name`,`FaceValue`,`MoneyConform`,`FaceValueDiscount`,`StartTime`,`EndTime`,`UseRules`,`Price`,`UseType`,`MaxUseSum`,`Type`,`State`,`Unit`,`SeleaseNumber`,`ReceiveAmount`,`Term`,`TermType`,`Scope`,`ProductGuid`,`VipCardGuid`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`
+	</sql>
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGuid != null">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="name != null">
+				and Name LIKE CONCAT(CONCAT('%',#{name},'%'))
+			</if>
+			<if test="faceValue != null">
+				and FaceValue = #{faceValue}
+			</if>
+			<if test="moneyConform != null">
+				and MoneyConform = #{moneyConform}
+			</if>
+			<if test="faceValueDiscount != null">
+				and FaceValueDiscount = #{faceValueDiscount}
+			</if>
+			<if test="startTime != null">
+				and StartTime = #{startTime}
+			</if>
+			<if test="endTime != null">
+				and EndTime = #{endTime}
+			</if>
+			<if test="useRules != null">
+				and UseRules = #{useRules}
+			</if>
+			<if test="price != null">
+				and Price = #{price}
+			</if>
+			<if test="useType != null">
+				and UseType = #{useType}
+			</if>
+		<if test="maxUseSum != null">
+			and MaxUseSum = #{maxUseSum}
+		</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+		<if test="unit != null">
+			and Unit = #{unit}
+		</if>
+			<if test="seleaseNumber != null">
+				and SeleaseNumber = #{seleaseNumber}
+			</if>
+			<if test="receiveAmount != null">
+				and ReceiveAmount = #{receiveAmount}
+			</if>
+			<if test="term != null">
+				and Term = #{term}
+			</if>
+			<if test="termType != null">
+				and TermType = #{termType}
+			</if>
+			<if test="scope != null">
+				and Scope = #{scope}
+			</if>
+		<if test="productGuid != null">
+			and ProductGuid = #{productGuid}
+		</if>
+		<if test="vipCardGuid != null">
+			and VipCardGuid = #{vipCardGuid}
+		</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+
+	<select id="selectListPage" resultType="CouponsEntity" parameterType="java.util.Map">
+		select
+		<include refid="query_field"/>
+		from couponstab
+		<where>
+			<include refid="where" />
+		</where>
+		<!--<if test="page != null and limit != null">
+			limit ${page}, ${limit}
+		</if>-->
+	</select>
+
+	<select id="selectListPageCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select
+		COUNT(id)
+		from couponstab
+		<where>
+			<include refid="where" />
+		</where>
+	</select>
+</mapper>

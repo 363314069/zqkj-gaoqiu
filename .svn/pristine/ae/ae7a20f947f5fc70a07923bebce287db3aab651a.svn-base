@@ -1,0 +1,26 @@
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+server:
+  port: 8769
+spring:
+  application:
+    name: service-zuul
+zuul:
+  routes:
+    api-a:
+      path: /admin-Service/**
+      serviceId: admin-Service
+    api-b:
+      path: /business-Service/**
+      serviceId: business-Service
+    api-c:
+      path: /pay-Service/**
+      serviceId: pay-Service
+  # 此处解决后端服务重定向导致用户浏览的 host 变成 后端服务的 host 问题
+  add-host-header: true
+
+web:
+  statics:
+    htmlpath: file:D:/work/zqkj-gaoqiu/web/

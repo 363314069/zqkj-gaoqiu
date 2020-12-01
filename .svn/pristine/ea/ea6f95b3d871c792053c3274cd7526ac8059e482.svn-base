@@ -1,0 +1,11 @@
+/********************下拉目录树*********************/
+.selectztree{position: relative;}
+.selectztree .edge{position: absolute; right: 10px; top: calc(50% - 8px); font-size: 16px; color: #c2c2c2;}
+.selectztree .ztree{position: absolute; border: 1px solid #aaaaaa; box-sizing: border-box; left: 0; display: none; width: 100%; max-height: 250px; background-color: #FFFDEF; overflow-y: auto; z-index: 1000;}
+/********************左右拖拉*********************/
+#ewresize{height: 100%; font-size: 0px;}
+#ewresize .left{width: 200px; display: inline-block; overflow: hidden; height: 100%; border-right: 1px #eee solid; box-sizing: border-box;z-index: 1000;}
+#ewresize .left:hover{cursor: ew-resize;}
+#ewresize .left .inner{cursor: default;width: calc(100% - 5px); border-right: 1px #eee solid; height: 100%; font-size: 14px; overflow-y: auto;}
+#ewresize .right{width: calc(100% - 200px); display: inline-block; height: 100%; overflow-y: auto; overflow-x: hidden;}
+#ewresize .right > iframe{border: 0px; width: 100%; height: 100%;}

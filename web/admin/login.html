@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>用户登录</title>
+		<link rel="stylesheet" href="common/css/common.css">
+		<link rel="stylesheet" href="common/js/layui/css/layui.css">
+		<script src="common/js/layui/layui.all.js" defer="defer"></script>
+		<script src="common/js/jquery/jquery-1.8.0.min.js"></script>
+		<script src="common/js/cookie/js.cookie.min.js" ></script>
+		<script src="common/js/common.js"></script>
+		<style>
+			body{background: url(common/images/loginbg.png) no-repeat center center; background-size: 100% 100%; text-align: center;}
+			.wrap{text-align: right; margin: 0 auto; padding: 150px 0 0 0; box-sizing: border-box;}
+			.login{float: right; width: 300px; margin-right: 20%; text-align: left; background-color: #FFF; border: 1px #eee solid; padding: 20px;}
+			.login .btn{text-align: center;}
+			.login .layui-btn{width: 100%;}
+			.logo{margin: 0 0 20px 0;}
+			.auxiliary{margin: 0;}
+			.auxiliary .l{float: left;}
+			.auxiliary .r{float: right; line-height: 40px; margin-right: 2px;}
+			.layui-form-item .layui-inline{margin: 0; padding: 0;}
+			#codeimg{height: 38px; width: 110px;}
+		</style>
+		<script>
+			if(self!=top) top.location=self.location;
+			$(function(){
+				var time = null;
+				var url = T.p("u");
+				var setCodeImg = function(){
+					time = (new Date()).getTime();
+					$("#codeimg").attr("src", T.serverurl + "security/oauth/img?t=" + time);
+				}
+				setCodeImg();
+				$("#codeimg").click(function(){
+					setCodeImg();
+				});
+			
+				layui.use('form', function() {
+					var form = layui.form, 
+					layer = layui.layer;
+					//vm.initInfo(id);
+					form.on('submit(login)', function(data) {
+						data.field.time = time;
+						$.ajax({
+							type : "POST",
+							url : T.serverurl + "security/oauth/login",
+							data : data.field,
+							success : function(r) {
+								if(r.code == 0){
+									//alert(JSON.stringify(r));
+									if($("#un-login").prop("checked")){
+										//localStorage.setItem("usermsg", JSON.stringify(r.data));
+										Cookies.set('token', r.toke, {expires: 10});
+									} else {
+										//sessionStorage.setItem("usermsg", JSON.stringify(r.data));
+										//sessionStorage.setItem("token", r.token);
+										Cookies.set('token', r.token);
+									}
+									url = null;
+									if(url){
+										location.href = decodeURIComponent(url);
+									} else {
+										location.href = "index.html";
+									}
+								} else {
+									setCodeImg();
+									alertMsg(r);
+								}
+							}
+						});
+					});
+					form.render();
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="login">
+				<div class="logo"><img src="common/images/login_logo.png"></div>
+				<form class="layui-form layui-elem-field-margin">
+					<div class="layui-form-item">
+					    <input type="text" class="layui-input" name="loginName" placeholder="登录帐号"/>
+					</div>
+					<div class="layui-form-item">
+					    <input type="password" class="layui-input" name="loginPassword" placeholder="登录密码"/>
+					</div>
+					<div class="layui-form-item">
+						<div class="layui-inline">
+					    	<input type="text" class="layui-input" name="code" placeholder="验证码"/>
+					    </div>
+						<div class="layui-inline">
+					    	<img id="codeimg" title="点击刷新"/>
+					    </div>
+					</div>
+					<div class="layui-form-item">
+					    <a class="layui-btn" lay-submit="" lay-filter="login">登录</a>
+					</div>
+					<div class="layui-form-item auxiliary">
+						<div class="l">
+					    	<input type="checkbox" id="un-login" title="十天内免登录" lay-skin="primary">
+					    </div>
+						<div class="r">
+					    	<a href="#">忘记密码</a>
+					    </div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

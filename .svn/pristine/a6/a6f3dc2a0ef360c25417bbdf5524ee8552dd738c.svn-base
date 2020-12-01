@@ -1,0 +1,172 @@
+package com.zqkj.controller.validata;
+
+
+import com.zqkj.entity.ActivityEntity;
+import com.zqkj.utils.Content;
+import com.zqkj.utils.PageUtil;
+import com.zqkj.utils.R;
+import com.zqkj.utils.StringUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+public class ActivityValidata {
+
+    public R saveActivity(@RequestBody ActivityEntity entity) {
+        Map<String, String> map = new HashMap<String, String>();
+        if(map.size() > 0)
+            return R.error(Content.STATUS_CODE_5006).putError(map);
+        return null;
+    }
+
+    public R updateActivity(@RequestBody ActivityEntity entity) {
+        if(entity.getId() == null){
+            return R.error(Content.STATUS_CODE_5006,"id为空");
+        }
+        return null;
+    }
+
+
+    public R saveList(List<ActivityEntity> list) {
+        return null;
+    }
+
+    public R info(ActivityEntity entity) {
+        /*if(StringUtil.isEmpty(entity.getGuid())){
+            return R.error(Content.STATUS_CODE_5004,"guid为空");
+        }*/
+        return null;
+    }
+
+    public R update(ActivityEntity entity) {
+        Map<String, String> map = new HashMap<String, String>();
+        if(map.size() > 0)
+            return R.error(Content.STATUS_CODE_5006).put("error", map);
+        return null;
+    }
+    public R del(ActivityEntity entity) {
+        if(entity.getId() == null && StringUtils.isAllBlank(entity.getGuid())){
+            return R.error(Content.STATUS_CODE_5006);
+        }
+        return null;
+    }
+
+    public R delByIds(Long[] ids) {
+        if(ids == null && ids.length == 0){
+            return R.error(Content.STATUS_CODE_5006);
+        }
+        return null;
+    }
+
+    public R delByGuids(String[] guids) {
+        if(guids == null && guids.length == 0){
+            return R.error(Content.STATUS_CODE_5006);
+        }
+        return null;
+    }
+
+    public R list(ActivityEntity entity, String orderBy) {
+        return null;
+    }
+
+    public R page(PageUtil<ActivityEntity> page, ActivityEntity entity) {
+        return null;
+    }
+
+    public R UploadImage(@RequestParam(value = "img", required = false) MultipartFile img) {
+        return null;
+    }
+
+    public R selectOne(@RequestBody String guid) {
+        if(StringUtil.isEmpty(guid)){
+            return R.error(Content.STATUS_CODE_5210,"数据guid不能为空");
+        }
+        return null;
+    }
+
+
+    public R selectList(@RequestBody ActivityEntity entity) {
+        return null;
+    }
+
+
+    public R notificationCallback(String sourceGuid,String userGuid,String orderNumber,String serialNumber,Integer sum) {
+        if(StringUtil.isEmpty(sourceGuid)){
+            return R.error(Content.STATUS_CODE_5006,"商品GUID为空");
+        }
+        if(StringUtil.isEmpty(userGuid)){
+            return R.error(Content.STATUS_CODE_5006,"用户GUID为空");
+        }
+        if(StringUtil.isEmpty(orderNumber)){
+            return R.error(Content.STATUS_CODE_5006,"订单号为空");
+        }
+        if(StringUtil.isEmpty(serialNumber)){
+            return R.error(Content.STATUS_CODE_5006,"流水号为空");
+        }
+        if(sum == null){
+            return R.error(Content.STATUS_CODE_5006,"订单数量为空");
+        }
+        return null;
+    }
+
+    public R notificaActivityCallback(String sourceGuid,String userGuid,String orderNumber,String serialNumber,Integer sum, String orderGuid) {
+        if(StringUtil.isEmpty(sourceGuid)){
+            return R.error(Content.STATUS_CODE_5006,"商品GUID为空");
+        }
+        if(StringUtil.isEmpty(userGuid)){
+            return R.error(Content.STATUS_CODE_5006,"用户GUID为空");
+        }
+        if(StringUtil.isEmpty(orderNumber)){
+            return R.error(Content.STATUS_CODE_5006,"订单号为空");
+        }
+        if(StringUtil.isEmpty(orderGuid)){
+            return R.error(Content.STATUS_CODE_5006,"订单GUID为空");
+        }
+        if(StringUtil.isEmpty(serialNumber)){
+            return R.error(Content.STATUS_CODE_5006,"流水号为空");
+        }
+        if(sum == null){
+            return R.error(Content.STATUS_CODE_5006,"订单数量为空");
+        }
+        return null;
+    }
+
+
+    public R notificaMemberAreaCallback(String sourceGuid,String userGuid,String orderNumber,String serialNumber,Integer sum) {
+        if(StringUtil.isEmpty(sourceGuid)){
+            return R.error(Content.STATUS_CODE_5006,"商品GUID为空");
+        }
+        if(StringUtil.isEmpty(userGuid)){
+            return R.error(Content.STATUS_CODE_5006,"用户GUID为空");
+        }
+        if(StringUtil.isEmpty(orderNumber)){
+            return R.error(Content.STATUS_CODE_5006,"订单号为空");
+        }
+        if(StringUtil.isEmpty(serialNumber)){
+            return R.error(Content.STATUS_CODE_5006,"流水号为空");
+        }
+        if(sum == null){
+            return R.error(Content.STATUS_CODE_5006,"订单数量为空");
+        }
+        return null;
+    }
+
+    public R listByGuids(String[] guids) {
+        if(guids == null || guids.length == 0)
+            return R.error(Content.STATUS_CODE_5004).put("count", 0);
+        return null;
+    }
+
+    public R selectListPage(PageUtil<ActivityEntity> page, ActivityEntity entity) {
+        return null;
+    }
+
+    public R selectGroupBuyingList() {
+        return null;
+    }
+}

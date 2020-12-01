@@ -1,0 +1,18 @@
+package com.zqkj.controller;
+
+import com.zqkj.entity.IntegralEntity;
+import com.zqkj.service.IntegralService;
+import io.swagger.annotations.Api;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+/**
+ * 积分表
+ */
+@Controller
+@RequestMapping("/integral/integral")
+@Api(value = "积分表", tags = { "activity 积分表" })
+public class IntegralController extends BaseController<IntegralService, IntegralEntity> {
+
+}

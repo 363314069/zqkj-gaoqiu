@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.UserExtendDao">
+	<sql id="insert_field">
+		`UserGUID`,`ExtLong`,`Unit`,`Type`,`State`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_field">
+		`ID`,`UserGUID`,`ExtLong`,`Unit`,`Type`,`State`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_list_field">
+		`ID`,`UserGUID`,`ExtLong`,`Unit`,`Type`,`State`
+	</sql>
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="userGUID != null">
+				and UserGUID = #{userGUID}
+			</if>
+			<if test="extLong != null">
+				and ExtLong = #{extLong}
+			</if>
+			<if test="unit != null">
+				and Unit = #{unit}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+		<if test="extInt != null">
+			and ExtInt = #{extInt}
+		</if>
+		<if test="extStr != null">
+			and ExtStr = #{extStr}
+		</if>
+	</sql>
+
+	<select id="selectList" resultType="UserExtendEntity">
+		select
+		<include refid="query_field"/>
+		from userextendtab
+		<where>
+			<include refid="where"></include>
+		</where>
+	</select>
+</mapper>

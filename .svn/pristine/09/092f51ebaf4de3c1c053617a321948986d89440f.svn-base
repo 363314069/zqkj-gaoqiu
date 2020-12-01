@@ -1,0 +1,7 @@
+package com.zqkj.controller.validata;
+
+import com.zqkj.entity.IntegralEntity;
+
+public class IntegralValidata extends BaseValidata<IntegralEntity> {
+
+}

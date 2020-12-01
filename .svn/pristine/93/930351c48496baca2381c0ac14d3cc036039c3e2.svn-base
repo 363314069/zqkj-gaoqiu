@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+		<title>机构表</title>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<link rel="stylesheet" href="../common/js/layui/css/layui.css">
+		<link rel="stylesheet" href="../common/css/common.css">
+		<link rel="stylesheet" href="../common/js/zTree_v3-3.5.33/css/zTreeStyle/zTreeStyle.css" />
+		<link rel="stylesheet" href="../common/fonts/font-yinfu/iconfont.css" />
+		<link rel="stylesheet" href="../common/js/yfplugin.css" />
+		<script src="../common/js/jquery/jquery-1.8.0.min.js"></script>
+		<script src="../common/js/cookie/js.cookie.min.js"></script>
+		<script src="../common/js/layui/layui.all.js" defer="defer"></script>
+		<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.core.min.js" ></script>
+		<script src="../common/js/zTree_v3-3.5.33/js/jquery.ztree.exedit.js"></script>
+		<script src="../common/js/common.js"></script>
+		<script src="../common/js/yfplugin.js"></script>
+		<script src="assets/js/param_form.js"></script>
+	</head>
+
+	<body>
+		<div class="wrap">
+			<fieldset id="rrapp" class="layui-elem-field">
+				<legend>参数管理</legend>
+				<div id="form" class="form">
+					<form class="layui-form layui-elem-field-margin" lay-filter="form" enctype="multipart/form-data">
+						<input type="hidden" name="id">
+						<input type="hidden" name="guid">
+						<input type="hidden" name="parentId" />
+						<input type="hidden" name="level" />
+						<div class="layui-form-item">
+							<label class="layui-form-label">父节点</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" name="parentName" placeholder="父节点" disabled="disabled" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">参数名称</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" name="name" placeholder="参数名称" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">参数key</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" name="key" placeholder="参数key" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">参数值</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" name="value" placeholder="参数值" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">参数类型</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" name="type" placeholder="参数类型" />
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">状态</label>
+							<div class="layui-input-inline">
+								<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">备注</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" name="remark" placeholder="备注" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+								<a class="layui-btn" lay-submit="" lay-filter="save">立即提交</a>
+								<a class="layui-btn layui-btn-primary" lay-submit="" lay-filter="back">返回</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</fieldset>
+		</div>
+	</body>
+
+</html>

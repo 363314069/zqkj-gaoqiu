@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.AreaDao">
+	<resultMap id="BaseResultMap" type="com.zqkj.entity.AreaEntity">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="GUID" property="guid" jdbcType="VARCHAR" />
+		<result column="ParentId" property="parentId" jdbcType="VARCHAR" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="NameEn" property="nameEn" jdbcType="VARCHAR" />
+		<result column="Abbreviation" property="abbreviation" jdbcType="VARCHAR" />
+		<result column="Code" property="code" jdbcType="INTEGER" />
+		<result column="CountryCode" property="countryCode" jdbcType="INTEGER" />
+		<result column="IndexId" property="indexId" jdbcType="VARCHAR" />
+		<result column="Level" property="level" jdbcType="INTEGER" />
+		<result column="IsParent" property="isParent" jdbcType="INTEGER" />
+		<result column="State" property="state" jdbcType="INTEGER" />
+		<result column="Remark" property="remark" jdbcType="VARCHAR" />
+		<result column="Creator" property="creator" jdbcType="VARCHAR" />
+		<result column="CreateTime" property="createTime" jdbcType="VARCHAR" />
+		<result column="CheckUser" property="checkUser" jdbcType="VARCHAR" />
+		<result column="CheckTime" property="checkTime" jdbcType="VARCHAR" />
+		<result column="ExtInt" property="extInt" jdbcType="INTEGER" />
+		<result column="ExtStr" property="extStr" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID AS id,
+		GUID AS guid,
+		Name AS name,
+		ParentId AS parentId,
+		NameEn AS nameEn,
+		Abbreviation AS abbreviation,
+		Code AS code,
+		CountryCode AS countryCode,
+		IndexId AS indexId,
+		Level AS level,
+		IsParent AS isParent,
+		State AS state,
+		Remark AS remark,
+		Creator AS creator,
+		CreateTime AS createTime,
+		CheckUser AS checkUser,
+		CheckTime AS checkTime,
+		ExtInt AS extInt,
+		ExtStr AS extStr
+	</sql>
+
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="name != null">
+				and Name = #{name}
+			</if>
+		<if test="parentId != null">
+			and ParentId = #{parentId}
+		</if>
+		<if test="nameEn != null">
+			and NameEn = #{nameEn}
+		</if>
+		<if test="abbreviation != null">
+			and Abbreviation = #{abbreviation}
+		</if>
+			<if test="code != null">
+				and Code = #{code}
+			</if>
+			<if test="countryCode != null">
+				and CountryCode = #{countryCode}
+			</if>
+			<if test="indexId != null">
+				and IndexId = #{indexId}
+			</if>
+			<if test="level != null">
+				and Level = #{level}
+			</if>
+			<if test="isParent != null">
+				and IsParent = #{isParent}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+		<if test="remark != null">
+			and Remark = #{remark}
+		</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+		<if test="extInt != null">
+			and ExtInt = #{extInt}
+		</if>
+		<if test="extStr != null">
+			and ExtStr = #{extStr}
+		</if>
+	</sql>
+
+	<select id="threeLevelLinkage" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select * from areatab
+		<where>
+			<choose>
+				<when test="code == null">
+					and  (`code` div 100) = 0;
+				</when>
+				<otherwise>
+					and  (`code` div 100) = #{code};
+				</otherwise>
+			</choose>
+		</where>
+	</select>
+</mapper>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.CoordinateDao">
+	<sql id="insert_field">
+		`ID`,`GUID`,`OrganizationGUID`,`StartLongitude`,`StartLatitude`,`EndLongitude`,`EndLatitude`,`Type`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_field">
+		`ID`,`GUID`,`OrganizationGUID`,`StartLongitude`,`StartLatitude`,`EndLongitude`,`EndLatitude`,`Type`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_list_field">
+		`ID`,`GUID`,`OrganizationGUID`,`StartLongitude`,`StartLatitude`,`EndLongitude`,`EndLatitude`,`Type`,`State`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`
+	</sql>
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGUID != null">
+				and OrganizationGUID = #{organizationGUID}
+			</if>
+			<if test="startLongitude != null">
+				and StartLongitude = #{startLongitude}
+			</if>
+			<if test="startLatitude != null">
+				and StartLatitude = #{startLatitude}
+			</if>
+			<if test="endLongitude != null">
+				and EndLongitude = #{endLongitude}
+			</if>
+			<if test="endLatitude != null">
+				and EndLatitude = #{endLatitude}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+</mapper>

@@ -1,0 +1,220 @@
+$(function(){
+$('legend').append(id?'修改':'添加');
+var api={
+	info:{url:T.serverebusiness + "/business/activity/info",type:"get"},
+	save:{url:T.serverebusiness + "/business/activity/saveActivity",type:"post"},
+	update:{url:T.serverebusiness + "/business/activity/updateActivity",type:"post"},
+	couponsList:{url:T.serverebusiness + "business/coupons/orgcouponslist",type:"post"},
+	activityCouponsList:{url:T.serverurl + "business/activitycoupons/couponsList", type:"post"},
+    uploadFile:{url:T.serverebusiness + "/business/activity/uploadimage",type:"post"}
+}
+layui.use('form', function() {
+    var laydate = layui.laydate;
+	var form = layui.form, 
+	layer = layui.layer, upload = layui.upload;
+
+    //执行实例
+    var uploadInst = upload.render({
+        elem: '#imgs', //绑定元素
+        accept: 'file',
+        size: 307200,
+        url: api.uploadFile.url, //上传接口
+        method: 'POST',
+        done: function(res){
+            //上传完毕回调
+            layer.alert("上传成功！", {
+                icon: 1,
+                title: "提示"
+            });
+            $("#img").val(res.data);
+            $('#upload-normal-img').attr("src", T.serverebusiness + res.data);
+        }
+        ,error: function(res){
+            //请求异常回调
+            layer.alert("后台出错", {
+                icon: 5,
+                title: "提示"
+            });
+        }
+    });
+    laydate.render({
+        elem: '#startTime' //或 elem: document.getElementById('test')、elem: lay('#test') 等
+        ,type: 'datetime'
+    });
+    laydate.render({
+        elem: '#endTime' //或 elem: document.getElementById('test')、elem: lay('#test') 等
+        ,type: 'datetime'
+    });
+	laydate.render({
+		elem: '#date' //或 elem: document.getElementById('test')、elem: lay('#test') 等
+		,type: 'datetime'
+	});
+	//vm.initInfo(id);
+	form.on('submit(save)', function(data) {
+		var type = api.save.type;
+		var url = api.save.url;
+		if (id) {
+			type = api.update.type;
+			url = api.update.url;
+		}
+		if(data.field.state == undefined)
+			data.field.state = 0;
+		else 
+			data.field.state = 1;
+
+		if(parseInt(data.field.price*100) < parseInt(data.field.commission*100)){
+			alert('佣金金额不能高于商品金额')
+				return false;
+		}
+
+		if(data.field.type == 0){
+			if(data.field.originalPrice == 0 || !isNull(data.field.originalPrice)){
+				alert("活动必须填入原价");
+				return false;
+			}
+		}
+
+		data.field.price = parseInt(data.field.price*100);
+		data.field.commission = parseInt(data.field.commission*100);
+		data.field.originalPrice = parseInt(data.field.originalPrice*100);
+
+		//可以试用的优惠 用二进制计算  然后存入数据库
+		var preferential = 0;
+		$("input:checkbox[name='preferential']:checked").each(function(i){
+			preferential = preferential + parseInt($(this).val());
+		});
+		data.field.preferential = preferential;
+
+
+		//发布优惠券产品，获取选中的优惠券
+		var activitycouponsEntityList = new Array();
+		$("input[name='preferentialList']:checked").each(function() {
+			var data1={"couponsGuid":$(this).val(),"quantity":1};
+			activitycouponsEntityList.push(data1);
+		});
+		data.field.activitycouponsEntityList = activitycouponsEntityList;
+
+
+		$.ajax({
+			type : type,
+			url : url,
+			data : JSON.stringify(data.field),
+			contentType : 'application/json;charset=utf-8',
+			success : function(r) {
+				if (r.code === 0) {
+					alert('操作成功', function(index) {
+						$.back();
+					});
+				} else {
+					alertMsg(r)
+				}
+			}
+		});
+		return false;
+	});
+	$('#back').on('click', function(data) {
+		$.back();
+	});
+
+
+
+
+	form.on("select(productType)", function(data){
+		if(data.value == 3){
+			$("#coupons").empty();
+			//查询商家优惠券关联表数据
+			couponsList();
+			$("#couponsList").show();
+		}else{
+			$("#coupons").empty();
+			$("#couponsList").hide();
+		}
+	});
+
+	//监听优惠券是否启用
+	/*form.on('checkbox(preferential)', function (data) {
+		if(data.elem.checked){
+			$("#couponsList").show();
+		}else{
+			//$("#coupons").empty();
+			$("#couponsList").hide();
+		}
+	});*/
+
+	if(id){
+		$.get(api.info.url, {id:id}, function(r) {
+			if(r.code == 0){
+				r.data.price = r.data.price/100;
+				r.data.commission = r.data.commission/100;
+				if(isNull(r.data.originalPrice)){
+                    r.data.originalPrice = r.data.originalPrice/100;
+                }
+				$('#upload-normal-img').attr("src", T.serverebusiness + r.data.img);
+				//如果关联了优惠券需要加载出优惠券信息
+				if(r.data.productType == 3){
+					couponsList();
+					$("#couponsList").show();
+					//查询关联的优惠券
+					$.ajax({
+						type : api.activityCouponsList.type,
+						url : api.activityCouponsList.url,
+						data : {"activityGuid":r.data.guid},
+						success : function(rc) {
+							if (rc.code === 0) {
+								$.each(rc.data,function (rci, rcObj) {
+									$("#coupons-"+rcObj.guid).prop("checked", true);
+								});
+								form.render();
+							} else {
+								alertMsg(rc)
+							}
+						}
+					});
+				}
+				form.val("form", r.data);
+
+				if((1 & r.data.preferential) == 1){
+					$("#preferential1").prop("checked", true);
+				}else{
+					$("#preferential1").prop("checked", false);
+				}
+				if((2 & r.data.preferential) == 2){
+					$("#preferential2").prop("checked", true);
+				}else{
+					$("#preferential2").prop("checked", false);
+				}
+				if((4 & r.data.preferential) == 4){
+					$("#preferential4").prop("checked", true);
+				}else{
+					$("#preferential4").prop("checked", false);
+				}
+
+                $("#content").html(r.data.content);
+				form.render();
+
+                ue = UE.getEditor('content');
+			} else {
+				alertMsg(r);
+			}
+		});
+	} else {
+        ue = UE.getEditor('content');
+    }
+
+	//加载优惠券
+	function couponsList() {
+		$("#coupons").empty();
+		$.ajax({
+			type:api.couponsList.type,
+			url:api.couponsList.url,
+			async : false,
+			success:function (r) {
+				$.each(r.data,function (i, obj) {
+					$("#coupons").append('<input type="checkbox" name="preferentialList" title="'+obj.name+'" id="coupons-'+obj.guid+'" value="'+obj.guid+'"><div class="layui-unselect layui-form-checkbox"><span>'+obj.name+'</span><i class="layui-icon layui-icon-ok"></i></div>');
+				});
+				form.render();
+			}
+		});
+	}
+});
+});

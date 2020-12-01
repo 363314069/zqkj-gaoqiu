@@ -1,0 +1,34 @@
+<div class="main-footer">
+	<div class="topbg"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 130">
+			<path style="fill:#00a964;" d="M601,100H149C66.71,100,0,55.23,0,0V130H750V0C750,55.23,683.29,100,601,100Z"></path>
+		</svg></div>
+	<ul class="nav">
+		<li class="select" name="f0">
+			<a href="snapUp?f=0">
+			<i class="iconfont">&#xe6b2;</i><span>抢购</span>
+			</a>
+		</li>
+		<li name="f1">
+			<a href="preferential?f=1">
+			<i class="iconfont">&#xe6b3;</i><span>订场</span>
+			</a>
+		</li>
+		<!--
+		<li name="f3">
+			<a>
+			<i class="iconfont">&#xe6b0;</i><span>优惠券</span>
+			</a>
+		</li>
+		-->
+		<li name="f2">
+			<a href="activity?f=2">
+			<i class="iconfont">&#xe642;</i><span>活动</span>
+			</a>
+		</li>
+		<li name="f3">
+			<a href="my_info?f=3">
+			<i class="iconfont">&#xe693;</i><span>我的</span>
+			</a>
+		</li>
+	</ul>
+</div>

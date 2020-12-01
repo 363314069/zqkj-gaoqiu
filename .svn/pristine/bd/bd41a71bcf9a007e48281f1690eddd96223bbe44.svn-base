@@ -1,0 +1,739 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>九洲高尔夫活动报名</title>
+		<script type="text/javascript" src="./../../res/js/flexible.js"></script>
+		<script type="text/javascript" src="./../../res/js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/cookie/js.cookie.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/mobile/layer.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/laydate/laydate.js"></script>
+		<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<link href="./../../res/fonts/font-zqkj-1.1/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="./../../res/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		
+		<link href="./../css/default-1.1.css?v=1" rel="stylesheet" type="text/css">
+		<script src="./../js/zqkj/common-1.1.js?v=1"></script>
+		<script src="./../js/zqkj/load-1.1.js"></script>
+		<script src="./../js/zqkj/wx_api-1.0.js"></script>
+		<style>
+			html, body{background-image: none;}
+			body{padding-top: 0;}
+			.wrap{text-align: left;}
+			.wrap img{
+				max-width: 100%;
+			}
+			.head1{
+				position: relative;
+				background-color: none;
+				max-height: 5rem;
+				overflow: hidden;
+			}
+			.head1 img{width: 100%;}
+			.head1 .back{
+				text-align: center;
+				display: block;
+				position: fixed;
+				top: .2rem;
+				left: .2rem;
+				width: .8rem;
+				height: .8rem;
+				border-radius: 50%;
+				line-height: .8rem;
+				color: #fff;
+				background-color: rgba(0,0,0,0.5);
+			}
+			.head1 .content{
+				display: block;
+				position: absolute;
+				right: .5rem;
+				bottom: .2rem;
+				text-align: left;
+				padding: .1rem .3rem;
+				font-size: .28rem;
+				color: #ffffff;
+				font-weight: bold;
+			}
+			.head1 .content::before{
+				position: absolute;
+				left: 0;
+				top: 0;
+				content: '';
+				display: block;
+				width: 100%;
+				height: 100%;
+				z-index: 1;
+				background-color: #ff9531cc;
+				transform:skewX(-30deg);
+				-webkit-transform:skewX(-30deg);  /*兼容-webkit-引擎浏览器*/
+				-moz-transform:skewX(-30deg);/*兼容-moz-引擎浏览器*/
+			}
+			.head1 .content div{
+				position: relative;
+				z-index: 2;
+			}
+			.head1 .content div:nth-child(2){
+				font-size: .24rem;
+			}
+
+			.title{
+				text-align: left;
+				font-size: .36rem;
+				font-weight: bold;
+				padding: .2rem .4rem;
+				line-height: .6rem;
+			}
+			.title .sprice{
+				font-size: .24rem;
+				color: #999;
+			}
+			.title #price{
+				color: #ff9531;
+				font-size: .36rem;
+			}
+			.introduce{padding: .2rem;}
+			#buy_nav{
+				position: fixed;
+				bottom: 0;
+				left: 0;
+				width: 100%;
+				background-color: #FFFFFF;
+				height: 1rem;
+				text-align: left;
+				font-size: 0;
+			}
+			#buy_nav .call{
+				display: inline-block;
+				width: 1.8rem;
+				text-align: center;
+			}
+			#buy_nav .iconfont{font-size: .48rem;}
+			#buy_nav .call span{
+				display: block;
+				font-size: .24rem;
+				color: #999999;
+			}
+			#buy_nav .call span:nth-child(1) svg {
+				height: .6rem; 
+				width: .6rem;
+				fill: #999999;
+			}
+			#buy_nav .cur{
+				display: inline-block;
+				width: calc(100% - 1.8rem);
+				text-align: center;
+				height: 1rem;
+				line-height: 1rem;
+				background: #ff9531;
+				font-size: .32rem;
+				vertical-align: top;
+				color: #ffffff;
+			}
+			.box{display: none;}
+			.layui-m-layercont{padding: .2rem;}
+			.form{display: block; max-height: 6rem; overflow-y: auto; text-align: left;}
+			.form input{border: transparent; border-bottom: 1px solid #999999; background-color: transparent;}
+			.form .items span{position: relative; margin-left: .2rem; display: inline-block;}
+			.form .items .name input{width: 1.8rem; padding-left: .36rem;}
+			.form .items .phoe input{width: 2.5rem; padding-left: .36rem;}
+			.form .items .chad input{width: 1.5rem; padding-left: .36rem;}
+			.form .items .code input{width: 1.2rem; padding-left: .36rem;}
+			.form .items span::before{
+				font-size: .32rem;
+				font-family: "iconfont" !important;
+				font-style: normal;
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+				position: absolute;
+				left: 0;
+				top: 0;
+			}
+			.form .items .name::before{content: '\e66b';}
+			.form .items .phoe::before{content: '\e69b';}
+			.form .items .chad::before{content: '\e6a3';}
+			.form .items .code::before{content: '\e638';}
+			.form .items div{padding: .1rem;}
+			.form .items li{margin: .2rem 0; text-align: left; border: 1px solid #eeeeee;}
+			.form .items li:nth-child(1) .remove{display: none;}
+			.form .items li .remove{
+				width: .4rem;
+				height: .4rem;
+				background-color: #FF0000;
+				line-height: .4rem;
+				color: #ffffff;
+				border-radius: 50%;
+				text-align: center;
+				font-size: .36rem;
+				font-weight: bold;
+			}
+			.form #remark{width: calc(100% - .1rem); height: 2rem;}
+			#add{line-height: 1rem; background-color: #cccccc; color: #fffFFF; margin: .1rem 0; text-align: center; font-size: 1rem;}
+
+			.time {
+				background-color: #fdf4f5;
+				width: 100%;
+				padding: 0 .4rem;
+				margin-bottom: .5rem;
+			}
+			.time .date {
+				height: .8rem;
+				line-height: .8rem;
+				border-bottom: 1px solid #eee;
+				
+			}
+			.time .date .iconfont {
+				font-size: .4rem;
+				vertical-align: middle;
+				color: #00a964;
+			}
+			.time .date p {
+				color: #ff9531;
+				font-size: .28rem;
+				display: inline-block;
+				
+			}
+			.clear {
+				clear: both;
+			}
+			.tishi{color: #FF0000;}
+		</style>
+	<body>
+	<a class="back" href="activity"><i class="iconfont">&#xe663;</i></a>
+	<div class="wrap">
+		<div class="head1">
+			<img id="activityImg" src="http://wap.oneagles.com/upload/img/20200424/7138020f-b7d8-4d5c-8e58-1b9e383f56e5.jpg">
+			<div class="content">
+				<!--<div>正在抢购</div>-->
+				<div>
+					<span class="l">报名活动截止时间:</span>
+					<span id="clock">00 天 00:00:00</span>
+				</div>
+			</div>
+		</div>
+		<div  class="title">
+			<label id="nameLabel"></label>
+			<!--<div class="sprice">
+				嘉宾价：<font id="originalPrice"></font>
+			</div>-->
+			<div class="sprice">
+				活动价：<font id="price"></font>
+			</div>
+		</div>
+		<div class="time">
+			<div class="date">
+				<i class="iconfont">&#xe690;</i>
+				<p id="date"></p>
+				<div class="clear"></div>
+			</div>
+			<!--<div class="date">
+				<img src="images/time.png">
+				<p id="startTime"></p>
+				<div class="clear"></div>
+			</div>
+			<div class="date">
+				<img src="images/time.png">
+				<p id="endTime"></p>
+				<div class="clear"></div>
+			</div>
+			<ul>
+				<li class="phone">
+					<p>咨询电话：<span id="consultphone"></span></p>
+				</li>
+			</ul>-->
+		</div>
+		<div class="introduce">
+			<div class="detail">
+				<!--<label>度假卡权益: </label>-->
+				<div class="clear"></div>
+				<div class="con">
+
+				</div>
+			</div>
+		</div>
+		<!-----------加入购物车/购买----------->
+		<div id="buy_nav">
+			<a class="call" href="#"> 
+				<span><i class="iconfont">&#xe625;</i></span>
+				<span>电话咨询</span>
+			</a>
+			<!--<a class="cur" href="#" onclick="applyTo()">立即抢购</a>-->
+		</div>
+	</div>
+
+	<!-- 弹出层   start -->
+	<div class="box" id="dialog">
+		<form id="ajaxForm" class="form">
+			<ul id="countUl">
+				<li>
+					<ul id="items" class="items">
+						<li>
+							<div>
+								<span class="name"><input type="text" name="name" id="defaultName" placeholder="姓名"></span>
+								<span class="phoe"><input type="text" name="phoe" id="defaultPhone" placeholder="手机"></span>
+							</div>
+							<div>
+								<span class="chad"><input type="text" name="chad" id="defaultChad" placeholder="差点"></span>
+								<!--<span class="radio"><input type="radio" name="type0" value="1" checked="checked">嘉宾</span>-->
+								<span class="radio" style="display: none"><input type="radio" name="type0" value="2" checked="checked">会员</span>
+								<span class="remove iconfont">&#xe60d;</span>
+							</div>
+						</li>
+					</ul>
+					
+				</li>
+				<li id="add">
+					<span>+</span>
+				</li>
+				<li>
+					<textarea id="remark" placeholder="其他需求..."></textarea>
+				</li>
+				<li id="codeLi" style="display: none">
+					<p class="tishi">您是新用户，请完善以下信息</p>
+					<ul class="items">
+						<li>
+							<div>
+								<span class="name"><input type="text" id="nameUser" class="name" placeholder="姓名"></span>
+								<span class="phoe"><input type="text" id="phoeUser" class="phoe" placeholder="手机"></span>
+							</div>
+							<div>
+								<span class="chad"><input type="text" id="chadUser" class="chad" placeholder="差点"></span>
+								<span class="code"><input type="text" name="" class="code" id="code" placeholder="验证码"></span>
+								<!--<input type="button" value="获取验证码" class="verify">-->
+								<span onclick="authCodeActivity()" id="dynamic" class="verify">获取验证码</span>
+							</div>
+
+						</li>
+					</ul>
+				</li>
+				<li>
+					<label for="">人数 :</label><input type="text" value="1" class="num">
+				</li>
+				<li>
+					金额 :￥<span data-price="" id="data-price"></span>
+				</li>
+			</ul>
+		</form>
+	</div>
+</body>
+ </html>
+<script type="text/javascript" src="./../../../pay/js/common-pay.js?v=1"></script>
+<script type="text/javascript">
+    //弹出层   start
+	var openbox = function(){
+		layer.open({
+			title: [
+			'活动报名',
+			'background-color:#8DCE16; color:#fff;'
+			]
+			,shadeClose:false
+			,anim: 'up'
+			,content: '<div id="window-box"></div>'
+			,btn: ['确认', '取消']
+			,yes: function(index){
+				$("#dialog").append($("#window-box").children("form"));
+				layer.close(index);
+				submitUser();
+			}
+			,no: function(index){
+				$("#dialog").append($("#window-box").children("form"));
+				layer.close(index);
+				return;
+			}
+		});
+		$("#window-box").append($("#dialog").children("form"));
+		submitOrdersInfo();//判断手机号是否为空不为空展示出注册框
+	}
+    $(function(){
+		$("#buy_nav").click(function(){
+			openbox();
+		});
+		$("#items").find("input:radio").click(function(event){
+			countprice();
+		});
+		$("#add").click(function(){
+			var sum = $("#items").children().length;
+		    var scrollTop = $(".form").scrollTop();
+			var height = $("#countUl").height();
+			var item = $("#items").children().eq(0);
+			var li = $("<li>");
+			li.html(item.html());
+			li.find("input").val('');
+			li.find("input").attr('disabled', false);
+			li.find("input:radio").attr("name", "type" + sum);
+			//li.find("input:radio").eq(0).val(1);
+			//li.find("input:radio").eq(1).val(2);
+			li.find("input:radio").eq(0).val(2);
+			li.find(".remove").click(function(){
+				li.remove();
+				$("#items").find("li").each(function(){
+					 $(this).find("input:radio").attr("name", "type" + $(this).index());
+				})
+				countprice();
+			})
+			li.find("input:radio").click(function(event){
+				countprice();
+			});
+            var num = $("#items").children().length;
+		    if(!isNull(buyNumber) || buyNumber == 0){
+				$("#items").append(li);
+		    } else {
+		        if (num < buyNumber) {
+					$("#items").append(li);
+		        } else {
+		            alert("该商品限购" + buyNumber + "个");
+		        }
+		    }
+			//设置滚动条位置
+			//$(".form").scrollTop(scrollTop + $("#countUl").height() -height);
+			countprice();
+		})
+		var countprice = function(){
+			//var price = parseFloat($(".price").find('span').data('price')) * 100;
+			var priceCount = 0;
+			$("#items").find("li").each(function(){
+				var type = $(this).find("input:checked").val();
+				if(type == 2){
+					priceCount += vipPrice;
+				}else{
+					priceCount += originalPrice;
+				}
+			})
+			var sum = $("#items").children().length;
+			$('.num').val(sum);
+			var all = parseFloat(priceCount / 100);
+			$('.price').find('span').text(all);
+			$("#data-price").text(all);
+		}
+    });
+	var activityGuid = T.p("guid");
+	var inviterGuid = T.p("inviterGuid");//邀请人guid
+	var buyNumber = 0;  //商品限购数量
+	var vipPrice = 100;//会员价
+	var originalPrice = 100;//原价
+	
+	var sigPhone = 0;
+	$(function(){
+	    var api = {
+	        info:{url:T.serverebusiness + "/business/activity/info", type:"get"},
+	        list:{url:T.serverebusiness + "/business/activity/list", type:"post"},
+	        page:{url:T.serverebusiness + "/business/activity/page", type:"post"},
+	        activityApply:{url:T.serverebusiness + "/business/apply/activityapply", type:"post"}
+	    };
+	    if(isNull(activityGuid)){
+	        $.ajax({
+	            type : "POST",
+	            url : api.info.url,
+	            method : api.info.type,
+	            headers : {token:T.token},
+	            data : {guid:activityGuid},
+	            success : function(r) {
+	                if (r.code == 0) {
+	                    if(r.data.state == 0){
+	                        location.href = "H5_activity_list.html";
+	                    }
+	                    var currentTime = new Date().getTime().toString();
+	                    var startTime = new Date(r.data.startTime.replace(/-/g, '/')).getTime().toString();
+	                    var endTime = new Date(r.data.endTime.replace(/-/g, '/')).getTime().toString();
+	                    if(currentTime > endTime){
+	                        //判断是否已结束
+	                        $("#buy_nav").append('<a class="cur" style="background-color: #B7B2B3" href="#">已结束</a>');
+	                        $(".sprice").show();
+	                    }else if(currentTime < startTime){
+	                        //判断是否未开始
+	                        $("#buy_nav").append('<a class="cur" style="background-color: #B7B2B3" href="#">未开始</a>');
+	                        $(".sprice").show();
+	                    }else{
+	                        if(isNull(r.data.price) && r.data.price > 0){
+	                            $("#buy_nav").append('<a class="cur" href="#">立即报名</a>');
+	                            $(".sprice").show();
+	                        }else{
+	                            $("#buy_nav").append('<a class="cur" href="#">立即领取</a>');
+	                        }
+	                    }
+	                    document.title = r.data.name;
+	                    $("#nameLabel").html(r.data.name);
+	                    $("#consultphone").html(r.data.phone);
+	                    buyNumber = r.data.buyNumber;
+	                    vipPrice = r.data.price;
+	                    originalPrice = r.data.originalPrice;
+	                    $(".call").attr('href','tel:'+r.data.phone+'');
+	                    //$("#data-price").attr("data-price",r.data.originalPrice/100);
+	                    //$("#data-price").text(r.data.originalPrice/100);
+	                    $("#data-price").attr("data-price",r.data.price/100);
+	                    $("#data-price").text(r.data.price/100);
+	                    $("#originalPrice").html("￥"+r.data.originalPrice/100);
+	                    $("#price").html("￥"+r.data.price/100);
+	                    $("#date").html("活动组织时间：" + formatDate(r.data.date));
+	                    //$("#startTime").html("开始时间：" + r.data.startTime);
+	                    //$("#endTime").html("结束时间：" + r.data.endTime);
+	                    $(".con").append(r.data.content);
+	                    $("#activityImg").attr('src',T.serverebusiness + r.data.img);
+	                    $('#clock').countdown(r.data.endTime, function(event) {
+	                        $(this).html(event.strftime('%D 天 %H:%M:%S'));
+	                    });
+	                    //分享加载
+	                    wxapi.setShare({
+	                        title:(r.data.name),
+	                        desc:('活动价格：'+r.data.price/100+'元 \n活动时间：'+formatDate(r.data.date)),
+	                        link:location.href,
+	                        imgUrl : T.serverebusiness + r.data.img
+	                    });
+	                } else {
+	                    alert(r.msg);
+	                }
+	            }
+	        });
+	    }
+	});
+	
+	
+	//验证码
+	var authCodeValue = "";
+	//电话号码验证
+	function isPhoneNo(phone) {
+	    var pattern = /^1[34578]\d{9}$/;
+	    return pattern.test(phone);
+	}
+	//发送短信
+	function authCodeActivity() {
+	    var phoe  = $("#phoeUser").val();
+	    if(!isNull(phoe)){
+	        alert('手机号不能为空');
+	        return false;
+	    }else if(isPhoneNo(phoe) == false){
+	        alert('请输入正确手机号');
+	        return false;
+	    }else {
+	        $.ajax({
+	            type : "POST",
+	            url : T.serverebusiness + "/security/wxoauth/authcode",
+	            headers : {token:T.token},
+	            data : {phone:phoe},
+	            success : function(r) {
+	                if (r.code == 0) {
+	                    authCodeValue = r.msg;
+	                    var Time = 60;
+	                    var TimeDown = setInterval(timedown,1000);
+	                    //倒计时
+	                    function timedown(){
+	                        $("#dynamic").attr("disabled", true);
+	                        $("#dynamic").text(""+ Time + "s");
+	                        if(Time == 0){
+	                            $("#dynamic").val("重新获取").removeAttr("disabled");
+	                            clearInterval(TimeDown);
+	                        }
+	                        Time--;
+	                    }
+	                } else {
+	                    $("#dynamic").val("重新获取").removeAttr("disabled");
+	                    alert(r.msg);
+	                }
+	            }
+	        });
+	    }
+	}
+	
+	//完善信息
+	function submitUser(){
+	    if(sigPhone == 0){
+	        $.ajax({
+	            type : "POST",
+	            url : T.serverebusiness + "/security/wxoauth/register",
+	            headers : {token:T.token},
+	            async: false,
+	            data : {name:$("#nameUser").val(),chad:$("#chadUser").val(),phone:$("#phoeUser").val(),authCode:$("#code").val()},
+	            success : function(r) {
+	                if (r.code == 0) {
+	                    submitOrders();
+	                } else {
+	                    alert(r.msg);
+	                }
+	            }
+	        });
+	    }else{
+	        submitOrders();
+	    }
+	}
+	
+	
+	//提交订单
+	function submitOrders() {
+	    //判断是否是本人打开自己分享的连接，自己下单不加佣金
+	    /*if(inviterGuid == T.usermsg.guid){
+	        inviterGuid = null;
+	    }*/
+	    var result = true;
+	    var typeArr = new Array();
+	    var params = new Array();
+	    $("#items").find("li").each(function(){
+	        var type = $(this).find("input:checked").val();
+	        typeArr.push(type);
+	        var object = {};
+	        var name = $(this).find("input[name='name']").val();
+	        var phone = $(this).find("input[name='phoe']").val();
+	        var chad = $(this).find("input[name='chad']").val();
+	        if(!isNull(name)){
+	            layer.open({
+	                content: '报名人姓名不可为空'
+	                ,skin: 'msg'
+	                ,time: 3 //2秒后自动关闭
+	            });
+	            result = false;
+	            return false;
+	        }
+	        /*if(!isNull(phone)){
+	            layer.open({
+	                content: '报名人电话不可为空'
+	                ,skin: 'msg'
+	                ,time: 3 //2秒后自动关闭
+	            });
+	            result = false;
+	            return false;
+	        }*/
+	        if(!isNull(chad)){
+	            layer.open({
+	                content: '报名人差点不可为空'
+	                ,skin: 'msg'
+	                ,time: 3 //2秒后自动关闭
+	            });
+	            result = false;
+	            return false;
+	        }
+	        object['name'] = $(this).find("input[name='name']").val();
+	        object['phone'] = $(this).find("input[name='phoe']").val();
+	        object['chad'] = $(this).find("input[name='chad']").val();
+	        params.push(object)
+	    })
+	    if (!result){
+	        return false;
+	    }
+	
+	    var json = JSON.stringify(params);
+	    layer.closeAll();
+	    layer.open({
+	        type: 2,
+	        shadeClose: false,
+	        content: '加载中'
+	    });
+	    $.ajax({
+	        type : "POST",
+	        url : T.serverepay + "/pay/order/addorder",
+	        headers : {token:T.token},
+	        traditional : true,
+	        data : {goodsGuid:activityGuid,/*inviterGuid:inviterGuid,*/sum:$("#items").children().length,typeArr:typeArr,userJson:json,remark:$("#remark").val()},
+	        success : function(res) {
+	            layer.closeAll();
+	            if (res.code == 0) {
+	                if(isNull(res.data) && res.data.orderMoney == 0){
+	                    alert("恭喜您，领取成功。请关注“九洲高尔夫”公众号预定使用！");
+	                    location.href = "alone_order_list.html";
+	                }else{
+	                    //location.href = "sure_order2.html?guid="+activityGuid+"&orderGuid="+res.data.guid;
+	                    if (res.code == 0) {
+	                        var data = $.parseJSON(res.msg);
+	                        if (typeof WeixinJSBridge == "undefined") {
+	                            if (document.addEventListener) {
+	                                document.addEventListener('WeixinJSBridgeReady',
+	                                    onBridgeReady(data), false);
+	                            } else if (document.attachEvent) {
+	                                document.attachEvent('WeixinJSBridgeReady',
+	                                    onBridgeReady(data));
+	                                document.attachEvent('onWeixinJSBridgeReady',
+	                                    onBridgeReady(data));
+	                            }
+	                        } else {
+	                            onBridgeReady(data);
+	                        }
+	                    } else {
+	                        if (res.code == 2) {
+	                            layer.alert(res.msg);
+	                        } else {
+	                            layer.msg("error：" + res.msg, {
+	                                shift : 6
+	                            });
+	                        }
+	                    }
+	                }
+	            } else if (res.code == 500) {
+	                alert("提交订单失败！请重试");
+	            }else{
+	                alert(res.msg);
+	            }
+	        }
+	    });
+	}
+	
+	
+	
+	//判断手机号是否为空
+	function submitOrdersInfo() {
+	    $.ajax({
+	        type : "GET",
+	        url : T.serverepay + "/security/user/selectUserMessage",
+	        headers : {token:T.token},
+	        success : function(res) {
+	            if (res.code == 0) {
+	                var data = res.data;
+	                if(!isNull(data.phone)){
+	                    sigPhone = 0;//0手机号为空   1手机号不为空
+	                    //手机号为空 进入到完善页面
+	                    $("#codeLi").show();
+	                }else{
+	                    sigPhone = 1;
+	                    $("#codeLi").hide();
+	                    $("#nameUser").val(T.usermsg.name);
+	                    $("#chadUser").val(T.usermsg.gap);
+	                    $("#phoeUser").val(T.usermsg.phone);
+	
+	                    $("#defaultName").val(T.usermsg.name);
+	                    $("#defaultPhone").val(T.usermsg.phone);
+	                    $("#defaultChad").val(T.usermsg.gap);
+	                }
+	            } else {
+	                location.reload();
+	            }
+	        }
+	    });
+	}
+	
+	
+	//格式化日期字符串
+	function formatDate(date, format) {
+	    if (!date) return;
+	    if (!format) format = "yyyy-MM-dd";
+	    switch(typeof date) {
+	        case "string":
+	            date = new Date(date.replace(/\-/g, '/'));
+	            break;
+	        case "number":
+	            date = new Date(date);
+	            break;
+	    }
+	    if (!date instanceof Date) return;
+	    var dict = {
+	        "yyyy": date.getFullYear(),
+	        "M": date.getMonth() + 1,
+	        "d": date.getDate(),
+	        "H": date.getHours(),
+	        "m": date.getMinutes(),
+	        "s": date.getSeconds(),
+	        "MM": ("" + (date.getMonth() + 101)).substr(1),
+	        "dd": ("" + (date.getDate() + 100)).substr(1),
+	        "HH": ("" + (date.getHours() + 100)).substr(1),
+	        "mm": ("" + (date.getMinutes() + 100)).substr(1),
+	        "ss": ("" + (date.getSeconds() + 100)).substr(1)
+	    };
+	    return format.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, function() {
+	        return dict[arguments[0]];
+	    });
+	}
+</script>

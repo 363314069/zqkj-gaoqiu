@@ -1,0 +1,219 @@
+package com.zqkj.service.impl;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.zqkj.entity.UserEntity;
+import com.zqkj.remote.CouponsRemote;
+import com.zqkj.remote.IntegralRemote;
+import com.zqkj.service.UserService;
+import com.zqkj.utils.BaseContentHandler;
+import com.zqkj.utils.Content;
+import com.zqkj.utils.R;
+import com.zqkj.utils.StringUtil;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.zqkj.dao.mapper.MembersverifyDao;
+import com.zqkj.entity.MembersverifyEntity;
+import com.zqkj.service.MembersverifyService;
+import org.springframework.web.multipart.MultipartFile;
+import tk.mybatis.mapper.entity.Example;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
+
+
+/**
+ * 
+ * 会员验证表
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-10-12 15:32:13
+ */
+@Service("membersverifyService")
+public class MembersverifyServiceImpl extends BaseServiceImpl<MembersverifyDao, MembersverifyEntity> implements MembersverifyService {
+
+    @Autowired
+    private CouponsRemote couponsRemote;
+
+    @Autowired
+    private IntegralRemote integralRemote;
+
+    @Autowired
+    private UserService userService;
+
+    @Override
+    public Integer importData(MultipartFile file) {
+        InputStream input = null;
+        Workbook wb = null;
+        try {
+            input=file.getInputStream();
+            String fileName=file.getOriginalFilename();
+            if(fileName.endsWith(".xls")){     //Excel&nbsp;2003
+                wb = new HSSFWorkbook(input);
+            }else if(fileName.endsWith(".xlsx")){    // Excel 2007/2010
+                wb = new XSSFWorkbook(input);
+            }
+            //读取页
+            List<MembersverifyEntity> membersverifyEntityList = new ArrayList<>();
+            //身份证集合用来查询是否有重复数据
+            List<String> idCardList = new ArrayList<>();
+            for(int sheetNum=0;sheetNum<wb.getNumberOfSheets();sheetNum++){
+                Sheet sheet = wb.getSheetAt(sheetNum);
+                if(sheet==null){
+                    continue;
+                }
+                //读取行
+                for(int rowNum=1;rowNum<sheet.getLastRowNum()+1;rowNum++){
+                    Row row= sheet.getRow(rowNum);
+                    if(row!=null){
+                        MembersverifyEntity membersverifyEntity = new MembersverifyEntity();
+                        if(row.getCell(0) != null){
+                            membersverifyEntity.setName(row.getCell(0).toString());
+                        }
+                        if(row.getCell(1) != null){
+                            if(row.getCell(1).getCellType().equals(NUMERIC)){
+                                DecimalFormat df = new DecimalFormat("#");
+                                String phone = df.format(row.getCell(1).getNumericCellValue());
+                                membersverifyEntity.setPhone(phone);
+                            }
+                            membersverifyEntity.setPhone(row.getCell(1).toString());
+                        }
+                        if(row.getCell(2) != null){
+                            membersverifyEntity.setIdCard(row.getCell(2).toString());
+                        }
+                        membersverifyEntity.setType(1);
+                        membersverifyEntity.setState(1);
+                        membersverifyEntityList.add(membersverifyEntity);
+                        idCardList.add(membersverifyEntity.getIdCard());
+                    }
+                }
+            }
+
+            if(membersverifyEntityList != null && membersverifyEntityList.size() > 0){
+                Example example = new Example(getClazz());
+                Example.Criteria criteria = example.createCriteria();
+                criteria.andIn("idCard", idCardList);
+                List<MembersverifyEntity> list = selectByExample(example);
+                if(list != null && list.size() > 0){
+                    return -1;
+                }
+                return insertList(membersverifyEntityList);
+            }else{
+                return 0;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    /**
+     * 重写插入，需要验证是否有重复
+     *
+     * @param record
+     * @return
+     */
+    @Override
+    public int backSave(MembersverifyEntity record) {
+        MembersverifyEntity queryEntity = new MembersverifyEntity();
+        queryEntity.setIdCard(record.getIdCard());
+        queryEntity = selectOne(queryEntity);
+        if(queryEntity == null){
+            return dao.insertSelective(record);
+        }else{
+            return 0;
+        }
+    }
+
+    @Override
+    public int backUpdate(MembersverifyEntity record) {
+        MembersverifyEntity queryEntity = new MembersverifyEntity();
+        queryEntity.setIdCard(record.getIdCard());
+        queryEntity = selectOne(queryEntity);
+        if(queryEntity == null){
+            return dao.updateByPrimaryKeySelective(record);
+        }else{
+            return 0;
+        }
+    }
+
+
+    @Override
+    public R verifyBin(MembersverifyEntity entity) {
+        MembersverifyEntity queryBind = new MembersverifyEntity();
+        queryBind.setBindGuid(BaseContentHandler.getUserGuid());
+        queryBind.setType(2);
+        queryBind = selectOne(queryBind);
+        if(queryBind != null){
+            return R.error(Content.STATUS_CODE_5005,"您已经验证过会员</br>每个微信只可验证一次！");
+        }
+        MembersverifyEntity queryEntity = new MembersverifyEntity();
+        queryEntity.setIdCard(entity.getIdCard());
+        queryEntity.setPhone(entity.getPhone());
+        queryEntity = selectOne(queryEntity);
+        if(queryEntity != null){
+            if(queryEntity.getType().equals(1)){
+                //进行绑定操作
+                Map<String, Object> params = new HashMap<>();
+                params.put("userGuid", BaseContentHandler.getUserGuid());
+                params.put("hotelType",entity.getHotelType());
+                String jsonStr = JSON.toJSONString(params);
+                String returnStr = couponsRemote.membersBin(jsonStr);
+                JSONObject jsonObject = JSONObject.parseObject(returnStr);
+                Integer code = jsonObject.getInteger("code");
+                System.out.println("传入值："+jsonStr);
+                System.out.println("返回值："+returnStr);
+                //绑定成功后修改该数据类型  为已绑定
+                if(code.equals(0)){
+                    //绑定会员卡
+                    Map<String, Object> paramsVip = new HashMap<>();
+                    paramsVip.put("userGuid", BaseContentHandler.getUserGuid());
+                    paramsVip.put("vipGuid", "fbc0646a-f00e-45ac-bf03-82a2a30879f8");//固定guid会员卡
+                    String jsonVipStr = JSON.toJSONString(paramsVip);
+                    String returnVipStr = integralRemote.binVip(jsonVipStr);
+                    JSONObject jsonVipObject = JSONObject.parseObject(returnVipStr);
+                    Integer codeVip = jsonVipObject.getInteger("code");
+                    System.out.println("vip传入值："+jsonVipStr);
+                    System.out.println("vip返回值："+returnVipStr);
+                    queryEntity.setType(2);//绑定
+                    queryEntity.setBindGuid(BaseContentHandler.getUserGuid());
+                    //判断是否是新用户新用户直接把手机号进行绑定
+                    UserEntity userEntity = userService.selectOneByGuid(BaseContentHandler.getUserGuid());
+                    if(StringUtil.isEmpty(userEntity.getPhone())){
+                        UserEntity userUpdate = new UserEntity();
+                        userUpdate.setId(userEntity.getId());
+                        userUpdate.setPhone(queryEntity.getPhone());
+                        userUpdate.setName(entity.getName());
+                        userService.updateByPrimaryKeySelective(userUpdate);
+                    }
+                    int count = updateByPrimaryKeySelective(queryEntity);
+                    if(count > 0){
+                        //返回验证成功
+                        return R.ok().putData(queryEntity);
+                    }else{
+                        return R.error(Content.STATUS_CODE_5001,"绑定失败！");
+                    }
+                }else{
+                    return R.error(Content.STATUS_CODE_5007,"绑定失败！");
+                }
+            }else{
+                return R.error(Content.STATUS_CODE_5006,"该账号已经被绑定，请确认！");
+            }
+        }else{
+            return R.error(Content.STATUS_CODE_5006,"没有查询到您的会员信息</br>请检查身份证号码和手机号！");
+        }
+    }
+}

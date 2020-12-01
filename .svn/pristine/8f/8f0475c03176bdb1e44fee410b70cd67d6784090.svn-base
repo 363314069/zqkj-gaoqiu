@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>活动、抢购、团购表</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<link rel="stylesheet" href="../../common/css/common.css">
+	<link rel="stylesheet" href="../../common/js/layui/css/layui.css">
+	<link rel="stylesheet" href="../../common/js/yfplugin.css">
+	<link rel="stylesheet" href="../../common/js/zTree_v3-3.5.33/css/zTreeStyle/zTreeStyle.css" />
+	<link rel="stylesheet" href="../../common/fonts/font-yinfu/iconfont.css" />
+	<script src="../../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../../common/js/zTree_v3-3.5.33/js/jquery.ztree.core.min.js" ></script>
+	<script src="../../common/js/zTree_v3-3.5.33/js/jquery.ztree.exedit.js"></script>
+	<script src="../../common/js/zTree_v3-3.5.33/js/jquery.ztree.excheck.js"></script>
+	<script src="../../common/js/common.js"></script>
+	<script src="../../common/js/yfplugin.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/ueditor.all.min.js"> </script>
+	<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+	<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/lang/zh-cn/zh-cn.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="../../common/js/ueditor1_4_3_3/ueditor.all.js"></script>
+	<script src="js/activity_form.js"></script>
+</head>
+<body>
+	<div class="wrap">
+		<fieldset id="rrapp" class="layui-elem-field">
+			<legend>活动/抢购/团购管理</legend>
+			<form class="layui-form layui-elem-field-margin" lay-filter="form" enctype="multipart/form-data">
+				<input type="hidden" name="id">
+				<input type="hidden" name="guid">
+				<div class="layui-form-item">
+				   	<label class="layui-form-label">活动名称</label>
+				   	<div class="layui-input-inline">
+				      <input type="text" class="layui-input" name="name" lay-verify="required" placeholder="活动名称"/>
+				    </div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">前缀</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="prefix" placeholder="前缀只能输入大写字母" onkeyup="this.value=this.value.toUpperCase()"/>
+					</div>
+				</div>
+				<div class="layui-form-item">
+				   	<label class="layui-form-label">联系电话</label>
+				   	<div class="layui-input-inline">
+				      <input type="text" class="layui-input" name="phone" lay-verify="required" placeholder="联系电话" maxlength="11"/>
+				    </div>
+				</div>
+
+				<div class="layui-upload">
+					<label class="layui-form-label">图片</label>
+					<!--<button type="button" class="layui-btn" id="but">上传图片</button>--><input type="file" accept="image/*" name="imgs" id="imgs" value="" >
+					<div class="layui-upload-list">
+						<img style="width: 100px;height: 100px" id="upload-normal-img">
+						<input type="hidden"  id="img" name="img" value="" />
+						<p id="test-upload-demoText"></p>
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">原价</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="originalPrice" placeholder="原价(单位:元)"/>
+					</div>
+				</div>
+				<div class="layui-form-item">
+				   	<label class="layui-form-label">价格</label>
+				   	<div class="layui-input-inline">
+				      <input type="text" class="layui-input" name="price" lay-verify="required" placeholder="价格(单位:元)"/>
+				    </div>
+				</div>
+				<!--<div class="layui-form-item">
+				   	<label class="layui-form-label">折扣</label>
+				   	<div class="layui-input-inline">
+				      <input type="text" class="layui-input" name="discount" value="0" placeholder="折扣"/>
+				    </div>
+				</div>-->
+				<input type="hidden" class="layui-input" name="discount" value="0" placeholder="折扣"/>
+				<div class="layui-form-item">
+					<label class="layui-form-label">类型</label>
+					<div class="layui-input-inline">
+						<select class="layui-input" name="type" placeholder="类型" lay-filter="type">
+							<option value="0" selected="selected">活动</option>
+							<option value="1">抢购</option>
+							<!--<option value="2">团购</option>-->
+							<option value="4">团购（新）</option>
+							<option value="5">球队活动</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-form-item" id="teamsList" style="display: none">
+					<label class="layui-form-label">选择球队</label>
+					<div class="layui-input-block" id="teams">
+						<!--<input type="checkbox" name="" title="写作" checked>
+						<input type="checkbox" name="" title="发呆">
+						<input type="checkbox" name="" title="禁用" disabled>-->
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">产品类型</label>
+					<div class="layui-input-inline">
+						<select class="layui-input" name="productType" lay-filter="productType"  placeholder="产品类型">
+							<option value="1">会员卡</option>
+							<option value="2" selected="selected">其他产品</option>
+							<option value="3">优惠券</option>
+						</select>
+					</div>
+				</div>
+
+				<div class="layui-form-item" id="couponsList" style="display: none">
+					<label class="layui-form-label">优惠券</label>
+					<div class="layui-input-block" id="coupons" name="coupons">
+
+					</div>
+				</div>
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">个人限购数量</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="buyNumber" placeholder="限购数量"/>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">购买佣金金额</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="commission" placeholder="购买佣金金额"/>
+					</div>
+				</div>
+				<!--<div class="layui-form-item">
+					<label class="layui-form-label">购买佣金占比</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="commissionProportion" placeholder="购买佣金占比"/>
+					</div>
+				</div>-->
+				<div class="layui-form-item">
+					<label class="layui-form-label">返现金币</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="backGoldSum" placeholder="返现金币"/>
+					</div>
+				</div>
+
+				<!--<div class="layui-form-item">
+					<label class="layui-form-label">可使用的优惠</label>
+					<div class="layui-input-inline">
+						<select class="layui-input" name="preferential" placeholder="类型">
+							<option value="0" selected="selected">不能使用任何优惠</option>
+							<option value="1">全部优惠都可使用</option>
+							<option value="2">只能使用优惠券</option>
+							<option value="3">只能使用积分</option>
+						</select>
+					</div>
+				</div>-->
+
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">可使用的优惠</label>
+					<div class="layui-input-block">
+						<input type="checkbox" lay-filter="preferential" name="preferential" id="preferential1" title="优惠卷" value="1"><div class="layui-unselect layui-form-checkbox"><span>写作</span><i class="layui-icon layui-icon-ok"></i></div>
+						<input type="checkbox" name="preferential" id="preferential2" title="积分" value="2"><div class="layui-unselect layui-form-checkbox"><span>阅读</span><i class="layui-icon layui-icon-ok"></i></div>
+						<input type="checkbox" name="preferential" id="preferential4" title="佣金" value="4"><div class="layui-unselect layui-form-checkbox"><span>游戏</span><i class="layui-icon layui-icon-ok"></i></div>
+					</div>
+				</div>
+
+
+				<div class="layui-form-item">
+					<label class="layui-form-label">状态</label>
+					<div class="layui-input-inline">
+						<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+					</div>
+				</div>
+
+
+				<!--<div class="layui-form-item">
+					<label class="layui-form-label">回调url</label>
+					<div class="layui-input-inline">
+						<select class="layui-input" name="callbackUrl" placeholder="类型">
+							<option value="http://wap.oneagles.com/business/activity/notificaCallback?sign=sign" selected="selected">通用回调</option>
+							<option value="http://wap.oneagles.com/security/vip/invitecode?areaCode=86004417">会员卡回调</option>
+							<option value="http://wap.oneagles.com/security/vip/weekscard?areaCode=86004417">度假卡回调</option>
+						</select>
+					</div>
+				</div>-->
+				<div class="layui-form-item">
+				   	<label class="layui-form-label">开始时间</label>
+				   	<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="startTime" id="startTime" lay-verify="required"  placeholder="yyyy-MM-dd" autocomplete="off" >
+				    </div>
+				</div>
+				<div class="layui-form-item">
+				   	<label class="layui-form-label">结束时间</label>
+				   	<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="endTime" id="endTime" lay-verify="required" placeholder="yyyy-MM-dd" autocomplete="off" >
+				    </div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">活动时间</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="date" id="date" lay-verify="required" placeholder="yyyy-MM-dd" autocomplete="off" >
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">内容</label>
+					<div class="layui-input-block">
+						<script id="content" name="content" type="text/plain">
+				       		这里写你的初始化内容
+						</script>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">备注</label>
+					<div class="layui-input-inline">
+						<input type="text" class="layui-input" name="remark" placeholder="备注"/>
+					</div>
+				</div>
+				<div class="layui-form-item">
+				    <div class="layui-input-block">
+				    	<a class="layui-btn" lay-submit="" lay-filter="save">立即提交</a>
+				    	<a class="layui-btn layui-btn-primary" id="back">返回</a>
+				    </div>
+				</div>
+			</form>
+		</fieldset>
+	</div>
+</body>
+</html>

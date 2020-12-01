@@ -1,0 +1,20 @@
+package com.zqkj.service.impl;
+
+import com.zqkj.dao.mapper.IntegralDao;
+import com.zqkj.entity.IntegralEntity;
+import com.zqkj.service.IntegralService;
+import com.zqkj.utils.R;
+import org.springframework.stereotype.Service;
+
+
+/**
+ * 积分表
+ */
+@Service("integralService")
+public class IntegralServiceImpl extends BaseServiceImpl<IntegralDao, IntegralEntity> implements IntegralService {
+
+    @Override
+    public Long selectIntegralSum(IntegralEntity integralEntity) {
+        return dao.selectIntegralSum(integralEntity);
+    }
+}

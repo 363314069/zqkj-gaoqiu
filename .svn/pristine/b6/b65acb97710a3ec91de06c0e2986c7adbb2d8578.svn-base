@@ -1,0 +1,185 @@
+$(function(){
+var api = {
+	del:{url:T.serverebusiness + "/business/activity/del", type:"post"},
+	save:{url:T.serverebusiness + "/business/activity/save", type:"post"},
+	update:{url:T.serverebusiness + "/business/activity/update", type:"post"},
+	info:{url:T.serverebusiness + "/business/activity/info", type:"get"},
+	list:{url:T.serverebusiness + "/business/activity/list", type:"post"},
+	page:{url:T.serverebusiness + "/business/activity/pagelist", type:"post"},
+	delbyguids:{url:T.serverebusiness + "/business/activity/delbyguids", type:"post"},
+	authorizedGetRole:{url:T.serverebusiness + "/security/authorized/getrole", type:"post"},
+	authorizedSaveRole:{url:T.serverebusiness + "/security/authorized/saverole", type:"post"}
+};
+layui.use([ 'laypage', 'layer', 'table' ], function() {
+	var laypage = layui.laypage, // 分页
+	layer = layui.layer, // 弹层
+	table = layui.table; // 表格
+	//var userGroupGuid = T.p("userGroupGuid");
+	$.tabfield = [
+		{ checkbox : true, fixed : true }, 
+		{ title: 'id', field: 'id', width: 50, fixed: 'left' },
+		//{ title: '应用程序ID', field: 'appId', width: 80 },			
+		{ title: '活动名称', field: 'name', width: 300 },
+        { title: '类型', field: 'type', width: 100 ,templet: function(d){
+            if(d.type == 0){
+                return '活动'
+            }else if(d.type == 1){
+                return '抢购'
+            }/*else if(d.type == 2){
+                return '团购'
+            }*/else if(d.type == 3){
+                return '会员产品'
+            }else if(d.type == 4){
+				return '团购（新）'
+			}else{
+                return ''
+            }
+        }},
+		{ title: '状态', field: 'state', width: 60, templet: function(d){return d.state == 1?'启用':'禁用'} },
+		{ title: '内容', field: 'content', width: 150 },
+		{ title: '开始时间', field: 'startTime', width: 200 },
+		{ title: '结束时间', field: 'endTime', width: 200 },
+		{ title: '创建时间', field: 'createTime', width: 200 },
+		{ fixed : 'right', width : 170, align : 'center', toolbar : '#tabbtn'}
+	];
+	// 执行一个 table 实例
+	table.render({
+		elem : '#table',
+		id : 'id',
+		url : api.page.url, // 数据接口
+		method : api.page.type,
+		headers : {token:T.token},
+		//where: {"name":$("#selectName").val(),"type":$("#type").val()},
+		page : true, // 开启分页
+		limit: 10,
+		cols : [ $.tabfield ],
+		done: function(res, page, count){ 
+			if($.isEmptyObject(res.data) || res.data.length == 0){
+				return;
+			}
+			/*var userGroupGuids = new Array();
+			$.each(res.data, function(i, obj){
+				if(obj.userGroupGuid)
+					userGroupGuids.push(obj.userGroupGuid);
+			});
+			if(userGroupGuids.length == 0){
+				return;
+			}*/
+			/*$.ajax({
+            	type:api.usergroupListByGuids.type,
+            	traditional: true,
+            	url:api.usergroupListByGuids.url,
+            	data : {"guids":userGroupGuids},
+				success : function(r) {
+					if (r.code == 0) {
+						$.each(r.data, function(i, obj){
+							$("#guid-" + obj.guid).text(obj.name);
+							res.data[$("#guid-" + obj.guid).parent().parent().parent().attr("data-index")].userGroupName = obj.name;
+						});
+					} else {
+						alertMsg(r);
+					}
+				}
+           	});*/
+		}
+	});
+
+	// 监听工具条
+	table.on('tool(default)', function(obj) { // 注：tool是工具条事件名，test是table原始容器的属性
+		// lay-filter="对应的值"
+		var data = obj.data, // 获得当前行数据
+		layEvent = obj.event; // 获得 lay-event 对应的值
+		if (layEvent === 'detail') {
+			var div = $("<div>");
+			for(var i = 0; i < $.tabfield.length; i++){
+				if($.tabfield[i].title && $.tabfield[i].title != "id" && $.tabfield[i].title != "guid"){
+					var field = $("<div>");
+					field.append($.tabfield[i].title + ":");
+					if($.tabfield[i].field == "state")
+						field.append(data[$.tabfield[i].field]==1?'启用':'禁用');
+					else
+						field.append(data[$.tabfield[i].field]?data[$.tabfield[i].field]:"");
+					div.append(field);
+				}
+			}
+			alert(div.html());
+		} else if (layEvent === 'del') {
+			layer.confirm('真的删除行么', function(index) {
+				//obj.del(); // 删除对应行（tr）的DOM结构
+				//layer.close(index);
+				// 向服务端发送删除指令
+				$.ajax({
+					type : api.del.type,
+					url : api.del.url,
+					data : {guid : data.guid},
+					success : function(r) {
+						if (r.code == 0) {
+							alert('成功删除了' + r.data + '记录', function(index) {
+								table.reload('id', {});
+								// obj.del(); // 删除对应行（tr）的DOM结构
+							});
+						} else {
+							alert(r.msg);
+						}
+					}
+				});
+			});
+		} else if (layEvent === 'edit') {
+			location.href = "activity_form.html?id=" + data.id;
+		} else if (layEvent === 'share') {
+			layer.alert('http://wap.oneagles.com/wap/business/H5_activity_info.html?guid='+data.guid, {icon: 6});
+		}  /*else if (layEvent === 'addmodule') {
+			addmodule(data);
+		}*/
+	});
+
+	$("#select").click(function() {
+		table.reload('id', {where: {"name":$("#selectName").val(),"type":$("#type").val()}});
+	});
+
+	$("#del").click(function() {
+		var checkStatus = table.checkStatus('id');
+		var guids = $.getRows(checkStatus.data);
+		if (!guids)
+			return;
+		confirm('确定要删除选中的记录？', function() {
+			$.ajax({
+				type : api.delbyguids.type,
+				url : api.delbyguids.url,
+				data : {guids : guids},
+				traditional: true,
+				success : function(r) {
+					if (r.code == 0) {
+						alert('成功删除了' + r.data + '记录', function(index) {
+							table.reload('id', {});
+						});
+					} else {
+						alert(r.msg);
+					}
+				}
+			});
+		});
+	});
+	var treeObj = null;
+	var setting = {
+		view: {
+			showIcon: false
+		},
+		check: {
+			enable: true,
+			chkboxType :{ "Y" : "ps", "N" : "ps" }
+		},
+		data: {
+			simpleData: {
+				enable: true,
+				idKey: "id",
+				pIdKey: "parentId",
+				rootPId: -1
+			},
+			key: {
+				name: "name"
+			}
+		}
+	};
+});
+});

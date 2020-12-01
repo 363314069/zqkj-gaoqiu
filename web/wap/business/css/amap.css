@@ -1,0 +1,158 @@
+/*!
+ * Css Document
+ * 
+ * @author	zongxian.chen at 2012/04/16 build.
+ * @version $Id$
+ */
+
+ /*清除浮动*/
+.clearfix:after {
+    content: ".";
+    visibility: hidden;
+    display: block;
+    height: 0;
+    overflow: hidden;
+    clear: both;
+}
+
+/* no ie mac \*/
+* html .clearfix {
+    height: 1%;
+}
+/* end */
+* + html .clearfix {
+    height: 1%;
+}
+
+#iCenter{
+	width:100%;
+	height:400px;
+	border:1px solid #F6F6F6;
+}
+#r_title{
+	line-height:28px;
+	padding-left:5px;
+	background-color:#D1EEEE;
+	font-weight:bold;
+}
+#result{
+	overflow:auto;
+	margin-bottom:5px;
+/*	width:661px;*/
+	height:255px;
+}
+/*  结果项 */
+#result .sub_result{
+	font-size:12px;
+	cursor:pointer;
+	line-height:20px;
+	/*padding:0px 0 4px 2px;*/
+	border-bottom:1px solid #C1FFC1;
+}
+#result .sub_result .detail{
+}
+#result .sub_result .detail h3{
+	color:#00A6AC;
+}
+
+a{
+	color:#067EC0;
+	text-decoration:none;
+}
+a:hover{
+	text-decoration:underline;
+}
+.note{
+	color:#999;
+}
+
+/*** layerout stylesheet ***/
+/* 修改背景URL */
+div.change{
+	background-image:url(http://pages.haozu.ajkcdn.com/20110909/img/map/marker-h.png);
+}
+div.change div{
+	background-image:url(http://pages.haozu.ajkcdn.com/20110909/img/map/marker-h-l.gif);
+}
+
+/*** copied from demo #39 添加自定义点覆盖物 ***/
+/* 定义自定义点样式 */
+.markerContentStyle{position:relative;}
+.markerContentStyle .markSpan{
+	background-color: #FFFFFF;
+	color:#379dda;
+	heigth:25px;
+	line-height:25px;
+	overflow:hidden;
+	display:block;
+	font-size:13px;
+	border:1px solid #ccc;
+	text-align:left;
+	FONT-FAMILY:Microsoft YaHei,sans-serif;;
+	position:absolute;
+	top:-44px;left:-47px;
+	white-space:nowrap
+	-webkit-border-radius:3px;
+	border-radius:3px;
+	text-aglin:center;
+	padding:5px;
+}
+.markerContentStyle .arrowSpan{
+	display:block;
+}
+.markerContentStyle .arrowSpan:before{content: ' '; position: absolute; width: 0; height: 0; left: 4px; top: -7px; border: 7px solid; border-color: #ccc transparent transparent transparent;}
+.markerContentStyle .arrowSpan:after{content: ' '; position: absolute; width: 0; height: 0; left: 5px; top: -8px; border: 6px solid; border-color: #fff transparent transparent transparent  ;}
+/*** copied from demo #43 添加自定义信息窗体 ***/
+/* 定义自定义信息窗体样式 */
+div.info {
+	position: relative;
+	z-index: 100;
+	border: 1px solid #BCBCBC;
+	box-shadow: 0 0 10px #B7B6B6;
+	border-radius: 8px;
+	background-color: rgba(255,255,255,0.9);
+	transition-duration: 0.25s;
+}
+div.info:hover {
+	box-shadow: 0px 0px 15px #0CF;
+}
+
+div.info-top {
+	position: relative;
+	background: none repeat scroll 0 0 #F9F9F9;
+	border-bottom: 1px solid #CCC;
+	border-radius:5px 5px 0 0;
+}
+div.info-top div {
+	display: inline-block;
+	color: #333333;
+	font-size:14px;
+	font-weight:bold;
+	line-height:31px;
+	padding:0 10px;
+}
+div.info-top img {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	transition-duration: 0.25s;
+}
+div.info-top img:hover{
+	box-shadow: 0px 0px 5px #000;
+}
+div.info-middle {
+	font-size:12px;
+	padding:10px;
+	line-height:21px;
+}
+div.info-bottom {
+	height:0px;
+	width:100%;
+	clear:both;
+	text-align:center;
+}
+div.info-bottom img{
+	position: relative;
+	z-index:104;
+}
+/*** -------------------------***/

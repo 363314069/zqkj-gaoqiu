@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>精品出行</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!--库-->
+    <link rel="stylesheet" type="text/css" href="css/amazeui.css">
+    <!-- 样式 -->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/amazeui.js"></script>
+    <script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+<body>
+<div id="trip_list">
+    <div id="item_name">
+    </div>
+</div>
+<!--footer-->
+<div class="foot_h"></div>
+</body>
+</html>
+<script type="text/javascript">
+    $(function(){
+        var api = {
+            info:{url:T.serverebusiness + "/business/activity/info", type:"get"},
+            list:{url:T.serverebusiness + "/business/activity/list", type:"post"},
+            page:{url:T.serverebusiness + "/business/activity/page", type:"post"}
+        };
+
+        $.ajax({
+            type : "POST",
+            url : api.list.url,
+            method : api.list.type,
+            data : {type:3},
+            headers : {token:T.token},
+            success : function(r) {
+                console.log(r);
+                if (r.code == 0) {
+                    var list = '<ul>';
+                    $.each(r.data, function(i, obj){
+                        list += '<li class="view">'+
+                            '<div class="pic">'+
+                            '<a title="" class="button" href="snapUp_info.html?guid='+obj.guid+'">'+
+                            '<img src="'+T.serverebusiness + obj.img+'">'+
+                            '<div class="cont">'+
+                            '<div class="num">'+
+                                /*'<p><span>20/30</span>人报名</p>'+
+                                 '<p>出发时间<span>2017/10/02</span></p>'+*/
+                            '<p>￥<span>'+obj.price/100+'</span></p>'+
+                            '<p>开始时间：<span>'+obj.startTime+'</span></p>'+
+                            '</div></div>'+
+                            '<div class="clear"></div>'+
+                            '</div>'+
+                            '<div class="con">'+
+                            '<span>'+obj.name+'</span>'+
+                            '</a>'+
+                            '</div>'+
+                            '</li>';
+                    });
+                    list += '</ul>';
+                    $("#trip_list").append(list);
+                } else {
+                    alert(r);
+                }
+            }
+        });
+    });
+</script>

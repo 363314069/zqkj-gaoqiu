@@ -1,0 +1,71 @@
+<html style="font-size: 50px;"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0 ,maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta content="telephone=no" name="format-detection">
+<link href="css/bank.css" rel="stylesheet" type="text/css">
+<style>
+	.card{
+		margin:0 0 20px 0;
+	}
+    .cardz{
+        margin:0 0 20px 0;
+    }
+</style>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+    <script type="text/javascript" src="js/common.js"></script>
+</head>
+<body>
+<header>
+    <a href="javascript:history.back(-1)"><img src="images/vipcard/header_icon1.png"></a>
+    <div class="title">我的卡包</div>
+</header>
+<div class="bank_content">
+	<!--<div class="card">
+        <div class="code">1234 5214 4861 1364</div>
+        <div class="date">2020/08/30</div>
+    </div>-->
+</div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    $.ajax({
+        type : "POST",
+        url : T.serverurl + "/security/vip/selectuservip",
+        headers : {token:T.token},
+        success : function(r) {
+            var list = "";
+            if (r.code == 0) {
+                $.each(r.data, function(i, obj) {
+                    if(obj.type == 0){
+                        var code = obj.areaCode+"" + obj.code+"";
+                        code = code.replace(/\s/g,'').replace(/(.{4})/g,"$1 ");
+                        var endTime = obj.endTime.substr(0,10);
+                        list += '<div class="card" onclick="vipinfo(\'' + obj.guid + '\')">'+
+                            '<div class="code">'+code +'</div>'+
+                            '<div class="date">'+endTime+'</div>'+
+                            '</div>';
+                    }else{
+                        var code = obj.areaCode+"" + obj.code+"";
+                        code = code.replace(/\s/g,'').replace(/(.{4})/g,"$1 ");
+                        var endTime = obj.endTime.substr(0,10);
+                        list += '<div class="cardz" onclick="vipinfo(\'' + obj.guid + '\')">'+
+                            '<div class="code">'+code +'</div>'+
+                            '<div class="date">'+endTime+'</div>'+
+                            '</div>';
+                    }
+                });
+                $(".bank_content").append(list);
+            } else {
+                alert(r.msg);
+            }
+        }
+    });
+
+    function vipinfo(guid) {
+        location.href = "vipcardinfo.html?guid="+guid;
+    }
+</script>

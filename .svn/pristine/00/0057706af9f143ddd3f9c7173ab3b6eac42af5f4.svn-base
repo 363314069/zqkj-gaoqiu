@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.IntroductionDao">
+	<resultMap id="BaseResultMap" type="com.zqkj.entity.IntroductionEntity">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="GUID" property="guid" jdbcType="VARCHAR" />
+		<result column="OrganizationGuid" property="organizationGuid" jdbcType="VARCHAR" />
+		<result column="ReservationGuid" property="reservationGuid" jdbcType="VARCHAR" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="Prefix" property="prefix" jdbcType="VARCHAR" />
+		<result column="NumberHoles" property="numberHoles" jdbcType="VARCHAR" />
+		<result column="Phone" property="phone" jdbcType="VARCHAR" />
+		<result column="Content" property="content" jdbcType="VARCHAR" />
+		<result column="Img" property="img" jdbcType="VARCHAR" />
+		<result column="CostPrice" property="costPrice" jdbcType="INTEGER" />
+		<result column="Price" property="price" jdbcType="INTEGER" />
+		<result column="Discount" property="discount" jdbcType="VARCHAR" />
+		<result column="Days" property="days" jdbcType="INTEGER" />
+		<result column="TimeJson" property="timeJson" jdbcType="VARCHAR" />
+		<result column="CycleSetting" property="cycleSetting" jdbcType="INTEGER" />
+		<result column="CycleSettingDate" property="cycleSettingDate" jdbcType="VARCHAR" />
+		<result column="Type" property="type" jdbcType="INTEGER" />
+		<result column="State" property="state" jdbcType="INTEGER" />
+		<result column="Preferential" property="preferential" jdbcType="INTEGER" />
+		<result column="CallbackUrl" property="callbackUrl" jdbcType="VARCHAR" />
+		<result column="StartTime" property="startTime" jdbcType="VARCHAR" />
+		<result column="EndTime" property="endTime" jdbcType="VARCHAR" />
+		<result column="PriceInclude" property="priceInclude" jdbcType="VARCHAR" />
+		<result column="GoldSum" property="goldSum" jdbcType="INTEGER" />
+		<result column="Remark" property="remark" jdbcType="VARCHAR" />
+		<result column="Creator" property="creator" jdbcType="VARCHAR" />
+		<result column="CreateTime" property="createTime" jdbcType="VARCHAR" />
+		<result column="CheckUser" property="checkUser" jdbcType="VARCHAR" />
+		<result column="CheckTime" property="checkTime" jdbcType="VARCHAR" />
+		<result column="ExtInt" property="extInt" jdbcType="INTEGER" />
+		<result column="ExtStr" property="extStr" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID AS id,
+		GUID AS guid,
+		OrganizationGuid AS organizationGuid,
+		ReservationGuid AS reservationGuid,
+		Name AS name,
+		Prefix AS prefix,
+		NumberHoles AS numberHoles,
+		Phone AS phone,
+		Content AS content,
+		Img AS img,
+		CostPrice AS costPrice,
+		Price AS price,
+		Discount AS discount,
+		Days AS days,
+		CycleSetting AS cycleSetting,
+		CycleSettingDate AS cycleSettingDate,
+		Type AS type,
+		State AS state,
+		Preferential AS preferential,
+		CallbackUrl AS callbackUrl,
+		StartTime AS startTime,
+		EndTime AS endTime,
+		TimeJson AS timeJson,
+		PriceInclude AS priceInclude,
+		GoldSum AS goldSum,
+		Remark AS remark,
+		Creator AS creator,
+		CreateTime AS createTime,
+		CheckUser AS checkUser,
+		CheckTime AS checkTime,
+		ExtInt AS extInt,
+		ExtStr AS extStr
+	</sql>
+
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGuid != null and organizationGuid != ''">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="reservationGuid != null and reservationGuid != ''">
+				and ReservationGuid = #{reservationGuid}
+			</if>
+			<if test="name != null and startTime != ''">
+				and Name LIKE CONCAT(CONCAT('%',#{name},'%'))
+			</if>
+		<if test="prefix != null">
+			and Prefix = #{prefix}
+		</if>
+		<if test="numberHoles != null">
+			and NumberHoles = #{numberHoles}
+		</if>
+			<if test="phone != null">
+				and Phone = #{phone}
+			</if>
+			<if test="content != null">
+				and Content = #{content}
+			</if>
+			<if test="img != null">
+				and Img = #{img}
+			</if>
+		<if test="costPrice != null">
+			and CostPrice = #{costPrice}
+		</if>
+			<if test="price != null">
+				and Price = #{price}
+			</if>
+			<if test="discount != null">
+				and Discount = #{discount}
+			</if>
+			<if test="days != null">
+				and Days = #{days}
+			</if>
+			<if test="timeJson != null">
+				and TimeJson = #{timeJson}
+			</if>
+		<if test="cycleSetting != null">
+			and CycleSetting = #{cycleSetting}
+		</if>
+		<if test="cycleSettingDate != null">
+			and CycleSettingDate = #{cycleSettingDate}
+		</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="preferential != null">
+				and Preferential = #{preferential}
+			</if>
+			<if test="callbackUrl != null">
+				and CallbackUrl = #{callbackUrl}
+			</if>
+			<if test="startTime != null">
+				and StartTime = #{startTime}
+			</if>
+			<if test="endTime != null">
+				and EndTime = #{endTime}
+			</if>
+		<if test="priceInclude != null">
+			and PriceInclude = #{priceInclude}
+		</if>
+		<if test="goldSum != null">
+			and GoldSum = #{goldSum}
+		</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+	<select id="selectByReservationGuid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List"/>
+		from introductiontab
+		<where>
+			ReservationGuid = #{reservationGuid}
+		</where>
+	</select>
+
+	<select id="selectIntroductionList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from introductiontab
+		<where>
+			<include refid="where"/>
+		</where>
+	</select>
+
+	<select id="selectListPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from introductiontab
+		<where>
+			<include refid="where" />
+		</where>
+		<if test="page != null and limit != null">
+			limit ${page}, ${limit}
+		</if>
+	</select>
+
+	<select id="selectListPageCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select
+		COUNT(id)
+		from introductiontab
+		<where>
+			<include refid="where" />
+		</where>
+	</select>
+</mapper>

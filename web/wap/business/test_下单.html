@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>订单</title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+		<!--
+		<script type="text/javascript" src="js/common.js"></script>
+		-->
+		<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default.css" rel="stylesheet" type="text/css">
+	</head>
+	<style>
+		html,body{overflow: hidden; color: #333;}
+		.wrap{padding-bottom: 0.88rem;}
+		.menu {
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #e7e7e7;
+			font-size: 0.32rem;
+			line-height: 0.8rem;
+			background-color: #fff;
+		}
+		.menu > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+			height: 0.8rem;
+			padding: 0 0.1rem;
+		}
+		.menu .select{
+			border-bottom: 0.04rem solid #2d9de7;
+			color: #2d9de7;
+		}
+		.list{
+			height: 100%;
+			overflow-y:auto; 
+		}
+		.list .title{
+			font-size: 0.24rem;
+			line-height: 0.5rem;
+			border-bottom: 1px solid #e7e7e7;
+			margin-bottom: 0.2rem;
+		}
+		.list .content{
+			display: -webkit-flex;
+			display: flex;
+		}
+		.list > li{
+			padding: 0.3rem;
+			overflow: hidden;
+			border-radius: .3rem;
+			background-color: #fff;
+			margin: 0.2rem;
+			font-size: 0.32rem;
+			color: #333;
+			text-align: left;
+		}
+		.list .list-head .logo{
+			width: 2.2rem;
+			height: 2.2rem;
+			overflow: hidden;
+			position: relative;
+			background: url(images/share/bg.jpg) no-repeat center center;
+			background-size: auto 100%;
+		}
+		.list .list-head .item {
+			width:calc(100% - 1.6rem);
+			text-align: left;
+			overflow: hidden;
+			line-height: .5rem;
+			padding-left: 0.2rem;
+		}
+		
+		.list .list-head .title .number{float: left;}
+		.list .list-head .title .state{float: right;}
+		.list .list-head .title::after{display: block; content: ''; clear: both;}
+		.list .list-head .logo img{display: none;}
+		.list .list-head .logo .times{position: absolute;left: 0; bottom: 0; display: none; width: 100%; height: 0.5rem; z-index: 999; font-size: 0.2rem; line-height: 0.5rem; background-color: #00ab65; color: #fff;}
+		.list .list-head .item .item1{font-size: 0.32rem; height: 1rem; margin: 0.1rem 0; box-sizing: border-box; overflow: hidden;display: -webkit-box;
+-webkit-box-orient: vertical;
+-webkit-line-clamp: 3;}
+		.list .list-head .item .item2 span{color: #DB0415; font-size: 0.28rem;}
+		.list .list-head .item .item3{font-size: 0.28rem;}
+		.list .list-head .btn {margin-top: 0.3rem;}
+		.list .list-head .btn .pay{background-color: #DB0415;border: 1px solid #DB0415;}
+		.list .list-head .btn .cancel{border: 1px solid #666; color: #666;}
+		.list .list-head .btn::after{display: block; content: ''; clear: both;}
+		.list .list-head .btn .buy-prices{color: #DB0415; float: left; font-size: 0.36rem;}
+		.list .list-head .btn .buy-prices .original{text-decoration: line-through; color: #999; margin-left: 0.05rem; font-size: 0.2rem; display: none;} 
+		.list .list-head .btn .buy-num{float: right; font-size: 0.28rem;}
+		.list .list-head .btn .buy-num span{border: 1px solid #666; width: 0.4rem; text-align: center; line-height: 0.4rem; display: inline-block;}
+		.list .list-head .btn .buy-num .num{border-left: none; border-right: none; width: 0.8rem;}
+		.list .list-head .describe{font-size: .2rem; text-align: left; padding: .2rem 0; color: #666;}
+		.list .list-head .describe textarea{width: 100%; height: 1.2rem; text-align: left; font-size: 0.32rem;}
+		.list .list-params{
+			line-height: 0.6rem;
+			font-size: 0.28rem;
+		}
+		.list .list-params span{
+			float: right;
+		}
+		.list .list-params span::after{
+			font-family: "iconfont" !important;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			content: '\e6af';
+			font-size: 0.32rem;
+			margin-left: 0.1rem;
+			color: #999;
+		}
+		.list .list-params div::after {display: block; content: ''; clear: both;}
+		.bottom{padding: .1rem .3rem; position: fixed; left: 0; bottom: 0; height: 0.88rem; background-color: #fff; z-index: 999; width: 100%; font-size: 0.36rem; line-height: 0.68rem;}
+		.bottom .bottom-prices{color: #DB0415; float: left;}
+		.bottom .bottom-btn{color: #fff; background-color: #DB0415; float: right; padding: 0 .8rem; border-radius: .34rem;}
+		
+		.timeItem li{text-align: left;}
+		.timeItem li .itemtop{background-color: #eee; text-align: center; font-size: 0.32rem; line-height: 0.6rem;}
+		.timeItem .title{
+			height: .88rem;
+			position: relative;
+			line-height: .88rem;
+			font-size: 0.36rem;
+			color: #fff;
+			text-align: center;
+			background-color: #2d9de7;
+		}
+		.timeItem .title a{
+			line-height: .88rem;
+			font-size: 0.32rem;
+			position: absolute;
+			left: 0.4rem;
+			top: 0;
+			color: #fff;
+		}
+		.timeItem li div{
+			font-size: 0;
+		}
+		.timeItem li div a{
+			display: inline-block; width: 20%;
+			line-height: 0.4rem;
+			text-align: center;
+			padding: 0.2rem;
+			box-sizing: border-box;
+			font-size: 0.32rem;
+		}
+		.timeItem li div a span{display: block;}
+		.timeItem li div a span:last-child{display: none;}
+		.icon-price::before{
+			font-family: "iconfont" !important;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			content: '\e6a0';
+			font-size: 0.32rem;
+		}
+		.list .list-userinfo div{padding: 0.2rem 0;}
+		.list .list-userinfo input{background:none;  outline:none;  border:1px solid #ccc; width: calc(100% - 2rem); height: 0.6rem; line-height: 0.6rem;}
+		.list .list-userinfo .code input{width: 2rem; margin-right: .4rem; }
+		.list .list-userinfo .code button{background:#fff; background:none;  outline:none;  border:1px solid #ccc; text-align: center; padding: 0 0.2rem; height: 0.6rem; line-height: 0.6rem;}
+		.list .list-userinfo span{display: inline-block; width: 1.4rem; text-align: right; margin-right: .2rem;}
+	</style>
+	<script>
+		$(function(){
+			$(".menu").children().click(function(){
+				$(this).parent().children().removeClass("select");
+				$(this).addClass("select");
+			});
+			$("#buy-num-reduce").click(function(){
+				var numdom = $("#buy-num");
+				var num = parseInt(numdom.text());
+				var min = parseInt(numdom.attr('min'));
+				if(num > min){
+					numdom.text(num - 1);
+				} else {
+					alert('最少购买'+ min + '件');
+				}
+				countPrice();
+			});
+			$("#buy-num-add").click(function(){
+				var numdom = $("#buy-num");
+				var num = parseInt(numdom.text());
+				var max = parseInt(numdom.attr('max'));
+				if(num < max){
+					numdom.text(num + 1);
+				} else {
+					alert('最多购买'+ max + '件');
+				}
+				countPrice();
+			});
+			
+			bindDate(7);
+			$("#paramTime").click(function(){
+				pagetime = layer.open({
+				  type: 1
+				  ,content: ''
+				  ,anim: 'up'
+				  ,style: 'position:fixed; left:0; top:0; width:100%; height:100%; border: none; -webkit-animation-duration: .5s; animation-duration: .5s;'
+				});
+				$("#layui-m-layer" + pagetime).find(".layui-m-layercont").append($('#timeItem').children('ul'));
+			})
+			$('#timeCancel').click(function(){
+				timeItemClose();
+			})
+			$("#timeItem").children('ul').click(function(e){
+				var tag = null;
+				if(e.target.nodeName == "A"){
+					tag =  $(e.target);
+				} else if(e.target.nodeName == "SPAN"){
+					tag =  $(e.target).parent();
+				}
+				
+				if(tag != null && tag.find("span").eq(0).text() != ''){
+					var guid = tag.attr("guid");
+					var time = tag.find("span").eq(0).text();
+					var price = tag.find("span").eq(1).text();
+					setTime(guid, time, price);
+				}
+				timeItemClose();
+			});
+			countPrice();
+		});
+
+		function bindDate(days){
+			laydate.render({
+			  elem: '#paramDate'
+			  ,theme: '#2d9de7'
+			  ,value: new Date()
+			  ,min: 0 //7天前
+			  ,max: days //几天后天后
+			  ,done: function(value, date, endDate){
+				// 回调函数
+				//initDate(value)
+			  }
+			});
+		}
+		var pagetime = null;
+		function timeItemClose(){
+			$('#timeItem').append($("#layui-m-layer" + pagetime).find(".layui-m-layercont").children());
+			layer.close(pagetime);
+		}
+		//设置时间及价格
+		function setTime(guid, time, price){
+			$("#paramTime").attr("guid",guid);
+			$("#paramTime").text(time);
+			//选择时间后的价格设置
+			$("#price").text(price);
+			countPrice();
+		}
+		//统计价格
+		function countPrice(){
+			var price = parseInt($("#price").text()) * parseInt($("#buy-num").text());
+			$("#puyprice").text(price);
+		}
+	</script>
+	<body>
+		<div class="wrap">
+			<ul class="head">
+				<li class="l"><a href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+				<li class="c">填写订单</li>
+				<li class="r"></li>
+			</ul>
+			<ul class="list">
+				<li class="list-head">
+					<div class="title"><span class="number">流水号：<i>JD202003291</i></span>  <span class="state">待付款</span></div>
+					<div class="content">
+						<div class="logo">
+							<img src="images/share/bg.jpg">
+							<span id="times" class="times">11天19时36分</span>
+						</div>
+						<ul class="item">
+							<li id="title" class="item1">买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利</li>
+							<li class="btn">
+								<div class="buy-prices"><span id="price" class="icon-price">489</span><span class="original icon-price" id="original">1000</span><!--原价--></div>
+								<div class="buy-num">数量：<span id="buy-num-reduce">-</span><span id="buy-num" class="num" max="4" min="1">1</span><span id="buy-num-add">+</span></div>
+							</li>
+						</ul>
+					</div>
+					<div>
+						
+					</div>
+					<div class="describe">留言：<br>
+						<textarea placeholder="如果购买了多份请输入其他人信息!"></textarea>
+					</div>
+				</li>
+				<li class="list-params">
+					<div>日期<span id="paramDate"></span></div>
+					<div>时间<span id="paramTime">8:00</span></div>
+				</li>
+				<li class="list-params">
+					<div>优惠卷<span>无可用</span></div>
+					<!--
+					<div>积分<span>无可用</span></div>
+					<div>会员卡<span>无可用</span></div>
+					-->
+				</li>
+				<li class="list-userinfo">
+					<div><span>姓　名：</span><input type="text" name="name"></div>
+					<div><span>差　点：</span><input type="text" name="chad"></div>
+					<div><span>手　机：</span><input type="text" name="phoe"></div>
+					<div class="code"><span>验证码：</span><input type="text" name="code"><button type="button">发送验证码</button></div>
+					<!--
+					<div>积分<span>无可用</span></div>
+					<div>会员卡<span>无可用</span></div>
+					-->
+				</li>
+			</ul>
+			<div class="bottom"><span class="bottom-prices icon-price" id="puyprice">489</span><a class="bottom-btn">支付</a></div>
+		</div>
+		<div id="timeItem" style="display: none;">
+			<ul class="timeItem">
+				<li class="title">选择时间 <a id="timeCancel">取消</a></li>
+				<li>
+					<div class="itemtop">
+						上午
+					</div>
+					<div id="morningTime">
+						<a guid='xss-ds-d'><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+					</div>
+				</li>
+				<li>
+					<div class="itemtop">
+						下午
+					</div>
+					<div id="afternoonTime">
+						<a guid='xss-ds-d'><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+						<a><span>9:00</span><span class="icon-price">100</span></a>
+					</div>
+				</li>
+			</ul>
+		</div>
+	</body>
+</html>

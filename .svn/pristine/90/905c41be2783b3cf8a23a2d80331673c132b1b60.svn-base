@@ -1,0 +1,234 @@
+package com.zqkj.service.impl;
+
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
+import com.zqkj.entity.IntroductionEntity;
+import com.zqkj.entity.TeatimeGroupByEntity;
+import com.zqkj.remote.service.OrderService;
+import com.zqkj.remote.service.UserService;
+import com.zqkj.remote.service.WxService;
+import com.zqkj.service.IntroductionService;
+import com.zqkj.utils.BaseContentHandler;
+import com.zqkj.utils.Content;
+import com.zqkj.utils.R;
+import com.zqkj.utils.StringUtil;
+import com.zqkj.utils.wxtemplate.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.zqkj.dao.mapper.TeatimeDao;
+import com.zqkj.entity.TeatimeEntity;
+import com.zqkj.service.TeatimeService;
+import tk.mybatis.mapper.entity.Example;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
+
+/**
+ * 
+ * 
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-01-14 11:14:20
+ */
+@Service("teatimeService")
+public class TeatimeServiceImpl extends BaseServiceImpl<TeatimeDao, TeatimeEntity> implements TeatimeService {
+
+    @Autowired
+    private IntroductionService introductionService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private WxService wxService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private HttpServletRequest request;
+
+
+    @Override
+    public R introductionCallback(TeatimeEntity teatimeEntity) {
+        System.out.println("进入回调");
+        //查询订单
+        String orderRemark = "";
+        String order = orderService.selectOne(teatimeEntity.getOrderGuid());
+        JSONObject orderJson = new JSONObject(order);
+        String introductionGuid = "";
+        int buySum = 1;//订购数量
+        String serialNumber = "";//流水号
+        if(orderJson.getInt("code") == 0){
+            System.out.println("查询订单成功");
+            JSONObject jsonData = new JSONObject(orderJson.getStr("data"));
+            introductionGuid = jsonData.getStr("goodsGuid");
+            teatimeEntity.setDate(jsonData.getStr("date"));
+            teatimeEntity.setTime(jsonData.getStr("time"));
+            teatimeEntity.setPrice(jsonData.getInt("price"));
+            teatimeEntity.setUserGuid(jsonData.getStr("creator"));
+            buySum = jsonData.getInt("buySum");
+            serialNumber = jsonData.getStr("serialNumber");
+            if(!StringUtil.isEmpty(jsonData.getStr("remark"))){
+                orderRemark = jsonData.getStr("remark");
+            }
+        }
+        IntroductionEntity introductionEntity = introductionService.selectOneByGuid(introductionGuid);
+        /*teatimeEntity.setIntroductionGuid(introductionEntity.getGuid());
+        teatimeEntity.setType(1);
+        teatimeEntity.setState(2);
+        int nRet = insertSelective(teatimeEntity);
+        if(nRet > 0){*/
+            //微信公众号消息推送
+            String user = userService.selectOne(teatimeEntity.getUserGuid());   //获取用户信息
+            String openId = "";
+            String userName = "";
+            String userPhone = "";
+            JSONObject userJson = new JSONObject(user);
+            if(userJson.getInt("code") == 0){
+                JSONObject userData = new JSONObject(userJson.getStr("data"));
+                openId = userData.getStr("openid");
+                userName = userData.getStr("name");
+                userPhone = userData.getStr("phone");
+            }
+
+            JSONObject accessTokenJson = new JSONObject(wxService.getAccessToken());    //获取accessToken
+            String accessToken = accessTokenJson.getStr("data");
+
+            String date = "";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); //制定输出格式
+            try {
+                date = sdf.format(sdf.parse(teatimeEntity.getDate()));
+            }catch (Exception e){
+                System.out.println("时间格式转换异常");
+            }
+            String pushDate = date + " "+teatimeEntity.getTime();
+            //设置消息模板
+            TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+            //根据具体模板参数组装
+            params.put("first", WechatTemplate.item("您好，您下单成功，待确认。", "#000000"));
+            /*params.put("type", WechatTemplate.item("旅行社", "#000000"));
+            params.put("name", WechatTemplate.item("九洲高尔夫", "#000000"));
+            params.put("productType", WechatTemplate.item("服务", "#000000"));
+            params.put("serviceName", WechatTemplate.item(introductionEntity.getName(), "#000000"));
+            params.put("time", WechatTemplate.item(date +" "+teatimeEntity.getTime(), "#000000"));
+            params.put("remark", WechatTemplate.item("如有疑问，请咨询：" + introductionEntity.getPhone(), "#000000"));*/
+            params.put("keyword1", WechatTemplate.item(serialNumber, "#000000"));//订单流水号
+            params.put("keyword2", WechatTemplate.item(introductionEntity.getName(), "#000000"));//球场名称
+            params.put("keyword3", WechatTemplate.item(pushDate, "#000000"));//预定时间
+            WechatTemplate wechatTemplate = new WechatTemplate();
+            wechatTemplate.setTemplate_id("aRpWWBvn2f818lI9LwtK4sLZYSmkDBiLGDzrSPuQLmk");   //微信模板id
+            wechatTemplate.setTouser(openId); //openId
+            wechatTemplate.setUrl(request.getScheme()+"://"+ request.getServerName() + "/wap/business/alone_order_list.html");
+            wechatTemplate.setData(params);
+            String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+            System.out.println("执行成功");
+
+
+            //单独给领导发送订单通知
+            //oEHsgw37cbGxPa18O_ILA3e-C3wM   燕姐
+            //oEHsgwzCt5KsqjcFjMF5OOrXsM4Q   晖哥
+            noticeLeader(introductionEntity.getName(),serialNumber,accessToken,userName,buySum,"oEHsgw37cbGxPa18O_ILA3e-C3wM",pushDate,userPhone,orderRemark);
+            noticeLeader(introductionEntity.getName(),serialNumber,accessToken,userName,buySum,"oEHsgwzCt5KsqjcFjMF5OOrXsM4Q",pushDate,userPhone,orderRemark);
+            return R.ok().putData(teatimeEntity);
+        /*}else{
+            System.out.println("执行失败");
+            return R.error(Content.STATUS_CODE_5004,"插入失败！");
+        }*/
+    }
+
+    @Override
+    public List<TeatimeEntity> selectList(TeatimeEntity teatimeEntity) {
+        return dao.selectList(teatimeEntity);
+    }
+
+    @Override
+    public R setUpDateTime(String mapstr,String introductionGuid,Integer type) {
+        //参数字符串转map
+        Gson gson = new Gson();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map = gson.fromJson(mapstr, map.getClass());
+        //type 1开启  2关闭
+        if(type == 1){
+            //循环map
+            for(Map.Entry<String, Object> entry : map.entrySet()){
+                String mapKey = entry.getKey();
+                //循环value
+                ArrayList mapValue = (ArrayList) entry.getValue();
+                for(int i=0;i<mapValue.size();i++){
+                    //直接删除
+                    Example teatimeDel = new Example(getClazz());
+                    Example.Criteria criteriaTeatimeDel = teatimeDel.createCriteria();
+                    criteriaTeatimeDel.andEqualTo("introductionGuid", introductionGuid);//场地guid
+                    criteriaTeatimeDel.andEqualTo("type", "2");//类型2  场地时间段关闭的
+                    criteriaTeatimeDel.andEqualTo("date", mapKey);//日期
+                    criteriaTeatimeDel.andEqualTo("time", mapValue.get(i).toString());//时间
+                    deleteByExample(teatimeDel);
+                }
+            }
+            return R.ok();
+        }else if(type == 2){
+            //循环map
+            for(Map.Entry<String, Object> entry : map.entrySet()){
+                String mapKey = entry.getKey();
+                //循环value
+                ArrayList mapValue = (ArrayList) entry.getValue();
+                for(int i=0;i<mapValue.size();i++){
+                    //查询这个时间段是否设置关闭，有设置不操作，没有进行插入
+                    TeatimeEntity teatimeEntity = new TeatimeEntity();
+                    teatimeEntity.setTime(mapValue.get(i).toString());
+                    teatimeEntity.setDate(mapKey);
+                    teatimeEntity.setIntroductionGuid(introductionGuid);
+                    teatimeEntity.setType(2);
+                    teatimeEntity.setUserGuid(BaseContentHandler.getUserGuid());
+                    int timeCount = selectCount(teatimeEntity);
+                    if(timeCount == 0){
+                        teatimeEntity.setState(0);
+                        insertSelective(teatimeEntity);
+                    }
+                }
+            }
+            return R.ok();
+        }else{
+            return R.error(Content.STATUS_CODE_5006,"类型错误");
+        }
+    }
+
+    @Override
+    public List<TeatimeGroupByEntity> selectDateTimeGroupBy(String startDate,String endDate,String introductionGuid,Integer type) {
+        Map map = new HashMap();
+        map.put("startDate",startDate);
+        map.put("endDate",endDate);
+        map.put("introductionGuid",introductionGuid);
+        map.put("type",type);
+        return dao.selectDateTimeGroupBy(map);
+    }
+
+
+    public String noticeLeader(String productsName,String serialNumber,String accessToken,String userName,Integer sum, String openId,String pushDate,String phone,String orderRemark){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(new Date());
+        //设置消息模板
+        TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+        //根据具体模板参数组装
+        /*params.put("first", WechatTemplate.item("用户订场成功！！", "#000000"));
+        params.put("keyword1", WechatTemplate.item(productsName, "#000000"));
+        params.put("keyword2", WechatTemplate.item(serialNumber, "#000000"));
+        params.put("remark", WechatTemplate.item(userName+"预定"+productsName+"球场，"+pushDate+"开球", "#000000"));*/
+        params.put("first", WechatTemplate.item("有新预定请及时处理", "#000000"));   //标题
+        params.put("keyword1", WechatTemplate.item(serialNumber, "#000000"));           //订单编号
+        params.put("keyword2", WechatTemplate.item(userName+"预定"+productsName+"，开球时间："+pushDate+"，预订人电话："+phone+",击球人信息："+userName+","+orderRemark, "#000000")); //详情
+        WechatTemplate wechatTemplate = new WechatTemplate();
+        wechatTemplate.setTemplate_id("TP_EHQ50gpwDmjndVVHobMoadk4bKVLqWSDTvXXqbfE");   //微信模板id
+        wechatTemplate.setTouser(openId); //openId
+        wechatTemplate.setUrl("http://wap.oneagles.com/admin/wap/H5_order_list.html");
+        wechatTemplate.setData(params);
+        String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+        return code;
+    }
+}

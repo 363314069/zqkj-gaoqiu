@@ -1,0 +1,26 @@
+package com.zqkj.service;
+
+import com.zqkj.entity.ReservationdateEntity;
+
+import java.util.List;
+
+/**
+ * 
+ * 
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-01-14 11:09:36
+ */
+public interface ReservationdateService extends BaseService<ReservationdateEntity> {
+
+    //根据条件查询订场设置包含时间表信息
+	public List<ReservationdateEntity> selectReservationdateList(ReservationdateEntity reservationdateEntity);
+
+
+    //批量修改添加
+    public List<ReservationdateEntity> updateReservationdateList(List<ReservationdateEntity> reservationdateList);
+
+
+    //批量修改添加指定日期中的周末价格
+    public List<ReservationdateEntity> updateListWeekend(ReservationdateEntity reservationdateList);
+}

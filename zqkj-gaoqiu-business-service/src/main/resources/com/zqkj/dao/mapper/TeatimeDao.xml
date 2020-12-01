@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.TeatimeDao">
+	<resultMap id="BaseResultMap" type="com.zqkj.entity.TeatimeEntity">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="GUID" property="guid" jdbcType="VARCHAR" />
+		<result column="OrganizationGuid" property="organizationGuid" jdbcType="VARCHAR" />
+		<result column="ReservationGuid" property="reservationGuid" jdbcType="VARCHAR" />
+		<result column="IntroductionGuid" property="introductionGuid" jdbcType="VARCHAR" />
+		<result column="ReservationDateGuid" property="reservationDateGuid" jdbcType="VARCHAR" />
+		<result column="UserGuid" property="userGuid" jdbcType="VARCHAR" />
+		<result column="Time" property="time" jdbcType="VARCHAR" />
+		<result column="Date" property="date" jdbcType="VARCHAR" />
+		<result column="Content" property="content" jdbcType="VARCHAR" />
+		<result column="Img" property="img" jdbcType="VARCHAR" />
+		<result column="CostPrice" property="costPrice" jdbcType="INTEGER" />
+		<result column="Price" property="price" jdbcType="INTEGER" />
+		<result column="Discount" property="discount" jdbcType="VARCHAR" />
+		<result column="Type" property="type" jdbcType="INTEGER" />
+		<result column="State" property="state" jdbcType="INTEGER" />
+		<result column="Preferential" property="preferential" jdbcType="INTEGER" />
+		<result column="CallbackUrl" property="callbackUrl" jdbcType="VARCHAR" />
+		<result column="Remark" property="remark" jdbcType="VARCHAR" />
+		<result column="Creator" property="creator" jdbcType="VARCHAR" />
+		<result column="CreateTime" property="createTime" jdbcType="VARCHAR" />
+		<result column="CheckUser" property="checkUser" jdbcType="VARCHAR" />
+		<result column="CheckTime" property="checkTime" jdbcType="VARCHAR" />
+		<result column="ExtInt" property="extInt" jdbcType="INTEGER" />
+		<result column="ExtStr" property="extStr" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID AS id,
+		GUID AS guid,
+		OrganizationGuid AS organizationGuid,
+		ReservationGuid AS reservationGuid,
+		IntroductionGuid AS introductionGuid,
+		ReservationDateGuid AS reservationDateGuid,
+		UserGuid AS userGuid,
+		Time AS time,
+		Date AS date,
+		Content AS content,
+		Img AS img,
+		CostPrice AS costPrice,
+		Price AS price,
+		Discount AS discount,
+		Type AS type,
+		State AS state,
+		Preferential AS preferential,
+		CallbackUrl AS callbackUrl,
+		Remark AS remark,
+		Creator AS creator,
+		CreateTime AS createTime,
+		CheckUser AS checkUser,
+		CheckTime AS checkTime,
+		ExtInt AS extInt,
+		ExtStr AS extStr
+	</sql>
+
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGuid != null">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="reservationGuid != null">
+				and ReservationGuid = #{reservationGuid}
+			</if>
+			<if test="introductionGuid != null">
+				and IntroductionGuid = #{introductionGuid}
+			</if>
+			<if test="reservationDateGuid != null">
+				and ReservationDateGuid = #{reservationDateGuid}
+			</if>
+			<if test="userGuid != null">
+				and UserGuid = #{userGuid}
+			</if>
+			<if test="time != null">
+				and Time = #{time}
+			</if>
+			<if test="date != null">
+				and Date &gt;=  #{date}
+			</if>
+			<if test="content != null">
+				and Content = #{content}
+			</if>
+			<if test="img != null">
+				and Img = #{img}
+			</if>
+		<if test="costPrice != null">
+			and CostPrice = #{costPrice}
+		</if>
+			<if test="price != null">
+				and Price = #{price}
+			</if>
+			<if test="discount != null">
+				and Discount = #{discount}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="preferential != null">
+				and Preferential = #{preferential}
+			</if>
+			<if test="callbackUrl != null">
+				and CallbackUrl = #{callbackUrl}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+
+	<select id="selectList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from teatimetab
+		<where>
+			<include refid="where"/>
+		</where>
+	</select>
+
+
+
+	<resultMap id="teatimeGroupByEntity" type="com.zqkj.entity.TeatimeGroupByEntity">
+		<id property="guid" column="guid" />
+		<collection property="teatimeEntityList" ofType="com.zqkj.entity.TeatimeEntity">
+			<result property="date" column="date" />
+			<result property="time" column="time" />
+		</collection>
+	</resultMap>
+
+	<select id="selectDateTimeGroupBy" parameterType="map" resultMap="teatimeGroupByEntity">
+		SELECT Date,group_concat(Time) as time,group_concat(guid) as guid FROM teatimetab
+		where type = #{type} and date &gt;= #{startDate} and date &lt;= #{endDate} and IntroductionGuid = #{introductionGuid}  GROUP BY date
+    </select>
+</mapper>

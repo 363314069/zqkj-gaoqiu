@@ -1,0 +1,457 @@
+$(function(){
+$('legend').append(guid?'修改':'添加');
+	var reservationGuid;
+var api = {
+	list:{url:T.serverebusiness + "business/introduction/list", type:"post"},
+	info:{url:T.serverebusiness + "business/introduction/info", type:"get"},
+	save:{url:T.serverebusiness + "business/introduction/saveintroduction", type:"post"},
+	reservationList:{url:T.serverebusiness + "business/reservation/list", type:"post"},
+	update:{url:T.serverebusiness + "business/introduction/updateintroduction", type:"post"},
+	uploadFile:{url:T.serverebusiness + "/business/common/uploadimage",type:"post"},
+	paramInfo:{url:T.serverebusiness + "security/param/info", type:"post"},
+	paramList:{url:T.serverebusiness + "security/param/list",type:"post"},
+	couponsList:{url:T.serverebusiness + "business/coupons/orgcouponslist",type:"post"},
+	couponsactmapList:{url:T.serverebusiness + "business/couponsactmap/list",type:"post"}
+};
+layui.use('form', function() {
+	var laydate = layui.laydate;
+	var form = layui.form,
+		layer = layui.layer, upload = layui.upload;
+
+	//执行实例
+	var uploadInst = upload.render({
+		elem: '#imgs', //绑定元素
+		accept: 'file',
+		size: 307200,
+		url: api.uploadFile.url, //上传接口
+		method: 'POST',
+		done: function (res) {
+			//上传完毕回调
+			layer.alert("上传成功！", {
+				icon: 1,
+				title: "提示"
+			});
+			$("#img").val(res.data);
+			$('#upload-normal-img').attr("src", T.serverebusiness + res.data);
+		}
+		, error: function (res) {
+			//请求异常回调
+			layer.alert("后台出错", {
+				icon: 2,
+				title: "提示"
+			});
+		}
+	});
+
+	form.on('select(cycleSetting)', function (data) {
+		$("#cycleSettingDate").val("");
+		form.render();
+	});
+
+	form.on('submit(save)', function(data) {
+		var startEnds = new Array();
+		var intervals = new Array();	//间隔分钟
+		var costPrices = new Array();	//原价
+		var prices = new Array();		//价格
+		var discounts = new Array();	//折扣
+		var peopleNumbers = new Array();	//人数
+		$("input[name='startEnd']").each(function() {
+			startEnds.push($(this).val())
+		});
+		$("input[name='intervals']").each(function() {
+			intervals.push($(this).val())
+		});
+		$("input[name='costPrices']").each(function() {
+			costPrices.push($(this).val())
+		});
+		$("input[name='prices']").each(function() {
+			prices.push($(this).val())
+		});
+		$("input[name='discounts']").each(function() {
+			discounts.push($(this).val())
+		});
+		$("input[name='peopleNumber']").each(function() {
+			peopleNumbers.push($(this).val())
+		});
+
+
+		if(startEnds.length < 1){
+			alert("请设置时间段");
+			return false;
+		}
+		data.field.price = Math.min.apply(null, prices);
+		if(data.field.price <= 0){
+			alert("时间段金额必须大于0元");
+			return false;
+		}
+
+		var  params = new Array();
+		for(var i = 0; i < startEnds.length; i++){
+			var object = {};
+			object['startTime'] = startEnds[i].split(" - ")[0];	//时间段起始时间
+			object['endTime'] = startEnds[i].split(" - ")[1];	//时间段结束时间
+			object['interval'] = intervals[i];	//间隔分钟
+			object['state'] = 0;	//状态
+			object['costPrice'] = parseInt(costPrices[i]*100);	//原价
+			object['price'] = parseInt(prices[i]*100);	//价格
+			//object['discount'] = discounts[i];	//折扣
+			object['discount'] = 0; //折扣
+
+
+			object['peopleNumber'] = peopleNumbers[i];	//人数
+			params.push(object);
+		}
+		var json = JSON.stringify(params);//JSON.stringify() 方法用于将 JavaScript 值转换为 JSON 字符串。
+
+		var type = api.save.type;
+		var url = api.save.url;
+		if (guid) {
+			type = api.update.type;
+			url = api.update.url;
+		}
+		if(!isNull(data.field.state))
+			data.field.state = 0;
+		else 
+			data.field.state = 1;
+
+		if(!isNull(data.field.preferential))
+			data.field.preferential = 0;
+		else
+			data.field.preferential = 1;
+
+
+		if(!isNull(data.field.goldSum)){
+			data.field.goldSum = 0;
+		}
+
+		if(data.field.type == 2){
+			if(data.field.goldSum > 0){
+				alert("特惠产品不可使用金币");
+				return false;
+			}
+		}
+
+		if(parseInt(data.field.goldSum*100) >= parseInt(data.field.price*100)){
+			alert("可用金币不能大于等于时间段最小金额");
+			return false;
+		}
+
+		data.field.timeJson = json;
+		data.field.price = parseInt(data.field.price*100);
+
+		//获取费用包含的复选框选择的值
+		var priceInclude = new Array();
+		$("input[name='priceInclude']:checked").each(function() {
+			priceInclude.push($(this).val());
+		});
+        data.field.priceInclude = priceInclude.toString();
+
+
+        var preferentialList = new Array();
+        $("input[name='preferentialList']:checked").each(function() {
+            preferentialList.push($(this).val());
+        });
+        data.field.preferentialList = preferentialList;
+
+		$.ajax({
+			type : type,
+			url : url,
+			data : JSON.stringify(data.field),
+			contentType : 'application/json;charset=utf-8',
+			success : function(r) {
+				if (r.code === 0) {
+					alert('操作成功', function(index) {
+						$.back();
+					});
+				} else {
+					alertMsg(r);
+				}
+			}
+		});
+		return false;
+	});
+
+	laydate.render({
+		elem: '#startTime' //或 elem: document.getElementById('test')、elem: lay('#test') 等
+		,type: 'datetime'
+	});
+	laydate.render({
+		elem: '#endTime' //或 elem: document.getElementById('test')、elem: lay('#test') 等
+		,type: 'datetime'
+	});
+
+	laydate.render({
+		elem: '#preferentialDate' //或 elem: document.getElementById('test')、elem: lay('#test') 等
+		,type: 'date'
+		,done: function(value, date, endDate){
+			if($("#cycleSetting").val() == 1){
+				var arr = $("#cycleSettingDate").val().split(",");
+				if($.inArray("0123456".charAt(new Date(value).getDay()), arr) < 0){
+					$("#cycleSettingDate").val((isNull($("#cycleSettingDate").val())?$("#cycleSettingDate").val()+",":"")+"0123456".charAt(new Date(value).getDay()));
+				}
+			}else{
+				$("#cycleSettingDate").val((isNull($("#cycleSettingDate").val())?$("#cycleSettingDate").val()+",":"")+value);
+			}
+			form.render();
+		}
+	});
+
+	$('#back').on('click', function(data) {
+		$.back();
+	});
+
+	//监听优惠券是否启用
+	form.on('switch(preferential)', function (data) {
+		if(data.elem.checked){
+			$("#couponsList").show();
+			//查询商家优惠券关联表数据
+			$.ajax({
+				type:api.couponsList.type,
+				url:api.couponsList.url,
+				success:function (r) {
+					$.each(r.data,function (i, obj) {
+						$("#coupons").append('<input type="checkbox" name="preferentialList" title="'+obj.name+'" id="coupons-'+obj.guid+'" value="'+obj.guid+'"><div class="layui-unselect layui-form-checkbox"><span>'+obj.name+'</span><i class="layui-icon layui-icon-ok"></i></div>');
+					});
+					form.render();
+				}
+			});
+		}else{
+			$("#coupons").empty();
+			$("#couponsList").hide();
+			form.render();
+		}
+	});
+
+	if(guid){
+		var priceInclude;
+		$.ajax({
+			type : api.info.type,
+			url : api.info.url,
+			data : {t:(new Date()), guid:guid},
+			async : true,
+			success : function(r) {
+				if(r.code == 0 && r.data){
+					reservationGuid = r.data.reservationGuid;
+					$("#upload-normal-img").attr("src",T.serverebusiness + r.data.img);
+					r.data.price = r.data.price/100;
+					if(isNull(r.data.priceInclude)){
+						priceInclude = r.data.priceInclude.split(",");
+					}
+					if(parseInt(r.data.preferential) == 1){  //0表示不用优惠券  1表示启用优惠券
+						$("#couponsList").show();
+						//加载优惠券选择的优惠券
+						$.ajax({
+							type:api.couponsList.type,
+							url:api.couponsList.url,
+							async : true,
+							success:function (r) {
+								$.each(r.data,function (i, obj) {
+									$("#coupons").append('<input type="checkbox" name="preferentialList" title="'+obj.name+'" id="coupons-'+obj.guid+'" value="'+obj.guid+'"><div class="layui-unselect layui-form-checkbox"><span>'+obj.name+'</span><i class="layui-icon layui-icon-ok"></i></div>');
+								});
+								form.render();
+							}
+						});
+
+						//加载我已经选择的优惠券
+						$.ajax({
+							type : api.couponsactmapList.type,
+							url : api.couponsactmapList.url,
+							data : {t:(new Date()), activityGuid:guid},
+							async : true,
+							success : function(r) {
+								if(r.code == 0 && r.data){
+									$.each(r.data,function (i, obj) {
+										$('#coupons-'+obj.couponsGuid).attr("checked",'true');
+									});
+									form.render();
+								} else {
+									alertMsg(r);
+								}
+							}
+						});
+					}
+
+					form.val("form", r.data);
+					traverseTime(r.data.timeJson);
+					form.render();
+				} else {
+					alertMsg(r);
+				}
+			}
+		});
+
+		//加载参数表 费用包含参数
+		$.ajax({
+			type : api.paramInfo.type,
+			url : api.paramInfo.url,
+			data : {t:(new Date()), key:100000},
+			async : true,
+			success : function(r) {
+				if(r.code == 0 && r.data){
+					$.ajax({
+						type : api.paramList.type,
+						url : api.paramList.url,
+						data : {t:(new Date()), parentId:r.data.id},
+						success : function(r) {
+							if(r.code == 0 && r.data){
+								$.each(r.data,function (i, obj) {
+									if(isNull(priceInclude)){
+										if(priceInclude.lastIndexOf(obj.guid) != -1){
+											$("#include").append('<input type="checkbox" name="priceInclude" title="'+obj.name+'" value="'+obj.guid+'" checked><div class="layui-unselect layui-form-checkbox"><span>'+obj.name+'</span><i class="layui-icon layui-icon-ok"></i></div>');
+										}else{
+											$("#include").append('<input type="checkbox" name="priceInclude" title="'+obj.name+'" value="'+obj.guid+'"><div class="layui-unselect layui-form-checkbox"><span>'+obj.name+'</span><i class="layui-icon layui-icon-ok"></i></div>');
+										}
+									}else{
+										$("#include").append('<input type="checkbox" name="priceInclude" title="'+obj.name+'" value="'+obj.guid+'"><div class="layui-unselect layui-form-checkbox"><span>'+obj.name+'</span><i class="layui-icon layui-icon-ok"></i></div>');
+									}
+								});
+								form.render();
+							} else {
+								alertMsg(r);
+							}
+						}
+					});
+				} else {
+					alertMsg(r);
+				}
+			}
+		});
+	}else{
+		//加载参数表 费用包含参数
+		$.ajax({
+			type : api.paramInfo.type,
+			url : api.paramInfo.url,
+			data : {t:(new Date()), key:100000},
+			success : function(r) {
+				if(r.code == 0 && r.data){
+					$.ajax({
+						type : api.paramList.type,
+						url : api.paramList.url,
+						data : {t:(new Date()), parentId:r.data.id},
+						success : function(r) {
+							if(r.code == 0 && r.data){
+								$.each(r.data,function (i, obj) {
+									if(obj.type == 1){
+										$("#include").append('<input type="checkbox" name="priceInclude" title="'+obj.name+'" value="'+obj.guid+'" checked><div class="layui-unselect layui-form-checkbox"><span>'+obj.name+'</span><i class="layui-icon layui-icon-ok"></i></div>');
+									}else{
+										$("#include").append('<input type="checkbox" name="priceInclude" title="'+obj.name+'" value="'+obj.guid+'"><div class="layui-unselect layui-form-checkbox"><span>'+obj.name+'</span><i class="layui-icon layui-icon-ok"></i></div>');
+									}
+								});
+								form.render();
+							} else {
+								alertMsg(r);
+							}
+						}
+					});
+				} else {
+					alertMsg(r);
+				}
+			}
+		});
+	}
+
+
+	//加载球场信息
+	$.ajax({
+		type : api.reservationList.type,
+		url : api.reservationList.url,
+		data : {organizationGuid : T.usermsg.organizationGuid},
+		success : function(r) {
+			if(r.code == 0 && r.data){
+				if(!isNull(reservationGuid)){
+					$.each(r.data , function (i, obj) {
+						$('#reservationGuid').append('<option value="'+obj.guid+'" selected="selected">'+obj.name+'</option>');
+					});
+				}else{
+					if(!isNull(r.data)){
+						alert('还未设置球场信息，需要先进行球场设置再进行场地设置', function(index) {
+							$.back();
+						});
+					}
+					$.each(r.data , function (i, obj) {
+						if(obj.guid == reservationGuid){
+							$('#reservationGuid').append('<option value="'+obj.guid+'" selected="selected">'+obj.name+'</option>');
+						}else{
+							$('#reservationGuid').append('<option value="'+obj.guid+'">'+obj.name+'</option>');
+						}
+					});
+				}
+				form.render('select');
+			} else {
+				alertMsg(r);
+			}
+		}
+	});
+
+	// 添加按钮事件
+	$(".formadd").on("click", function() {
+		var div1 = $('<div class="layui-form-item">');
+		var div1_1 = $('<div class="layui-inline">');
+		var div1_2 = $('<div class="layui-inline">');
+		var div1_3 = $('<div class="layui-inline">');
+		var div1_4 = $('<div class="layui-inline">');
+		var div1_5 = $('<div class="layui-inline" style="display: none">');
+		var div1_6 = $('<div class="layui-inline">');
+		var but = $('<button type="button" class="layui-btn layui-btn-sm layui-btn-normal editdelete" ><i class="layui-icon"></i> 删除</button>');
+		div1_1.append('<label class="layui-form-label">时间段</label><div class="layui-input-inline"><input type="text" lay-verify="required" name="startEnd" id="startEnd"  autocomplete="off" class="layui-input startEnd"></div>');
+		div1_2.append('<label class="layui-form-label">间隔分钟</label><div class="layui-input-inline"><input type="text" lay-verify="required" name="intervals"  autocomplete="off" class="layui-input"></div>');
+		div1_3.append('<label class="layui-form-label">价格</label><div class="layui-input-inline"><input type="text" lay-verify="required" name="prices"  autocomplete="off" class="layui-input"></div>');
+		div1_4.append('<label class="layui-form-label">原价</label><div class="layui-input-inline"><input type="text" lay-verify="required" name="costPrices"  autocomplete="off" class="layui-input"></div>');
+		div1_5.append('<label class="layui-form-label">折扣</label><div class="layui-input-inline"><input type="text" name="discounts" autocomplete="off" class="layui-input"></div>')
+		div1_6.append('<label class="layui-form-label">人数</label><div class="layui-input-inline"><input type="text" lay-verify="required" name="peopleNumber" autocomplete="off" class="layui-input"></div>')
+		div1.append(div1_1).append(div1_2).append(div1_3).append(div1_4).append(div1_5).append(div1_6).append(but);
+		$("#timeJsons").append(div1);
+
+		// 删除按钮事件
+		$(".editdelete").on("click", function() {
+			$(this).parent().remove();
+		});
+
+		lay('.startEnd').each(function() {
+			laydate.render({
+				elem: this
+				,type: 'time'
+				,format: 'HH:mm'
+				,range: true
+			});
+		});
+	});
+
+	function traverseTime(timeJsonStr) {
+		var timeJson=eval(timeJsonStr);
+		for(var i=0; i<timeJson.length ;i++){
+			var div1 = $('<div class="layui-form-item">');
+			var div1_1 = $('<div class="layui-inline">');
+			var div1_2 = $('<div class="layui-inline">');
+			var div1_3 = $('<div class="layui-inline">');
+			var div1_4 = $('<div class="layui-inline">');
+			var div1_5 = $('<div class="layui-inline" style="display: none">');
+			var div1_6 = $('<div class="layui-inline">');
+			var but = $('<button type="button" class="layui-btn layui-btn-sm layui-btn-normal editdelete" ><i class="layui-icon"></i> 删除</button>');
+			div1_1.append('<label class="layui-form-label">时间段</label><div class="layui-input-inline"><input type="text" lay-verify="required" value="'+timeJson[i].startTime+' - '+timeJson[i].endTime+'" name="startEnd" id="startEnd"  autocomplete="off" class="layui-input startEnd"></div>');
+			div1_2.append('<label class="layui-form-label">间隔分钟</label><div class="layui-input-inline"><input type="text" lay-verify="required" value="'+timeJson[i].interval+'" name="intervals"  autocomplete="off" class="layui-input"></div>');
+			div1_3.append('<label class="layui-form-label">价格</label><div class="layui-input-inline"><input type="text" lay-verify="required" value="'+timeJson[i].price/100+'" name="prices"  autocomplete="off" class="layui-input"></div>');
+			div1_4.append('<label class="layui-form-label">原价</label><div class="layui-input-inline"><input type="text" lay-verify="required" value="'+timeJson[i].costPrice/100+'" name="costPrices" autocomplete="off" class="layui-input"></div>');
+			div1_5.append('<label class="layui-form-label">折扣</label><div class="layui-input-inline"><input type="text" value="'+timeJson[i].discount+'" name="discounts" autocomplete="off" class="layui-input"></div>')
+			div1_6.append('<label class="layui-form-label">人数</label><div class="layui-input-inline"><input type="text" lay-verify="required" value="'+timeJson[i].peopleNumber+'" name="peopleNumber" autocomplete="off" class="layui-input"></div>')
+			div1.append(div1_1).append(div1_2).append(div1_3).append(div1_4).append(div1_5).append(div1_6).append(but);
+			$("#timeJsons").append(div1);
+
+			// 删除按钮事件
+			$(".editdelete").on("click", function() {
+				$(this).parent().remove();
+			});
+
+			lay('.startEnd').each(function() {
+				laydate.render({
+					elem: this
+					,type: 'time'
+					,format: 'HH:mm'
+					,range: true
+				});
+			});
+		}
+	}
+	form.render();
+});
+});

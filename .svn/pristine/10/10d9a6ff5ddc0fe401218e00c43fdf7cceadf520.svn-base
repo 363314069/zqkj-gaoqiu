@@ -1,0 +1,34 @@
+package com.zqkj.service;
+
+import com.zqkj.entity.CouponsEntity;
+import com.zqkj.entity.CouponsuserEntity;
+import com.zqkj.utils.R;
+
+import java.util.List;
+
+/**
+ * 
+ * 优惠券用户关联
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-03-23 14:30:22
+ */
+public interface CouponsuserService extends BaseService<CouponsuserEntity> {
+
+    //支付订单绑定优惠券
+    public R payOrderBindingCoupons(String jsonStr);
+
+    //查询用户在某个商品中可以使用的优惠券
+    public List<CouponsuserEntity> selectCouponsUserAct(String actGuid);
+
+
+    //取消订单，取消该订单绑定的优惠券
+    public R cancelOrderCoupons(String orderGuid);
+
+
+    //抢购优惠券回调
+    public Integer activityCallback(String userGuid, String activityGuid,String orderGuid, Integer sum);
+
+    //取消订单，取消该订单绑定的优惠券
+    public List<CouponsEntity> selectUserCoupons(Integer state);
+}

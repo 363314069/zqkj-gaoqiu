@@ -1,0 +1,29 @@
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Title</title>
+    <script src="/wap/common/js/jquery/jquery-1.8.0.min.js"></script>
+    <script src="/wap/common/js/cookie/js.cookie.min.js"></script>
+</head>
+<body ontouchstart class="weui-wepay-pay-wrap">
+<input type="hidden" id="state" value="${state}">
+</body>
+<script type="text/javascript">
+</script>
+</html>
+<script type="text/javascript">
+
+    if($("#state").val() == 1){//1登录成功跳转订单页面   2未绑定跳转到登录页面
+        sessionStorage.setItem('token', '${token}');
+        sessionStorage.setItem("usermsg", '${user}');
+        location.href = "/admin/wap/H5_order_list.html";
+    }else{
+        //未绑定跳转网页版登录
+        location.href = "/admin/wap/login.html";
+    }
+
+    //判断是否为空
+    function isNull(data) {
+        return (data == "" || data == undefined || data == null || data == 'null') ? false : true;
+    }
+</script>

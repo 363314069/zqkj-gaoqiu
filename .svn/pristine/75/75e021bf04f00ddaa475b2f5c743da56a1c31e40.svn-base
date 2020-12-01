@@ -1,0 +1,67 @@
+package com.zqkj.controller;
+
+import com.zqkj.utils.R;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.zqkj.entity.CouponsuserEntity;
+import com.zqkj.service.CouponsuserService;
+
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
+/**
+ * 
+ * 优惠券用户关联
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-03-23 14:30:22
+ */
+@Controller
+@RequestMapping("/business/couponsuser")
+@Api(value = "", tags = { "business/couponsuser " })
+public class CouponsuserController extends BaseController<CouponsuserService, CouponsuserEntity> {
+
+    @ResponseBody
+    @RequestMapping(value = "/orderbindingcoupons", method = {RequestMethod.POST})
+    @ApiOperation(value = "支付订单绑定优惠券", notes = "参数为json字符串")
+    public R payOrderBindingCoupons(@RequestBody String jsonStr) {
+        return service.payOrderBindingCoupons(jsonStr);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/couponsUserAct", method = {RequestMethod.POST})
+    @ApiOperation(value = "查询用户在某个商品中可以使用的优惠券", notes = "参数为json字符串")
+    public R selectCouponsUserAct(String actGuid) {
+        return R.ok().putData(service.selectCouponsUserAct(actGuid));
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/cancelordercoupons", method = {RequestMethod.POST})
+    @ApiOperation(value = "取消订单，取消该订单绑定的优惠券", notes = "订单guid")
+    public R cancelOrderCoupons(@RequestBody String orderGuid) {
+        return service.cancelOrderCoupons(orderGuid);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/activitycallback", method = {RequestMethod.POST,RequestMethod.GET})
+    @ApiOperation(value = "抢购优惠券回调", notes = "userGuid activityGuid")
+    public R activityCallback(String creator, String goodsGuid, String orderGuid, Integer sum) {
+        Integer count = service.activityCallback(creator,goodsGuid,orderGuid,sum);
+        return R.ok().putData(count);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/selectusercoupons", method = {RequestMethod.POST,RequestMethod.GET})
+    @ApiOperation(value = "查询用户的优惠券")
+    public R selectUserCoupons(Integer state) {
+        return R.ok().putData(service.selectUserCoupons(state));
+    }
+}

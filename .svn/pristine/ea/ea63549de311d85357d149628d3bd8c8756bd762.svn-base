@@ -1,0 +1,350 @@
+package com.zqkj.service.impl;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.zqkj.entity.ActivitycouponsEntity;
+import com.zqkj.entity.CouponsEntity;
+import com.zqkj.entity.CouponsactmapEntity;
+import com.zqkj.service.ActivitycouponsService;
+import com.zqkj.service.CouponsService;
+import com.zqkj.service.CouponsactmapService;
+import com.zqkj.utils.BaseContentHandler;
+import com.zqkj.utils.Content;
+import com.zqkj.utils.R;
+import com.zqkj.utils.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.zqkj.dao.mapper.CouponsuserDao;
+import com.zqkj.entity.CouponsuserEntity;
+import com.zqkj.service.CouponsuserService;
+import tk.mybatis.mapper.entity.Example;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+
+/**
+ * 
+ * 
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-03-23 14:30:22
+ */
+@Service("couponsuserService")
+public class CouponsuserServiceImpl extends BaseServiceImpl<CouponsuserDao, CouponsuserEntity> implements CouponsuserService {
+
+    @Autowired
+    private CouponsService couponsService;
+
+    @Autowired
+    private CouponsactmapService couponsactmapService;
+
+    @Autowired
+    private ActivitycouponsService activitycouponsService;
+
+    @Override
+    public R payOrderBindingCoupons(String jsonStr) {
+        JSONObject jsonObject = JSONObject.parseObject(jsonStr);
+        String orderGuid = jsonObject.getString("orderGuid");//订单guid
+        Integer orderMoney = jsonObject.getInteger("orderMoney");//订单金额
+        JSONArray couponsUserGuids = jsonObject.getJSONArray("couponsUserGuid");//用户关联优惠券表guid数组
+        Integer unitPrice = jsonObject.getInteger("unitPrice");//单价GUID
+        unitPrice = (unitPrice == null ? 0 : unitPrice);
+        List<String> guidListCouponsuser = new ArrayList<String>();
+        for(int i=0;i<couponsUserGuids.size();i++){
+            guidListCouponsuser.add(couponsUserGuids.get(i).toString());
+        }
+
+        //先修改这些要使用的优惠券
+        CouponsuserEntity couponsuserUpdate = new CouponsuserEntity();
+        couponsuserUpdate.setIfUse(1);//已使用
+        couponsuserUpdate.setOrderGuid(orderGuid);//绑定订单guid
+        Example exampleCouponsuserUpdate = new Example(getClazz());
+        Example.Criteria criteriaCouponsuserUpdate = exampleCouponsuserUpdate.createCriteria();
+        criteriaCouponsuserUpdate.andIn("guid", guidListCouponsuser);
+        int nRetCount = updateByExampleSelective(couponsuserUpdate,exampleCouponsuserUpdate);
+        if(nRetCount <= 0){
+            return R.error(Content.STATUS_CODE_5007,"修改用户拥有的优惠券失败");
+        }
+
+        //查询用户要使用的优惠券，先查询关联的优惠券guid，再查询优惠券，然后进行金额计算，返回订单优惠后的金额
+        //根据选择的guid查询用户和优惠券关联表数据
+        Example exampleCouponsuser = new Example(getClazz());
+        Example.Criteria criteriaCouponsuser = exampleCouponsuser.createCriteria();
+        criteriaCouponsuser.andIn("guid", guidListCouponsuser);
+        List<CouponsuserEntity> listCouponsuser = selectByExample(exampleCouponsuser);
+
+        if(listCouponsuser == null || listCouponsuser.size() == 0){
+            return R.error(Content.STATUS_CODE_5007,"查询用户拥有的优惠券失败");
+        }
+
+        //获取用户和优惠券关联表数据，查询优惠券
+        List<CouponsEntity> listCoupons = new ArrayList<CouponsEntity>();
+        for(CouponsuserEntity couponsuser : listCouponsuser){
+            CouponsEntity couponsEntity = couponsService.selectOneByGuid(couponsuser.getCouponsGuid());
+            if(couponsEntity != null){
+                listCoupons.add(couponsEntity);
+            }
+        }
+
+        if(listCoupons == null || listCoupons.size() == 0){
+            return R.error(Content.STATUS_CODE_5007,"查询优惠券失败");
+        }
+        
+        //计算金额
+        Integer money = 0;
+        Integer ctypesum = 0;
+        for(CouponsEntity coupons : listCoupons){
+            if(coupons.getFaceValue() != null && coupons.getType() == 1){
+                money += coupons.getFaceValue();
+            }
+            if(coupons.getType() == 2) {
+            	money += unitPrice;
+            	ctypesum++;
+            }
+        }
+        /*
+         * 修改为大于等于
+         */
+        if(orderMoney >= money){
+            orderMoney = orderMoney - money;
+        }else{
+            return R.error(Content.STATUS_CODE_5007,"订单金额不能小于优惠金额");
+        }
+        return R.ok().putData(orderMoney).put("ctypesum", ctypesum);
+    }
+
+    @Override
+    public List<CouponsuserEntity> selectCouponsUserAct(String actGuid,String userGuid) {
+        //查询商品和优惠券的关联
+        CouponsactmapEntity couponsactmapEntity = new CouponsactmapEntity();
+        couponsactmapEntity.setActivityGuid(actGuid);//商品guid
+        List<CouponsactmapEntity> couponsactList = couponsactmapService.select(couponsactmapEntity);
+        List<String> couponsGuidList = new ArrayList<>();   //存储商品和优惠券关联的，优惠券guid
+        for(CouponsactmapEntity couponsactmap : couponsactList){
+            couponsGuidList.add(couponsactmap.getCouponsGuid());
+        }
+        List<CouponsuserEntity> couponsuserList = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        if(couponsGuidList != null && couponsGuidList.size() > 0){
+            //根据商品查询出的优惠券guids，查询优惠券
+            Example exampleCoupons = new Example(couponsService.getClazz());
+            Example.Criteria criteriaCoupons = exampleCoupons.createCriteria();
+            criteriaCoupons.andIn("guid", couponsGuidList);
+            criteriaCoupons.andGreaterThan("endTime", sdf.format(new Date()));
+            List<CouponsEntity> listCoupons = couponsService.selectByExample(exampleCoupons);
+
+            //查询用户拥有的优惠券  未使用的优惠券
+            Example exampleCouponsUser = new Example(getClazz());
+            Example.Criteria criteriaCouponsUser = exampleCouponsUser.createCriteria();
+            criteriaCouponsUser.andEqualTo("ifUse",0);
+            if(StringUtil.isEmpty(userGuid)){
+                criteriaCouponsUser.andEqualTo("userGuid",BaseContentHandler.getUserGuid());
+            }else{
+                criteriaCouponsUser.andEqualTo("userGuid",userGuid);
+            }
+            criteriaCouponsUser.andIn("couponsGuid", couponsGuidList);
+            couponsuserList = selectByExample(exampleCouponsUser);
+
+            for(CouponsuserEntity couponsuser : couponsuserList){
+                for(CouponsEntity couponsEntity : listCoupons){
+                    if(couponsuser.getCouponsGuid().equals(couponsEntity.getGuid())){
+                        couponsuser.setCouponsEntity(couponsEntity);
+                    }
+                }
+            }
+        }
+        return couponsuserList;
+    }
+
+    @Override
+    public List<CouponsuserEntity> selectUserCouponsList(String actGuid,String userGuid) {
+        //查询商品和优惠券的关联（直接查询优惠券表，优惠券表中添加关联商品guid）
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Example exampleCoupons = new Example(couponsService.getClazz());
+        Example.Criteria criteriaCoupons = exampleCoupons.createCriteria();
+        criteriaCoupons.andEqualTo("productGuid", actGuid);
+        criteriaCoupons.andGreaterThan("endTime", sdf.format(new Date()));
+        List<CouponsEntity> couponslist = couponsService.selectByExample(exampleCoupons);
+        List<String> couponsGuidList = new ArrayList<>();   //存储商品和优惠券关联的，优惠券guid
+        for(CouponsEntity entity : couponslist){
+            couponsGuidList.add(entity.getGuid());
+        }
+
+        List<CouponsuserEntity> couponsuserList = new ArrayList<>();
+        if(couponsGuidList != null && couponsGuidList.size() > 0){
+            //查询用户拥有的优惠券  未使用的优惠券
+            Example exampleCouponsUser = new Example(getClazz());
+            Example.Criteria criteriaCouponsUser = exampleCouponsUser.createCriteria();
+            criteriaCouponsUser.andEqualTo("ifUse",0);
+            if(StringUtil.isEmpty(userGuid)){
+                criteriaCouponsUser.andEqualTo("userGuid",BaseContentHandler.getUserGuid());
+            }else{
+                criteriaCouponsUser.andEqualTo("userGuid",userGuid);
+            }
+            criteriaCouponsUser.andIn("couponsGuid", couponsGuidList);
+            couponsuserList = selectByExample(exampleCouponsUser);
+            for(CouponsuserEntity couponsuser : couponsuserList){
+                for(CouponsEntity couponsEntity : couponslist){
+                    if(couponsuser.getCouponsGuid().equals(couponsEntity.getGuid())){
+                        couponsuser.setCouponsEntity(couponsEntity);
+                    }
+                }
+            }
+        }
+        return couponsuserList;
+    }
+
+    @Override
+    public R cancelOrderCoupons(String orderGuid) {
+        CouponsuserEntity couponsuserEntity = new CouponsuserEntity();
+        couponsuserEntity.setOrderGuid(orderGuid);
+        couponsuserEntity.setIfUse(1);
+        List<CouponsuserEntity> couponsuserEntityList = select(couponsuserEntity);
+        System.out.println("查询用户优惠券"+couponsuserEntityList);
+        if(couponsuserEntityList == null || couponsuserEntityList.size() == 0){
+            return R.ok().putData(orderGuid);
+        }else{
+            List<String> guidListCouponsuser = new ArrayList<String>();
+            for(CouponsuserEntity couponsuser : couponsuserEntityList){
+                guidListCouponsuser.add(couponsuser.getGuid());
+            }
+            //批量修改这些优惠券
+            //先修改这些要使用的优惠券
+            CouponsuserEntity couponsuserUpdate = new CouponsuserEntity();
+            couponsuserUpdate.setIfUse(0);//0未使用 1已使用
+            couponsuserUpdate.setOrderGuid("");//绑定订单guid
+            Example exampleCouponsuserUpdate = new Example(getClazz());
+            Example.Criteria criteriaCouponsuserUpdate = exampleCouponsuserUpdate.createCriteria();
+            criteriaCouponsuserUpdate.andIn("guid", guidListCouponsuser);
+            int nRetCount = updateByExampleSelective(couponsuserUpdate,exampleCouponsuserUpdate);
+            if(nRetCount > 0){
+                return R.ok().putData(orderGuid);
+            }else{
+                return R.error(Content.STATUS_CODE_5007,"修改用户拥有的优惠券失败");
+            }
+        }
+    }
+
+    @Override
+    public Integer activityCallback(String userGuid, String activityGuid,String orderGuid, Integer sum) {
+        //根据抢购guid查询和他关联的优惠券（查询关联表），获取所有的优惠券guid
+        ActivitycouponsEntity activitycouponsEntity = new ActivitycouponsEntity();
+        activitycouponsEntity.setActivityGuid(activityGuid);
+        List<ActivitycouponsEntity> list = activitycouponsService.select(activitycouponsEntity);
+
+        List<CouponsuserEntity> couponsuserEntityList = new ArrayList<>();
+        for(int i=0;i<sum;i++){
+            for(ActivitycouponsEntity activitycoupons : list){
+                CouponsuserEntity couponsuserEntity = new CouponsuserEntity();
+                couponsuserEntity.setIfUse(0);//0未使用
+                couponsuserEntity.setCouponsGuid(activitycoupons.getCouponsGuid());
+                couponsuserEntity.setUserGuid(userGuid);
+                couponsuserEntity.setOrderGuid(orderGuid);
+                couponsuserEntity.setType(1);
+                couponsuserEntity.setState(0);
+                couponsuserEntity.setCreator(userGuid);
+                couponsuserEntityList.add(couponsuserEntity);
+
+                //修改优惠券的领取量
+                CouponsEntity couponsUpdate = couponsService.selectOneByGuid(activitycoupons.getCouponsGuid());
+                if(couponsUpdate.getReceiveAmount() == null){
+                    couponsUpdate.setReceiveAmount(1);
+                }else{
+                    couponsUpdate.setReceiveAmount(couponsUpdate.getReceiveAmount()+1);
+                }
+                couponsService.updateByPrimaryKeySelective(couponsUpdate);
+            }
+        }
+        int countIns = 0;
+        if(couponsuserEntityList != null && couponsuserEntityList.size() > 0){
+            countIns = insertList(couponsuserEntityList);
+        }
+        return countIns;
+    }
+
+    @Override
+    public List<CouponsEntity> selectUserCoupons(Integer state,String vipCardGuid,String userGuid) {
+        CouponsuserEntity couponsuserEntity = new CouponsuserEntity();
+        if(StringUtil.isEmpty(userGuid)){
+            couponsuserEntity.setUserGuid(BaseContentHandler.getUserGuid());
+        }else{
+            couponsuserEntity.setUserGuid(userGuid);
+        }
+        if(!StringUtil.isEmpty(vipCardGuid)){
+            couponsuserEntity.setVipCardGuid(vipCardGuid);
+        }
+        if(state == 0){//0未使用  1已使用  2已过期(已过期查询未使用的优惠券，然后选出已过期的数据)
+            couponsuserEntity.setIfUse(0);
+        }else if(state == 1){
+            couponsuserEntity.setIfUse(1);
+        }else if(state == 2){
+            couponsuserEntity.setIfUse(2);
+        }
+        List<CouponsEntity> listCoupons = dao.selectCouponsGroupBy(couponsuserEntity);
+        return listCoupons;
+    }
+
+    @Override
+    public Integer membersBin(String jsonStr) {
+        cn.hutool.json.JSONObject jsonObject = new cn.hutool.json.JSONObject(jsonStr);
+        //获取传入的人员guid、 酒店类型 1：公寓酒店 10张  2：保利“N+”酒店 5张  3：涛景酒店 3张
+        String userGuid = jsonObject.getStr("userGuid");
+        Integer hotelType = jsonObject.getInt("hotelType");
+
+        //阳江涛景1张对应18洞，每人发10张    海陵岛保利1张对应36洞，每人发5张  （每人都发，直接写死优惠券GUID到程序中）
+        String couponsYJ = "4f03aeab-0c44-46d5-b39b-aecd8ce82bf2";  //阳江涛景1张对应18洞优惠券GUID
+        String couponsHLD = "98f5ce73-a457-4f87-83c7-520edf675abd"; //海陵岛保利1张对应36洞优惠券GUID
+        String couponsApartmentHotel = "95cdc32a-4ab0-4211-8bcc-7157e2892a45";  //公寓酒店优惠券GUID
+        String couponsPolyHotel = "0d2eb515-c759-4500-8322-bf1e3e666b38"; //保利“N+”酒店优惠券GUID
+        String couponsTJHotel = "a0bae99a-c443-41ef-ac6d-d9b5262da77e";  //阳江涛景酒店
+        String couponsBLMJHotel = "6b83f5b4-160c-4df1-86ce-97a36fac4a55";  //北洛秘境
+
+        //批量插入优惠券人员关联信息
+        List<CouponsuserEntity> couponsuserList = new ArrayList<>();
+        //阳江涛景1张对应18洞优惠券   10张
+        couponsuserList = forModule(couponsuserList,userGuid,couponsYJ,10);
+        //海陵岛保利1张对应36洞优惠券  5张
+        couponsuserList = forModule(couponsuserList,userGuid,couponsHLD,5);
+        //判断酒店类型 批量插入酒店优惠券人员关联信息
+        if(hotelType.equals(1)){
+            //公寓酒店 10张
+            couponsuserList = forModule(couponsuserList,userGuid,couponsApartmentHotel,10);
+        }else if(hotelType.equals(2)){
+            //保利“N+”酒店 5张
+            couponsuserList = forModule(couponsuserList,userGuid,couponsPolyHotel,5);
+        }else if(hotelType.equals(3)){
+            //涛景酒店 3张
+            couponsuserList = forModule(couponsuserList,userGuid,couponsTJHotel,3);
+        }
+        else if(hotelType.equals(4)){
+            //北洛秘境 5张
+            couponsuserList = forModule(couponsuserList,userGuid,couponsBLMJHotel,5);
+        }
+        return insertList(couponsuserList);
+    }
+
+    /**
+     * membersBin 绑定多个优惠券通用添加集合进行批量插入
+     * @param couponsuserList 返回该集合，节省处理该集合合并问题
+     * @param userGuid  用户guid
+     * @param couponsGuid   优惠券guid
+     * @param couponsCount   要绑定几张
+     * @return
+     */
+    public List<CouponsuserEntity> forModule(List<CouponsuserEntity> couponsuserList,String userGuid, String couponsGuid,int couponsCount){
+        for(int i=0;i<couponsCount;i++){
+            CouponsuserEntity couponsuserSave = new CouponsuserEntity();
+            couponsuserSave.setUserGuid(userGuid);
+            couponsuserSave.setCouponsGuid(couponsGuid);
+            couponsuserSave.setIfUse(0);
+            couponsuserSave.setType(1);
+            couponsuserSave.setState(0);
+            couponsuserList.add(couponsuserSave);
+        }
+        return couponsuserList;
+    }
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Title</title>
+    <script src="/wap/common/js/jquery/jquery-1.8.0.min.js"></script>
+    <script src="/wap/common/js/cookie/js.cookie.min.js"></script>
+</head>
+<body>
+    <input type="hidden" id="token" value="${token}">
+    <input type="hidden" id="user" value="'${user}'">
+</body>
+<script type="text/javascript">
+    $(function () {
+        sessionStorage.setItem('token', '${token}');
+        sessionStorage.setItem("usermsg", '${user}');
+        if(!isNull(sessionStorage.getItem("forwardUrl"))){
+            location.href = "/wap/business/v1.1/preferential/preferential.html?f=1";
+        }else{
+            location.href = sessionStorage.getItem("forwardUrl");
+        }
+    });
+    //判断是否为空
+    function isNull(data) {
+        return (data == "" || data == undefined || data == null || data == 'null') ? false : true;
+    }
+</script>
+</html>

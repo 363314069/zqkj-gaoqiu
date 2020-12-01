@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title></title>
+	<link rel="stylesheet" href="../../common/css/common.css">
+	<link rel="stylesheet" href="../../common/js/layui/css/layui.css">
+	<script src="../../common/js/jquery/jquery-1.8.0.min.js"></script>
+	<script src="../../common/js/cookie/js.cookie.min.js"></script>
+	<script src="../../common/js/layui/layui.all.js" defer="defer"></script>
+	<script src="../../common/js/common.js"></script>
+
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/ueditor.config.js"></script>
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/ueditor.all.min.js"> </script>
+	<!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+	<!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+	<script type="text/javascript" charset="utf-8" src="../../common/js/ueditor1_4_3_3/lang/zh-cn/zh-cn.js"></script>
+	<script type="text/javascript" charset="UTF-8" src="../../common/js/ueditor1_4_3_3/ueditor.all.js"></script>
+	<script src="js/reservation_form.js"></script>
+</head>
+<body>
+<div class="wrap">
+<fieldset id="rrapp" class="layui-elem-field">
+	<legend></legend>
+	<form class="layui-form layui-elem-field-margin" lay-filter="form">
+		<input type="hidden" name="id">
+		<input type="hidden" name="guid">
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">名称</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="name" placeholder="名称" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">联系电话</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="phone" placeholder="联系电话"/>
+		    </div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">地区</label>
+			<input type="hidden" name="addressCode" id="addressCode">
+			<div class="layui-input-inline">
+				<select class="layui-input" name="province" lay-filter="province" id="province" placeholder="省">
+				</select>
+			</div>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="city" lay-filter="city" id="city" placeholder="市">
+				</select>
+			</div>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="area" lay-filter="area" id="area" placeholder="区">
+				</select>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">详细地址</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="address" placeholder="详细地址"/>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">GPS坐标</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="coordinate" placeholder="GPS坐标"/>
+				<a href="https://lbs.qq.com/tool/getpoint/index.html" target="_blank" class="layui-btn layui-btn-xs">选择坐标</a>
+			</div>
+		</div>
+
+		<div class="layui-upload">
+			<label class="layui-form-label">图片</label>
+			<!--<button type="button" class="layui-btn" id="but">上传图片</button>--><input type="file" accept="image/*" name="imgs" id="imgs" value="" >
+			<div class="layui-upload-list">
+				<img style="width: 100px;height: 100px" id="upload-normal-img">
+				<input type="hidden"  id="img" name="img" value="" />
+				<p id="test-upload-demoText"></p>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">场地类型(丘陵场地)</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="resType" placeholder="场地类型(丘陵场地)"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">建立时间</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="resTime" id="resTime" placeholder="建立时间"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">球场面积</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="resArea" placeholder="球场面积"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">果岭草种</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="greenGrass" placeholder="果岭草种"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">球场数据</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="resData" placeholder="球场数据"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">设计师</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="designer" placeholder="设计师"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">球道长度</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="resLength" placeholder="球道长度"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">球道草种</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="fairwayGrass" placeholder="球道草种"/>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">球道详情</label>
+			<div class="layui-input-block">
+				<input type="text" class="layui-input" name="fairwayDetails" placeholder="球道详情"/>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">价格</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="price" placeholder="价格" lay-verify="required"/>
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">折扣</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="discount" placeholder="折扣"/>
+		    </div>
+		</div>
+		<!--<div class="layui-form-item">
+		   	<label class="layui-form-label">预定天数</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="days" placeholder="预定天数"/>
+		    </div>
+		</div>-->
+		<div class="layui-form-item">
+			<label class="layui-form-label">类型</label>
+			<div class="layui-input-inline">
+				<select class="layui-input" name="type" placeholder="类型">
+					<option value="1" selected="selected">默认类型</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">状态</label>
+			<div class="layui-input-inline">
+				<input type="checkbox" name="state" checked="checked" value="1" lay-skin="switch" lay-text="启用|禁用">
+			</div>
+		</div>
+		<!--<div class="layui-form-item">
+		   	<label class="layui-form-label">是否可以使用优惠券、积分等等</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="preferential" placeholder="是否可以使用优惠券、积分等等"/>
+		    </div>
+		</div>-->
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">开始时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="startTime" id="startTime" placeholder="yyyy-MM-dd" lay-verify="required" autocomplete="off" />
+		    </div>
+		</div>
+		<div class="layui-form-item">
+		   	<label class="layui-form-label">结束时间</label>
+		   	<div class="layui-input-block">
+		      <input type="text" class="layui-input" name="endTime" id="endTime" placeholder="yyyy-MM-dd" lay-verify="required" autocomplete="off" />
+		    </div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">内容</label>
+			<div class="layui-input-block">
+				<script id="content" name="content" type="text/plain">
+				       这里写你的初始化内容
+				</script>
+			</div>
+		</div>
+		<div class="layui-form-item">
+		    <div class="layui-input-block">
+		    	<a class="layui-btn" lay-submit="" lay-filter="save" yf-opt="save">立即提交</a>
+		    	<a class="layui-btn layui-btn-primary" id="back" yf-opt="back">返回</a>
+		    </div>
+		</div>
+	</form>
+</fieldset>
+</div>
+</body>
+</html>

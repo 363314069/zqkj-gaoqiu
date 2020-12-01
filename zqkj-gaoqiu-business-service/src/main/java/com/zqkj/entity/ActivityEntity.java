@@ -1,0 +1,122 @@
+package com.zqkj.entity;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.List;
+
+/**
+ * 活动表
+ */
+@Data
+@EqualsAndHashCode(callSuper=false)
+@Table(name="activitytab")
+public class ActivityEntity extends BaseEntity implements Serializable {
+	private static final long serialVersionUID = 1L;
+	/**编号**/
+	@Id
+	@GeneratedValue(generator = "JDBC")
+	@Column
+	private Integer id;
+	/**guid**/
+	@Column
+	private String guid;
+	/**活动名称**/
+	@Column
+	private String name;
+	/**前缀**/
+	@Column
+	private String prefix;
+	/**联系电话**/
+	@Column
+	private String phone;
+	/**'机构guid'**/
+	@Column
+	private String organizationGuid;
+	/**'内容'**/
+	@Column
+	private String content;
+	/**'图片'**/
+	@Column
+	private String img;
+	/**'原价'**/
+	@Column
+	private Integer originalPrice;
+	/**'价格'**/
+	@Column
+	private Integer price;
+	/**'折扣'**/
+	@Column
+	private String discount;
+	/**开始时间**/
+	@Column
+	private String startTime;
+	/**结束时间**/
+	@Column
+	private String endTime;
+	/**活动时间**/
+	@Column
+	private String date;
+	/**活动类型  0活动  1抢购  2团购  4团购（新）  5球队活动  6旅游套餐  7酒店**/
+	@Column
+	private Integer type;
+	/**产品类型 1会员卡 2抢购通用 3优惠券 **/
+	@Column
+	private Integer productType;
+	/**状态**/
+	@Column
+	private Integer state;
+	/**是否可以使用优惠券、积分...**/
+	@Column
+	private Integer preferential;
+	/**回调url**/
+	@Column
+	private String callbackUrl;
+	/**购买次数**/
+	@Column
+	private Integer buyNumber;
+	/**购买佣金金额**/
+	@Column
+	private Integer commission;
+	/**购买佣金占比**/
+	@Column
+	private String commissionProportion;
+	/**返现金币数量**/
+	@Column
+	private Integer backGoldSum;
+	/**备注**/
+	@Column
+	private String remark;
+	/**创建者**/
+	@Column
+	private String creator;
+	/**创建时间**/
+	@Column
+	private String createTime;
+	/**审核用户**/
+	@Column
+	private String checkUser;
+	/**审核时间**/
+	@Column
+	private String checkTime;
+	/**扩展整型**/
+	@Column
+	private Integer extInt;
+	/**扩展字符**/
+	@Column
+	private String extStr;
+
+	/**H5查询类型条件  0**/
+	@Transient
+	private Integer selectVal;
+
+	/**产品为优惠券，传入优惠券guid**/
+	@Transient
+	private List<ActivitycouponsEntity> activitycouponsEntityList;
+
+	/**球队活动，关联的球队**/
+	@Transient
+	private List<TeamEntity> teamEntityList;
+}

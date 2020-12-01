@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.OrganizationDao">
+	<sql id="insert_field">
+		`GUID`,`ProvinceGuid`,`Name`,`ServerUrl`,`Token`,`LoginApi`,`CallbackApi`,`SubSite`,`Address`,`Contacts`,`Phone`,`Mail`,`WeChat`,`QQCode`,`LogoFile`,`ShowTitle`,`Type`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_field">
+		`ID`,`GUID`,`ProvinceGuid`,`Name`,`ServerUrl`,`Token`,`LoginApi`,`CallbackApi`,`SubSite`,`Address`,`Contacts`,`Phone`,`Mail`,`WeChat`,`QQCode`,`LogoFile`,`ShowTitle`,`Type`,`State`,`Remark`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`,`ExtInt`,`ExtStr`
+	</sql>
+	<sql id="query_list_field">
+		`ID`,`GUID`,`ProvinceGuid`,`Name`,`ServerUrl`,`Token`,`LoginApi`,`CallbackApi`,`SubSite`,`Address`,`Contacts`,`Phone`,`Mail`,`WeChat`,`QQCode`,`LogoFile`,`ShowTitle`,`Type`,`State`,`Creator`,`CreateTime`,`CheckUser`,`CheckTime`
+	</sql>
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="provinceGuid != null">
+				and ProvinceGuid = #{provinceGuid}
+			</if>
+			<if test="name != null">
+				and Name = #{name}
+			</if>
+			<if test="serverUrl != null">
+				and ServerUrl = #{serverUrl}
+			</if>
+			<if test="token != null">
+				and Token = #{token}
+			</if>
+			<if test="loginApi != null">
+				and LoginApi = #{loginApi}
+			</if>
+			<if test="callbackApi != null">
+				and CallbackApi = #{callbackApi}
+			</if>
+			<if test="subSite != null">
+				and SubSite = #{subSite}
+			</if>
+			<if test="address != null">
+				and Address = #{address}
+			</if>
+			<if test="contacts != null">
+				and Contacts = #{contacts}
+			</if>
+			<if test="phone != null">
+				and Phone = #{phone}
+			</if>
+			<if test="mail != null">
+				and Mail = #{mail}
+			</if>
+			<if test="weChat != null">
+				and WeChat = #{weChat}
+			</if>
+			<if test="qQCode != null">
+				and QQCode = #{qQCode}
+			</if>
+			<if test="logoFile != null">
+				and LogoFile = #{logoFile}
+			</if>
+			<if test="showTitle != null">
+				and ShowTitle = #{showTitle}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+</mapper>

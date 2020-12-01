@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>机构坐标管理管理</title>
+<link rel="stylesheet" href="../css/normalize.css" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../js/layui/css/layui.css">
+<script src="../js/jquery/jquery-1.8.0.min.js"></script>
+<script src="../js/layui/layui.all.js"></script>
+<script src="js/common.js"></script>
+<script src="js/common_list.js"></script>
+<script src="js/coordinate.js"></script>
+</head>
+<body>
+	<div class="wrap">
+	<fieldset class="layui-elem-field">
+	  <legend>机构坐标管理管理</legend>
+	  <div class="layui-elem-field-margin">
+	    <a class="layui-btn" href="coordinate_form.html" yf-opt="add"><i class="layui-icon">&#xe61f;</i>添加 </a>
+  		<a class="layui-btn" id="del" yf-opt="batchdel"><i class="layui-icon">&#xe640;</i>删除 </a>
+	  </div>
+	</fieldset>
+	<table class="layui-hide" id="table" lay-filter="default"></table>
+	<script type="text/html" id="tabbtn">
+  		<a class="layui-btn layui-btn-primary layui-btn-xs layui-icon" lay-event="detail" yf-opt="detail">&#xe615;</a>
+  		<a class="layui-btn layui-btn-xs layui-icon" lay-event="edit" yf-opt="edit">&#xe642;</a>
+  		<a class="layui-btn layui-btn-danger layui-btn-xs layui-icon" lay-event="del" yf-opt="del">&#xe640;</a>
+	</script>
+	</div>
+</body>
+</html>

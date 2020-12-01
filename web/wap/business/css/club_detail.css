@@ -1,0 +1,149 @@
+.float-left{
+	float: left;
+}
+.float-right{
+	float: right;
+}
+.main-club-photo {
+	width:100%;
+	height:170px;
+}
+.main-club-photo img{
+	width:100%;
+	height:100%;
+}
+.weather{
+	position:absolute; top:110px;line-height:25px;padding:0 13px;text-align: left;color: white;
+}
+.weather .weather-img-container{
+	width:30px;height:30px;float: left;
+}
+.weather img{
+	width:20px;
+}
+.weather .weather-data{
+	font-size:12px;
+	display: inline;
+}
+.course-name{
+	position:absolute; top:130px;line-height:40px;padding:0 13px;text-align: left;color: white;font-size: 16px;overflow: hidden;
+}
+.course-linking{
+	position: absolute;top:110px;height:30px;color: white;right: 0px;padding:13px;
+}
+.course-linking div{
+	display: inline-block;width:30px;height:30px;border-radius:15px;border:1px solid white;line-height: 30px;text-align: center;color: #55C0EA;float: right;font-size: 16px;
+}
+.course-linking .icon-course-detail{
+	margin-right:13px;background: url('../img/bg_course_particulars@3x.png') center center no-repeat;background-size:18px 18px;	
+}
+.course-linking .icon-course-location{
+	margin-right:13px;background: url('../img/bg_course_location@3x.png') center center no-repeat;background-size:18px 18px;	
+}
+.time-choice{
+	line-height:40px; background-color: white;margin: 0px;padding:0 13px;font-size: 14px;
+	border-bottom: 1px solid #E6E6E6;
+}
+.time-choice i {
+	float: right;color: #E0E0E0;
+}
+.time-choice .time-mark{
+	width:30%;
+	height:45px;
+	display:inline-block;
+	text-align: left;
+	color: #999999;
+}
+.time-choice .mark-date{
+	width:25%;
+	height:45px;
+	float:right;
+	color: #55C0EA;
+}
+.time-choice .mark-date .week{
+	color: #666666;
+}
+.icon-down-grey{background:url('../img/ic_down_gray@3x.png') center center no-repeat;background-size:12px 6px;width:24px;height: 100%;}
+.icon-time-orange{background:url('../img/ic_time_orange_small@3x.png') center center no-repeat;background-size:18px 18px;width:24px;height: 100%;}
+.icon-front-gray{background:url('../img/ic_front_gray_small@3x.png') center center no-repeat;background-size:10px 18px;width:36px;height:100%;}
+.icon-guan{background:url('../img/ic_guan@3x.png') center center no-repeat;background-size:20px 20px;width:24px;height:100%;}
+.icon-tehui{background:url('../img/ic_tehui@3x.png') center center no-repeat;background-size:38px 20px;width:42px;height:100%;}
+.icon-xian{background:url('../img/ic_xian@3x.png') center center no-repeat;background-size:20px 20px;width:24px;height:100%;}
+.icon-message-gray{background:url('../img/ic_message_gray@3x.png') center center no-repeat;background-size:35px 35px;width:61px;height:100%;}
+.icon-golden-right{background:url('../img/ic_golden_right@3x.png') center center no-repeat;background-size:18px 18px;width:24px;height:100%;}
+.time-choice .mark-time{
+	margin-left:5%;
+	width:5%;
+	height:45px;
+	float:right;
+	color: #55C0EA;
+	text-align: left;
+}
+.spec-time{
+	padding:0 0 0 13px;
+	background-color: #FFF6F2;
+}
+.spec-time .item{clear: both;position: relative;}
+.spec-time .item:not(:last-child)::after {position: absolute;right: 0;bottom: 0;left: 0px;height: 1px;content: '';-webkit-transform: scaleY(.5);transform: scaleY(.5);background-color: #E6E6E6;}
+.spec-time i{
+	float: right;line-height: 60px;font-size: 24px;color: #E0E0E0;
+}
+.spec-time .price-time{
+	width:100%;
+}
+.spec-time .price-time .tips{
+	line-height: 30px;
+	font-size: 16px;
+}
+.spec-time .price-time i{
+	float:left;line-height: 30px;font-size: 20px;color:#18B4ED;
+}
+.spec-time .price-time .time-frame{
+	line-height: 30px;
+	font-size:14px;
+	color: #999999;
+}
+.spec-time .price{
+	width:45%;
+	float: right;
+	line-height: 60px;
+}
+.spec-time .price .low-price{
+	color: #ff6d00;display: inline-block;
+}
+.spec-time .price .low-price .selling-price{
+	font-size: 18px;
+}
+.spec-time .price .low-search{
+	color: #55c0ea;display: inline-block;float: right;font-size: 18px;
+}
+.merchant{background-color: white;}
+.merchant .item{padding:0 13px;background-color: white;position: relative;}
+.merchant .item:not(:last-child)::after {position: absolute;right: 0;bottom: 0;left: 0px;height: 1px;margin-left: 13px;content: '';-webkit-transform: scaleY(.5);transform: scaleY(.5);background-color: #E6E6E6;}
+.merchant .item .price-show{width:60;height:40px;position:absolute;top:50%;margin-top:-25px;right:80px;text-align: right;color: #FF6D00;font-size: 12px;}
+.merchant .item .price-show .selling-price{text-align:center;font-size: 18px;}
+.merchant .item .price-show .give-yb{border-radius:2px;border:1px solid #FF6D00;font-size: 10px;}
+.merchant .item .btn-img-tee{width:60px;height:48px;position:absolute;top:50%;margin-top:-24px;right:13px;cursor: pointer;}
+.merchant .item .btn-img-tee.tee-0{width:60px;height:40px;position:absolute;top:50%;margin-top:-20px;right:13px;cursor: pointer;}
+.merchant .item .btn-img-tee img{width: 100%;height:100%;border-radius:2px;}
+.merchant .item .agent-show{width:60%;padding:10px 0px;}
+.merchant .item .agent-show .agent{height:30px;line-height: 30px;width: auto;font-size: 18px;}
+.merchant .item .agent-show .tee{color: #55C0EA;margin-right:13px;}
+.merchant .item .agent-show .tee-person{color: #999999;}
+.merchant .item .agent-show .price-content{line-height: 30px;color: #999999;font-size: 14px;}
+.more{background-color:white;height:45px;line-height:45px; width:100%;text-align: center;color: #55C0EA;border-top: 1px solid #E6E6E6;cursor: pointer;}
+
+.odds-package{background-color: white;margin-top: 10px;}
+.odds-package i{float: right;line-height: 45px;font-size: 24px;color: #E0E0E0;}
+.odds-package .item{height:45px;line-height: 45px;padding-left: 13px;cursor: pointer;}
+.odds-package .item:not(:last-child)::after {position: absolute;right: 0;bottom: 0;left: 0px;height: 1px;margin-left: 13px;content: '';-webkit-transform: scaleY(.5);transform: scaleY(.5);background-color: #E6E6E6;}
+.odds-package .item .price-wrap{color:#FF6D00;font-size: 16px;float:right;}
+.odds-package .item .price{font-size: 18px;}
+
+.course-manager{background-color: white;margin-top: 10px;padding: 10px 0px 10px 13px;}
+.course-manager .head-img{width:60px;float: left;}
+.course-manager .head-img img{width:100%;height:100%;border-radius:3px;}
+.course-manager .message-wrap{height: 70px;}
+.course-manager .desc{margin-left:70px;height: 60px;line-height: 30px;}
+.course-manager .desc .name{color: #295998;}
+.course-manager .desc .job{color: #999999;height:25px;line-height: 25px;font-size: 14px;}

@@ -1,0 +1,124 @@
+package com.zqkj.entity;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+/**
+ * 订单表
+ */
+@Data
+@EqualsAndHashCode(callSuper=false)
+@Table(name="ordertab")
+public class OrderEntity extends BaseEntity implements Serializable {
+	private static final long serialVersionUID = 1L;
+	
+	/**编号**/
+	@Id
+	@GeneratedValue(generator = "JDBC")
+	@Column
+	private Integer id;
+	/**GUID**/
+	@Column
+	private String guid;
+	/**订单号**/
+	@Column
+	private String orderNumber;
+	/**组织机构GUID**/
+	@Column
+	private String organizationGuid;
+	/**用户OPENID**/
+	@Column
+	private String openid;
+	/**用户GUID**/
+	@Column
+	private String userGuid;
+	/**商品GUID**/
+	@Column
+	private String goodsGuid;
+	/**卡guid**/
+	@Column
+	private String vipGuid;
+	/**订单名称**/
+	@Column
+	private String name;
+	/**订单支付金额 单位（分）**/
+	@Column
+	private Integer orderMoney;
+	/**订单总金额 单位（分）**/
+	@Column
+	private Integer totalOrderMoney;
+	/**订单类型：0支付  1退款  2提现**/
+	@Column
+	private Integer type;
+	/**订单状态： 0失败  1成功  2用户取消  3超时自动取消   4商家代订**/
+	@Column
+	private Integer state;
+	/**支付类型：0微信支付  1支付宝支付**/
+	@Column
+	private Integer payType;
+	/**支付金额 单位（分）**/
+	@Column
+	private Integer payMoney;
+	/**支付时间**/
+	@Column
+	private String payTime;
+	/**回调url**/
+	@Column
+	private String callbackUrl;
+	/**日期**/
+	@Column
+	private String date;
+	/**时间**/
+	@Column
+	private String time;
+	/**商家确认 1待确认  2已确认  3商家取消  4商家修改  5商家修改用户确认**/
+	@Column
+	private Integer businConfi;
+	/**邀请人guid**/
+	@Column
+	private String inviterGuid;
+	/**流水号**/
+	@Column
+	private String serialNumber;
+	/**优惠JSON**/
+	@Column
+	private String discountJson;
+	/**商品购买数量**/
+	@Column
+	private Integer buySum;
+	/**团购状态 1等待拼团结束  2拼团成功  3拼团失败已退款**/
+	@Column
+	private Integer groupBuyingState;
+	/**备注**/
+	@Column
+	private String remark;
+	/**创建者**/
+	@Column
+	private String creator;
+	/**创建时间**/
+	@Column
+	private String createTime;
+	/**审核用户**/
+	@Column
+	private String checkUser;
+	/**审核时间**/
+	@Column
+	private String checkTime;
+	/**扩展整型**/
+	@Column
+	private Integer extInt;
+	/**扩展字符**/
+	@Column
+	private String extStr;
+
+	/**商品**/
+	@Transient
+	private PlaceOrderEntity placeOrderEntity;
+
+	/**用户**/
+	@Transient
+	private UserEntity userEntity;
+}

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>球场预订</title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js"></script>
+		<script type="text/javascript" src="js/common.js?v=1"></script>
+		<script type="text/javascript" src="layer/mobile/layer.js"></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js"></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default.css" rel="stylesheet" type="text/css">
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<script src="js/coordtransform.js"></script>
+		<script src="js/wx_api.js?v=6"></script>
+		<!--
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=Eo0EMvydXBWKhzAX40eUjN7eOIx0ISxV"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=E7JBZ-5UO3R-NIJWJ-WXGP5-P2R5V-IKFZY"></script>
+		-->
+	</head>
+	<style>
+		body{background-color: #00a964;}
+		ul.footer{border: none; background-color: #00a964;}
+		ul.footer .iconfont, ul.footer a{color: #fff;}
+		ul.footer .select .iconfont, ul.footer .select a{ color: #fff;}
+		.wrap{
+			background-color: #fff;
+			border-radius: 0 0 1rem 1rem;
+			height: calc(100% - .2rem);
+		}
+		.nav-select{
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #e7e7e7;
+			font-size: 0.32rem;
+			line-height: 0.8rem;
+			color: #2d9de7;
+		}
+		.nav-select .iconfont{font-size: 0.36rem;}
+		.nav-select > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+			height: 0.8rem;
+		}
+		.nav-select i{margin: 0 0.1rem;}
+		.nav-select .fa{vertical-align: text-top;}
+		.menu {	
+			/*display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #e7e7e7;*/
+			font-size: 0.32rem;
+			line-height: 0.8rem;
+			text-align: left;
+			padding: 0 .2rem;
+		}
+		.menu > li{
+			/*-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;*/
+			display: inline-block;
+			text-align: center;
+			height: 0.8rem;
+			padding: 0 0.1rem;
+		}
+		.menu > li:nth-child(2n){
+			padding: 0;
+		}
+		.menu .select{
+			border-bottom: 0.04rem solid #2d9de7;
+			color: #2d9de7;
+		}
+		.wrap{
+			overflow-y:auto; 
+		}
+		.list{
+			
+		}
+		.list > li{
+			padding: 0.4rem 0.2rem;
+			overflow: hidden;
+			position: relative;
+		}
+		.list .item {
+			margin: 0 .2rem 0 .7rem;
+			text-align: left;
+			overflow: hidden;
+			font-size: 0.28rem;
+			line-height: .45rem;
+			border: 1px solid #e7e7e7;
+			padding: .2rem .2rem .2rem 1.3rem;
+			border-radius: .2rem;
+			-moz-border-radius: .2rem;
+			-webkit-border-radius: .2rem;
+			box-shadow: .05rem .05rem .05rem 0rem rgba(0, 0, 0, .2);
+			position: relative;
+		}
+		.list .item > li{
+			margin: .1rem 0;
+		}
+		.list .item > li:nth-child(1){
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+		}
+		.list .item > li:nth-child(2) span{
+			padding: 0 .1rem;
+			border: 1px solid #5592f5;
+			border-radius: .1rem;
+			-moz-border-radius: .1rem;
+			margin: 0 .1rem .1rem 0;
+			-webkit-border-radius: .1rem;
+			color: #5592f5;
+			display: inline-block;
+			font-size: .24rem;
+			
+		}
+		.list .item > li:nth-child(3){
+			color: #999;
+			font-size: .24rem;
+		}
+		.list .item > li:nth-child(4) span:nth-child(1){
+			color: #ff0000;
+			font-size: 0.48rem;
+		}
+		.list .item > li:nth-child(4) span:nth-child(2){
+			margin-left: .1rem;
+			color: #fbbd4c;
+			font-size: .24rem;
+		}
+		.list .item > li:nth-child(4) span:nth-child(2) img{
+			vertical-align: middle;
+		}
+		.list .price{
+			text-align: center;
+			width: 1.8rem;
+			font-size: 0.36rem;
+			position: absolute;
+			padding:0 0 .3rem 0;
+			right: -.65rem;
+			bottom: -.3rem;
+			line-height: .6rem;
+			color: #fff;
+			-webkit-transform:rotate(-45deg);
+			background-color: #fbbd4c;
+		}
+		.list .price a{
+			color: #fff;
+		}
+		
+		.list .logo{ 
+			width: 1.6rem; 
+			height: 1.6rem; 
+			border-radius: .2rem; 
+			-moz-border-radius: .2rem; 
+			-webkit-border-radius: .2rem;
+			background: url(images/head120.jpg) no-repeat center center;
+			background-size: cover;
+			position: absolute;
+			left: .4rem;
+			top: calc(50% - .9rem);
+			z-index: 9999;
+		}
+		
+		.list .logo img{
+			display: none;
+		}
+		.list .coupon span{
+			overflow: hidden;
+			text-overflow:ellipsis;
+			white-space: nowrap;
+			display: inline-block;
+			max-width: calc(100% - .5rem);
+		}
+		.list .coupon::after{
+			content: '券';
+			background-color: #fbbd4c;
+			color: #fff;
+			display: inline-block;
+			vertical-align: top;
+			margin-left: .1rem;
+			border-radius: .2rem .1rem .2rem .1rem;
+			-moz-border-radius: .2rem .1rem .2rem .1rem;
+			-webkit-border-radius: .2rem .1rem .2rem .1rem;
+			font-size: .24rem;
+			padding: 0 .05rem;
+		}
+		.list .contain{
+			
+		}
+		.list .gold img{width: .40rem; vertical-align: middle;}
+		ul.arealist {
+			display: none;
+			position:fixed;
+			overflow:auto;
+			left:0; 
+			top:0; 
+			width:100%; 
+			height:100%; 
+			border: none; 
+			background-color: #FFFFFF; 
+			text-align: left;
+			line-height: 0.8rem;
+			font-size: 0.28rem;
+			padding-top:0.88rem;
+			box-sizing: border-box;
+			z-index: 9999;
+		}
+
+		.arealist > li > a::before{
+			content: "\e660"; 
+			font-family: "iconfont" !important;
+			font-size: .28rem;
+			font-style: normal;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+			padding: 0.2rem;
+		}
+		.arealist > li > a{display: block; border-bottom: 1px solid #e7e7e7;}
+		.arealist ul li{display: inline-block; padding: 0 0.6rem;}
+		.arealist ul{display: none; border-bottom: 1px solid #e7e7e7;}
+		.arealist .select{color: #2d9de7;}
+		.arealist .select::before{content: "\e661"; }
+
+		.head1{background-color: transparent; color: #333;}
+		.head1 a{ color: #333;}
+		
+		.news{
+			padding: .2rem;
+			font-size: .32rem;
+			line-height: .32rem;
+			color: #fff;
+			position: relative;
+		}
+		.news .price{
+			background-color: #fff;
+			margin-top: .8rem;
+			line-height: .6rem;
+			font-size: .28rem;
+			color: #ff0000;
+		}
+		.news .price span{
+			color: #ff0000;
+		}
+		.news .itme{
+			position: absolute;
+			left: .5rem;
+			top: 0;
+			width: 2.2rem;
+			height: 2.8rem;
+			background:url(images/head.jpg) no-repeat center center;
+			background-size: cover;
+			z-index: 10;
+			box-shadow: .05rem .05rem .05rem 0rem rgba(0, 0, 0, .2);
+		}
+		
+		.news .msg{
+			margin-top: .5rem;
+			height: 2.8rem;
+			padding:.2rem 0 0 3rem;
+			text-align: left;
+			background-color: #fff;
+			color: #999;
+			border: #eee solid 1px;
+			border-radius: .2rem;
+			-moz-border-radius: .2rem;
+			-webkit-border-radius: .2rem;
+			box-shadow: .05rem .05rem .05rem 0rem rgba(0, 0, 0, .2);
+			line-height: .5rem;
+			font-size: .24rem;
+		}
+		.news .msg ul li:first-child{
+			font-size: .32rem;
+			color: #333;
+		}
+		.news ul > li.buying{
+			position: absolute;
+			bottom: -.2rem;
+			right: .2rem;
+		}
+		.news .buying a{
+			background-color: #fbbd4c;
+			color: #fff;
+			padding: .02rem .3rem;
+		}
+		.wrap{
+			position: relative;
+			z-index: 999;
+		}
+		.wrap .bg{
+			width: 100%; 
+			height: 2.5rem;
+			background:url(images/head.jpg) no-repeat center center;
+			background-size: cover;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 0;
+		}
+	</style>
+	<body>
+
+		<div class="wrap">
+			<div class="bg"></div>
+			<ul class="head head1">
+				<li class="l"><a id="back" href="javascript:history.go(-1);"><i class="iconfont">&#xe663;</i></a></li>
+			</ul>
+			<!--
+			<ul class="nav-select">
+				<li><i class="iconfont">&#xe6ae;</i><span id="area"></span><i class="fa fa-sort-desc"></i></li>
+				<li><i class="iconfont">&#xe633;</i><span id="date"></span><i class="fa fa-sort-desc"></i></li>
+			</ul>
+			<ul>
+				<li><input type="text" id="selectName" name="reservationname" class="queryInput"><button class="buttonQuery" onclick="fuzzyQuery()">搜索</button></li>
+			</ul>
+			-->
+			<ul class="news">
+				<li class="itme">
+					<ul id="thMsg">
+						<!--<li class="price">今日特惠<span>360元</span></li>
+						<li class="buying"><a>抢购</a></li>-->
+					</ul>
+				</li>
+				<li class="msg">
+					<ul>
+						<li id="reservationName"></li>
+						<li id="reservationMsg"></li>
+					</ul>
+				</li>
+			</ul>
+			<ul class="menu">
+				<li class="select" singType="1">时段预定</li>
+				<!--<li onclick="nearestDistance()">距离最近</li>-->
+			</ul>
+			<ul class="list" id="list">
+				<!--<li class="placeOrder">
+					<div class="logo" style="background-image: url(http://wap.oneagles.com//upload/courtImg/img/20200404/06d4f981-0d90-459f-b25a-c19aa20e872f.png);"></div>
+					<ul class="item">
+						<li class="coupon"><span>北京华堂18洞-特惠时段</span></li>
+						<li><span>球车</span><span>果岭费</span><span>设施费</span></li>
+						<li>08:00-09:00 13:00-14:00 </li>
+						<li><span>40.1元</span> <span>金币抵扣：30 <img style="width:.4rem;" src="fonts/svg/jb1.svg"><span></span></span></li>
+						<li class="price"><a>订购</a></li>
+					</ul>
+				</li>-->
+			</ul>
+		</div>
+	</body>
+</html>
+<script type="application/javascript">
+	var reservationGuid = getQueryString('guid'); //获取球场guid
+	var paramList = null;//参数表数据
+	$(function() {
+		//加载参数表数据  费用包含
+		$.ajax({
+			type : "post",
+			async:false,
+			url : T.serverurl + "security/param/list",
+			success : function(res) {
+				paramList = res.data;
+			}
+		});
+
+		$.ajax({
+			type: "GET",
+			url: T.serverurl + "/business/reservation/info",
+			headers: {
+				token: T.token
+			},
+			data: {
+				"guid": reservationGuid
+			},
+			success: function(r) {
+				if (r.code == 0) {
+					$(".bg").css("background-image","url("+T.serverurl + r.data.img.replace(/\\/g, '/')+")");
+					//$(".itme").css("background-image","url("+T.serverurl + r.data.img.replace(/\\/g, '/')+")");
+					$("#reservationName").html(r.data.name);
+					//$("#reservationMsg").html("球洞数："+r.data.numberHoles);
+				}
+			}
+		});
+
+		//加载特惠
+		var reservationGuids = new Array();
+		reservationGuids.push(reservationGuid);
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/business/introduction/listByReservations",
+			headers : {token:T.token},
+			data : {reservationGuids:reservationGuids,type:2,state:1},
+			traditional: true,
+			success : function(r) {
+				if (r.code == 0) {
+					if(isNull(r.data)){
+						var obj = r.data[0];
+						$(".itme").css("background-image","url("+T.serverurl + obj.img.replace(/\\/g, '/')+")");
+						$("#thMsg").append('<li class="price">今日特惠<span>'+obj.price/100+'元</span></li><li class="buying"><a href="javascript:;" onclick="reserveIntrod(\''+obj.guid+'\')">抢购</a></li>');
+					}else{
+						notTh();
+					}
+				}
+			}
+		});
+
+
+
+		$.ajax({
+			type: "GET",
+			url: T.serverurl + "/business/introduction/selectlist",
+			headers: {
+				token: T.token
+			},
+			data: {
+				"orderBy": 'createTime desc',
+				state: 1,
+				"reservationGuid": reservationGuid
+			},
+			success: function(r) {
+				if (r.code == 0) {
+					$.each(r.data, function(i, obj) {
+						var li = $('<li onclick="xiadan(\'' + obj.guid + '\')">');
+						li.append('<div class="logo" style="background-image: url(' + T.serverurl + obj.img.replace(/\\/g, '/') + ');"></div>');
+						var ul = $('<ul class="item">');
+						ul.append('<li class="coupon">' + obj.name + '</li>');
+						var ul_li1 = $('<li>');//费用包含
+						if(isNull(obj.priceInclude)){
+							var priceIncludes = obj.priceInclude.split(",");
+							for(var priceInt=0;priceInt < priceIncludes.length;priceInt++){
+								$.each(paramList,function (parint, parObj) {
+									if(isNull(parObj.guid) && parObj.guid == priceIncludes[priceInt]){
+										ul_li1.append('<span>'+parObj.name+'</span>');
+									}
+								});
+							}
+						}
+						ul.append(ul_li1);
+						/*var timeJson = JSON.parse(obj.timeJson);
+						var timeStr = "";
+						$.each(timeJson,function (i, timeData) {
+							if(i < 2){
+								timeStr += timeData.startTime + "-" + timeData.endTime +"&nbsp;";
+							}
+						});
+						ul.append('<li>'+timeStr+'</li>');*/
+						ul.append('<li></li>');
+						if(isNull(obj.goldSum) && obj.goldSum > 0){
+							ul.append('<li><span>'+obj.price/100+'元</span> <span>金币抵扣：'+obj.goldSum+' <img style="width:.4rem;" src="fonts/svg/jb1.svg"><span></span></span></li>');
+						}else{
+							ul.append('<li><span>'+obj.price/100+'元</span></li>');
+						}
+						ul.append('<li class="price"><a>订购</a></li>');
+						li.append(ul);
+						$(".list").append(li);
+					});
+				} else {
+					alert(r.msg);
+				}
+			}
+		});
+	});
+
+
+	//没有特惠产品查询正常时段产品
+	function notTh() {
+		$.ajax({
+			type: "GET",
+			url: T.serverurl + "/business/introduction/selectlist",
+			headers: {
+				token: T.token
+			},
+			data: {
+				"orderBy": 'createTime desc',
+				state: 1,
+				"reservationGuid": reservationGuid
+			},
+			success: function(r) {
+				console.log(r);
+				if (r.code == 0 && isNull(r.data)) {
+					var obj = r.data[0];
+					$(".itme").css("background-image","url("+T.serverurl + obj.img.replace(/\\/g, '/')+")");
+					$("#thMsg").append('<li class="price">今日特惠<span>'+obj.price/100+'元</span></li><li class="buying"><a href="javascript:;" onclick="reserveIntrod(\''+obj.guid+'\')">抢购</a></li>');
+				}
+			}
+		});
+	}
+
+	//跳转到支付页面
+	function reserveIntrod(guid) {
+		location.href = "H5_introduction_pay.html?footer=1&guid="+guid;
+	}
+	//下单
+	function xiadan(guid) {
+		location.href = "H5_introduction_pay.html?footer=1&guid=" + guid;
+	}
+</script>

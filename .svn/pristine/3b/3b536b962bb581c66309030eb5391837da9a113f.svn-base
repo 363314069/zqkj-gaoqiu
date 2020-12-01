@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>我的订单</title>
+		<script type="text/javascript" src="./../../res/js/flexible.js"></script>
+		<script type="text/javascript" src="./../../res/js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/cookie/js.cookie.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/mobile/layer.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/laydate/laydate.js"></script>
+		<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<link href="./../../res/fonts/font-zqkj-1.1/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="./../../res/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		
+		<link href="./../css/default-1.1.css?v=1" rel="stylesheet" type="text/css">
+		<script src="./../js/zqkj/common-1.1.js?v=1"></script>
+		<script src="./../js/zqkj/load-1.1.js"></script>
+		<script src="./../js/zqkj/wx_api-1.0.js"></script>
+	</head>
+	<style>
+		body{background-color: #fff; background-image:none;}
+		.menu {
+			display: -webkit-flex;
+			display: flex;
+			justify-content: space-around;
+			border-bottom: 1px solid #e7e7e7;
+			font-size: 0.32rem;
+			line-height: 0.8rem;
+			background-color: #fff;
+		}
+		.menu > li{
+			-webkit-box-flex: 1;
+			-webkit-flex: 1;
+			flex: 1;
+			text-align: center;
+			height: 0.8rem;
+			padding: 0 0.1rem;
+		}
+		.menu > li u{text-decoration: none;}
+		.menu .select{
+			border-bottom: 0.04rem solid #2d9de7;
+			color: #2d9de7;
+		}
+		
+		.list{
+			border: 1px solid #eee;
+			background-color: #fff;
+		}
+		.list .content{
+			display: -webkit-flex;
+			display: flex;
+		}
+		.list > li{
+			padding: 0.2rem;
+			overflow: hidden;
+			background-color: #fff;
+			margin: 0.2rem;
+		}
+		.list > li:nth-child(n + 2){
+			border-top: 1px solid #eee;
+		}
+		
+		.list .logo{
+			width: 2.2rem;
+			height: 2.2rem;
+			position: relative;
+			background: url(images/share/bg.jpg) no-repeat center center;
+			background-size: auto 100%;
+		}
+		.list .item {
+			width:calc(100% - 1.6rem);
+			text-align: left;
+			overflow: hidden;
+			font-size: 0.24rem;
+			line-height: .5rem;
+			padding-left: 0.2rem;
+		}
+		
+		.list .title .number{float: left; font-size: .24rem;}
+		.list .title .state{float: right;}
+		.list .title::after{display: block; content: ''; clear: both;}
+		.list .logo img{ width: 2.2rem; height: 2.2rem; }
+		.list .logo .times{position: absolute;left: 0; bottom: 0; display: none; width: 100%; height: 0.5rem; z-index: 999; font-size: 0.2rem; line-height: 0.5rem; background-color: #00ab65; color: #fff;}
+		.list .item .item1{font-size: 0.32rem; height: 1rem; margin: 0.1rem 0; box-sizing: border-box; overflow: hidden;}
+		.list .item .item2 span{color: #DB0415; font-size: 0.28rem;}
+		.list .item .item3{font-size: 0.28rem;}
+		.list .btn {margin-top: 0.3rem}
+		.list .btn a{ float: right; padding: 0 .4rem; margin-left: 0.2rem; font-size: 0.28rem; line-height: .6rem; color: #fff; border-radius: .3rem;}
+		.list .btn .pay{background-color: #DB0415;border: 1px solid #DB0415;}
+		.list .btn .cancel{border: 1px solid #666; color: #666;}
+		.list .btn::after{display: block; content: ''; clear: both;}
+		.list .btn .prices{color: #DB0415; float: left; }
+		.list .btn .prices .original{text-decoration: line-through; color: #999; margin-left: 0.2rem; font-size: 0.2rem;display: none;} 
+		
+	</style>
+	<body>
+		<ul class="main-head">
+			<ul class="top">
+				<li class="l"></li>
+				<li class="c">我的订单</li>
+				<li class="r"></li>
+			</ul>
+		</ul>
+		<div class="wrap">
+			<ul class="menu">
+				<li class="select"><u>全部</u></li>
+				<li selectVal="0"><u>待付款</u></li>
+				<li selectVal="1"><u>已付款</u></li>
+				<li selectVal="2"><u>已取消</u></li>
+			</ul>
+			<ul class="list">
+				<!--<li>
+					<div class="title"><span class="number">流水号：<i>JD202003291</i></span>  <span class="state">待付款</span></div>
+					<div class="content">
+						<div class="logo">
+							<img src="images/share/bg.jpg">
+							<span id="times" class="times">11天19时36分</span>
+						</div>
+						<ul class="item">
+							<li id="title" class="item1">买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利买500送1500，秦皇岛保利高尔夫超值抢购。秦皇岛保利</li>
+							<li class="btn">
+								<div class="prices"><span id="price">¥489</span><span class="original">¥1500</span>&lt;!&ndash;原价&ndash;&gt;</div>
+								<a class="pay">去支付</a>
+								<a class="cancel">取消</a>
+							</li>
+						</ul>
+					</div>
+				</li>-->
+			</ul>
+		</div>
+		<div id="footer"></div>
+	</body>
+</html>
+<script>
+	//弹出层   start
+	$(function(){
+		$(".menu").children().click(function(){
+			$(this).parent().children().removeClass("select");
+			$(this).addClass("select");
+			selectOrderList($(this).attr("selectVal"));
+		});
+		selectOrderList();
+	});
+	var api = {
+		info:{url:T.serverepay + "/pay/order/info", type:"get"},
+		list:{url:T.serverepay + "/pay/order/selectlist", type:"post"},
+		page:{url:T.serverepay + "/pay/order/page", type:"post"},
+		cancelorder:{url:T.serverepay + "/pay/order/cancelorder", type:"post"},
+		selectActivityList:{url:T.serverebusiness + "/business/activity/listByGuids", type:"post"},
+		selectIntroductionList:{url:T.serverebusiness + "/business/introduction/listByGuids", type:"post"}
+	};
+
+	function selectOrderList(state){
+		$(".list").empty();
+		$.ajax({
+			type : "POST",
+			url : api.list.url,
+			method : api.list.type,
+			async: false,
+			headers : {token:T.token},
+			data : {"orderBy" : "createTime desc","state":state},
+			success : function(r_order) {
+				if(r_order.code == 0){
+					var list = $(".list");
+					var introductionArr = new Array();
+					var activityArr = new Array();
+					$.each(r_order.data, function(i, obj){
+						if(obj.type != 2){
+							//type 2 为提现订单，提现订单不展示
+							var li = $("<li>");
+							var title = $('<div class="title">');
+							var content = $('<div class="content">');
+							if(isNull(obj.serialNumber)){
+								title.append('<span class="number">流水号：' + '<i>'+obj.serialNumber+'</i>' + '</span>');
+							}else{
+								title.append('<span class="number">流水号：' + '<i>'+obj.orderNumber+'</i>' + '</span>');
+							}
+							if(obj.state == 0){
+								title.append('<span class="state">待付款</span>');
+							}else if(obj.state == 1){
+								title.append('<span class="state">已付款</span>');
+							}else if(obj.state == 2 || obj.state == 3){
+								title.append('<span class="state">订单超时已取消</span>');
+							}
+
+							var ul = $('<ul class="item">');
+							if (isNull(obj.date) && isNull(obj.time)) {
+								//时间和日期不为空它的商品为订场
+								introductionArr.push(obj.goodsGuid);
+								content.append('<div class="logo" name="goodsImg-'+obj.goodsGuid+'" onclick="orderSkipProduct(\''+obj.goodsGuid+'\',1)">');
+								ul.append('<li id="title" class="item1" onclick="orderInfo(\''+obj.guid+'\')">'+obj.name+'</li>');
+							}else{
+								//为空的话商品则是抢购活动团表中
+								activityArr.push(obj.goodsGuid);
+								content.append('<div class="logo" name="goodsImg-'+obj.goodsGuid+'" onclick="orderSkipProduct(\''+obj.goodsGuid+'\',2)">');
+								ul.append('<li id="title" class="item1" onclick="orderInfo(\''+obj.guid+'\')">'+obj.name+'</li>');
+							}
+
+							ul.append('<li name="param-'+obj.goodsGuid+'">价格包含：</li>');
+							var btn = $('<li class="btn">');
+							btn.append('<div class="prices"><span id="price">¥'+obj.orderMoney/100+'</span></div>');
+							if(obj.state == 0){
+								if (isNull(obj.date) && isNull(obj.time)) {
+									//时间和日期不为空它的商品为订场
+									btn.append('<a class="pay" href="javascript:payintroductionorder(\'' + obj.guid + '\')">去支付</a><a class="cancel" href="javascript:cancelOrder(\'' + obj.id + '\')">取消</a>');
+								}else{
+									//为空的话商品则是抢购活动团表中
+									btn.append('<a class="pay" href="javascript:queryUserMessage(\'' + obj.guid + '\')">去支付</a><a class="cancel" href="javascript:cancelOrder(\'' + obj.id + '\')">取消</a>');
+								}
+							}else if(obj.state == 1){
+								if (isNull(obj.date) && isNull(obj.time)) {
+									if(obj.businConfi == 1){
+										btn.append('<a class="pay" style="background-color:#99CCFF; border:1px solid #99CCFF">待确认</a>');
+									}else if(obj.businConfi == 2){
+										btn.append('<a class="pay" style="background-color:#99CC00; border:1px solid #99CC00">商家已确认</a>');
+									}else if(obj.businConfi == 3){
+										btn.append('<a class="pay" style="background-color:#FF6600; border:1px solid #FF6600">商家取消</a><a class="cancel" href="javascript:cancelOrder(\'' + obj.id + '\')">取消</a>');
+									}else if(obj.businConfi == 4){
+										btn.append('<a class="pay" href="javascript:userConfirm(\''+obj.id+'\')" style="background-color:#FFCC00; border:1px solid #FFCC00">请确认</a><a class="cancel" href="javascript:cancelOrder(\'' + obj.id + '\')">取消</a>');
+									}else if(obj.businConfi == 5){
+										btn.append('<a class="pay" style="background-color:#66CC00; border:1px solid #66CC00">已确认</a>');
+									}
+								}
+							}else if(obj.state == 2){
+								btn.append('<a class="pay" style="background-color:#E48253; border:1px solid #E48253">已取消</a>');
+							}
+							ul.append(btn);
+							content.append(ul);
+							li.append(title).append(content);
+							list.append(li);
+						}
+					});
+					
+					if(activityArr.length > 0){
+						//查询抢购团购活动 产品
+						$.ajax({
+							type : "POST",
+							url : api.selectActivityList.url,
+							method : api.selectActivityList.type,
+							traditional: true,
+							async: false,
+							headers : {token:T.token},
+							data : {guids : activityArr},
+							success : function(r_activity) {
+								if(r_activity.code == 0){
+									$.each(r_activity.data, function(i, obj){
+										var tds = $(".logo[name=goodsImg-" + obj.guid + "]");
+										tds.each(function(){
+											//$(this).attr("src",T.serverurl + obj.img);
+											obj.img = obj.img.replace(/\\/g,"/");
+											$(this).css('background-image', 'url("' + T.serverurl + obj.img + '")');
+										});
+									});
+								}
+							}
+						});
+					}
+
+					if(introductionArr.length > 0){
+						//查询场地 产品
+						$.ajax({
+							type : "POST",
+							url : api.selectIntroductionList.url,
+							method : api.selectIntroductionList.type,
+							traditional: true,
+							async: false,
+							headers : {token:T.token},
+							data : {guids : introductionArr},
+							success : function(r_introduction) {
+								if(r_introduction.code == 0){
+									$.each(r_introduction.data, function(i, obj){
+										var tds = $(".logo[name=goodsImg-" + obj.guid + "]");
+										tds.each(function(){
+											//$(this).attr("src",T.serverurl + obj.img);
+											obj.img = obj.img.replace(/\\/g,"/");
+											$(this).css('background-image', 'url("' + T.serverurl + obj.img + '")');
+										});
+										//加载价格包含
+										if(isNull(obj.priceInclude)){
+											$.ajax({
+												type : "post",
+												url : T.serverurl + "security/param/listByGuids",
+												traditional:true,
+												data : {guids : obj.priceInclude.split(",")},
+												success : function(paramRes) {
+													$.each(paramRes.data,function (j, resobj) {
+														var tds = $("li[name=param-" + obj.guid + "]");
+														tds.each(function(){
+															$(this).append('<span>'+resobj.name+'</span>')
+														});
+													});
+												}
+											});
+										}
+									});
+								}
+							}
+						});
+					}
+				} else {
+					var div = $("<div class='nodata'>" + ruser.msg + "</div>")
+					list.append(div);
+				}
+			}
+		});
+	}
+
+	//取消订单
+	function cancelOrder(id) {
+		if(window.confirm('你确定要取消该订单吗？')){
+			$.ajax({
+				type : "POST",
+				url : T.serverepay + "/pay/order/cancelorder",
+				async: false,
+				headers : {token:T.token},
+				data : {id : id,state:2},
+				success : function(r) {
+					if(r.code == 0){
+						alert("订单已取消成功！");
+						location.reload();
+					}else{
+						alert(r.msg);
+					}
+				}
+			});
+		}else{
+			return false;
+		}
+	}
+
+
+	//商家修改订单，用户进行确认
+	function userConfirm(id) {
+		if(window.confirm('你确定要确认该订单吗？')){
+			$.ajax({
+				type : "POST",
+				url : T.serverepay + "/pay/order/userconfirm",
+				async: false,
+				headers : {token:T.token},
+				data : {id : id,businConfi:5},
+				success : function(r) {
+					if(r.code == 0){
+						alert("订单确认成功！");
+						location.reload();
+					}
+				}
+			});
+		}else{
+			return false;
+		}
+	}
+
+
+	//跳转到产品详情页中
+	function orderSkipProduct(guid, type) {
+		if(type == 1){
+			//type==1 跳转订场产品中
+			jump.to("introduction_pay?guid="+guid);
+		}else if(type == 2){
+			//type==2 跳转抢购产品中
+			jump.to("snapUp_info?guid="+guid);
+		}
+	}
+	//跳转到订单详情
+	function orderInfo(guid) {
+		jump.to("my_order_info?orderGuid="+guid);
+	}
+</script>

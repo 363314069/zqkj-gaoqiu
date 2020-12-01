@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/zqkj-gaoqiu.iml" filepath="$PROJECT_DIR$/zqkj-gaoqiu.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zqkj-gaoqiu-admin-service/zqkj-gaoqiu-admin-service.iml" filepath="$PROJECT_DIR$/zqkj-gaoqiu-admin-service/zqkj-gaoqiu-admin-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zqkj-gaoqiu-business-service/zqkj-gaoqiu-business-service.iml" filepath="$PROJECT_DIR$/zqkj-gaoqiu-business-service/zqkj-gaoqiu-business-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zqkj-gaoqiu-common/zqkj-gaoqiu-common.iml" filepath="$PROJECT_DIR$/zqkj-gaoqiu-common/zqkj-gaoqiu-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zqkj-gaoqiu-eureka-service/zqkj-gaoqiu-eureka-service.iml" filepath="$PROJECT_DIR$/zqkj-gaoqiu-eureka-service/zqkj-gaoqiu-eureka-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zqkj-gaoqiu-gateway-service/zqkj-gaoqiu-gateway-service.iml" filepath="$PROJECT_DIR$/zqkj-gaoqiu-gateway-service/zqkj-gaoqiu-gateway-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zqkj-gaoqiu-integral-service/zqkj-gaoqiu-integral-service.iml" filepath="$PROJECT_DIR$/zqkj-gaoqiu-integral-service/zqkj-gaoqiu-integral-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/zqkj-gaoqiu-pay-service/zqkj-gaoqiu-pay-service.iml" filepath="$PROJECT_DIR$/zqkj-gaoqiu-pay-service/zqkj-gaoqiu-pay-service.iml" />
+    </modules>
+  </component>
+</project>

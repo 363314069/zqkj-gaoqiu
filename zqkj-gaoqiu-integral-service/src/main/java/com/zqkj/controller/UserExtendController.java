@@ -1,0 +1,98 @@
+package com.zqkj.controller;
+
+import com.alibaba.fastjson.JSONObject;
+import com.zqkj.utils.Content;
+import com.zqkj.utils.R;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.zqkj.entity.UserExtendEntity;
+import com.zqkj.service.UserExtendService;
+
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import tk.mybatis.mapper.entity.Example;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+
+/**
+ * 
+ * 用户扩展表
+ * @author zqkj
+ * @email root@qq.com
+ * @date 2020-01-03 16:31:23
+ */
+@Controller
+@RequestMapping("/integral/userextend")
+@Api(value = "", tags = { "integral/userextend " })
+public class UserExtendController extends BaseController<UserExtendService, UserExtendEntity> {
+
+    @ResponseBody
+    @RequestMapping(value = "/listByGuids", method = {RequestMethod.POST})
+    @ApiOperation(value = "根据数组Guid批量查询数据", notes = "参数为数组如[1,2,3,4]")
+    public R listByGuids(String[] guids) {
+        Example example = new Example(getClazz());
+        Example.Criteria criteria = example.createCriteria();
+        List<String> guidList = new ArrayList<String>(Arrays.asList(guids));
+        criteria.andIn("userGUID", guidList);
+        List<UserExtendEntity> list = service.selectByExample(example);
+        return R.ok().putData(list);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/cancelorderbalance", method = {RequestMethod.POST})
+    @ApiOperation(value = "取消订单余额增加", notes = "参数为json字符串")
+    public R cancelOrderBalance(@RequestBody String jsonStr) {
+        return service.cancelOrderBalance(jsonStr);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/usegold", method = {RequestMethod.POST})
+    @ApiOperation(value = "订单金币抵扣", notes = "参数为json字符串")
+    public R useGold(@RequestBody String jsonStr) {
+        Integer moneyValue = service.useGold(jsonStr);
+        return R.ok().putData(moneyValue);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/registergiving", method = {RequestMethod.POST})
+    @ApiOperation(value = "新用户注册送300金币", notes = "用户GUID")
+    public R registerGiving(@RequestBody String userGuid) {
+        Integer nRet = service.registerGiving(userGuid);
+        if(nRet > 0){
+            return R.ok().putData(nRet);
+        }else{
+            return R.error(Content.STATUS_CODE_5007);
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/binvip", method = {RequestMethod.POST})
+    @ApiOperation(value = "验证会员绑定会员卡", notes = "json")
+    public R binVip(@RequestBody String jsonStr) {
+        Integer nRet = service.binVip(jsonStr);
+        if(nRet > 0){
+            return R.ok().putData(nRet);
+        }else{
+            return R.error(Content.STATUS_CODE_5007);
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/selectlist", method = {RequestMethod.POST})
+    @ApiOperation(value = "条件查询", notes = "json")
+    public R selectList(UserExtendEntity extendEntity) {
+        return R.ok().putData(service.selectList(extendEntity));
+    }
+}

@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.zqkj.dao.mapper.ReservationDao">
+	<resultMap id="BaseResultMap" type="com.zqkj.entity.ReservationEntity">
+		<id column="ID" property="id" jdbcType="INTEGER" />
+		<result column="GUID" property="guid" jdbcType="VARCHAR" />
+		<result column="OrganizationGuid" property="organizationGuid" jdbcType="VARCHAR" />
+		<result column="Prefix" property="prefix" jdbcType="VARCHAR" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="Profile" property="profile" jdbcType="VARCHAR" />
+		<result column="AddressCode" property="addressCode" jdbcType="VARCHAR" />
+		<result column="Address" property="address" jdbcType="VARCHAR" />
+		<result column="Coordinate" property="coordinate" jdbcType="VARCHAR" />
+		<result column="ResType" property="resType" jdbcType="VARCHAR" />
+		<result column="ResTime" property="resTime" jdbcType="VARCHAR" />
+		<result column="ResArea" property="resArea" jdbcType="VARCHAR" />
+		<result column="GreenGrass" property="greenGrass" jdbcType="VARCHAR" />
+		<result column="ResData" property="resData" jdbcType="VARCHAR" />
+		<result column="Designer" property="designer" jdbcType="VARCHAR" />
+		<result column="ResLength" property="resLength" jdbcType="VARCHAR" />
+		<result column="FairwayGrass" property="fairwayGrass" jdbcType="VARCHAR" />
+		<result column="FairwayDetails" property="fairwayDetails" jdbcType="VARCHAR" />
+		<result column="Phone" property="phone" jdbcType="VARCHAR" />
+		<result column="Content" property="content" jdbcType="VARCHAR" />
+		<result column="Img" property="img" jdbcType="VARCHAR" />
+		<result column="Price" property="price" jdbcType="INTEGER" />
+		<result column="Discount" property="discount" jdbcType="VARCHAR" />
+		<result column="Days" property="days" jdbcType="INTEGER" />
+		<result column="Type" property="type" jdbcType="INTEGER" />
+		<result column="State" property="state" jdbcType="INTEGER" />
+		<result column="Preferential" property="preferential" jdbcType="INTEGER" />
+		<result column="CallbackUrl" property="callbackUrl" jdbcType="VARCHAR" />
+		<result column="StartTime" property="startTime" jdbcType="VARCHAR" />
+		<result column="EndTime" property="endTime" jdbcType="VARCHAR" />
+		<result column="TimeJson" property="timeJson" jdbcType="VARCHAR" />
+		<result column="Remark" property="remark" jdbcType="VARCHAR" />
+		<result column="Creator" property="creator" jdbcType="VARCHAR" />
+		<result column="CreateTime" property="createTime" jdbcType="VARCHAR" />
+		<result column="CheckUser" property="checkUser" jdbcType="VARCHAR" />
+		<result column="CheckTime" property="checkTime" jdbcType="VARCHAR" />
+		<result column="ExtInt" property="extInt" jdbcType="INTEGER" />
+		<result column="ExtStr" property="extStr" jdbcType="VARCHAR" />
+		<collection property="introductionList" select="com.zqkj.dao.mapper.IntroductionDao.selectByReservationGuid" javaType="java.util.ArrayList" column="GUID"/>
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID AS id,
+		GUID AS guid,
+		OrganizationGuid AS organizationGuid,
+		Name AS name,
+		Prefix AS prefix,
+		Profile AS profile,
+		AddressCode	AS addressCode,
+		Address	AS address,
+		Coordinate	AS coordinate,
+		ResType AS resType,
+		ResTime AS resTime,
+		ResArea AS resArea,
+		GreenGrass AS greenGrass,
+		ResData AS resData,
+		Designer AS designer,
+		ResLength AS resLength,
+		FairwayGrass AS fairwayGrass,
+		FairwayDetails AS fairwayDetails,
+		Phone AS phone,
+		Content AS content,
+		Img AS img,
+		Price AS price,
+		Discount AS discount,
+		Days AS days,
+		Type AS type,
+		State AS state,
+		Preferential AS preferential,
+		CallbackUrl AS callbackUrl,
+		StartTime AS startTime,
+		EndTime AS endTime,
+		TimeJson AS timeJson,
+		Remark AS remark,
+		Creator AS creator,
+		CreateTime AS createTime,
+		CheckUser AS checkUser,
+		CheckTime AS checkTime,
+		ExtInt AS extInt,
+		ExtStr AS extStr
+	</sql>
+
+	<sql id="where">
+			<if test="id != null">
+				and ID = #{id}
+			</if>
+			<if test="guid != null">
+				and GUID = #{guid}
+			</if>
+			<if test="organizationGuid != null">
+				and OrganizationGuid = #{organizationGuid}
+			</if>
+			<if test="name != null">
+				and Name LIKE CONCAT(CONCAT('%',#{name},'%'))
+			</if>
+		<if test="prefix != null">
+			and Prefix = #{prefix}
+		</if>
+		<if test="profile != null">
+			and Profile = #{profile}
+		</if>
+		<if test="addressCode != null">
+			and AddressCode = #{addressCode}
+		</if>
+		<if test="address != null">
+			and Address = #{address}
+		</if>
+		<if test="coordinate != null">
+			and Coordinate = #{coordinate}
+		</if>
+		<if test="resType != null">
+			and ResType = #{resType}
+		</if>
+		<if test="resTime != null">
+			and ResTime = #{resTime}
+		</if>
+		<if test="resArea != null">
+			and ResArea = #{resArea}
+		</if>
+		<if test="greenGrass != null">
+			and GreenGrass = #{greenGrass}
+		</if>
+		<if test="resData != null">
+			and ResData = #{resData}
+		</if>
+		<if test="designer != null">
+			and Designer = #{designer}
+		</if>
+		<if test="resLength != null">
+			and ResLength = #{resLength}
+		</if>
+		<if test="fairwayGrass != null">
+			and FairwayGrass = #{fairwayGrass}
+		</if>
+		<if test="fairwayDetails != null">
+			and FairwayDetails = #{fairwayDetails}
+		</if>
+			<if test="phone != null">
+				and Phone = #{phone}
+			</if>
+			<if test="content != null">
+				and Content = #{content}
+			</if>
+			<if test="img != null">
+				and Img = #{img}
+			</if>
+			<if test="price != null">
+				and Price = #{price}
+			</if>
+			<if test="discount != null">
+				and Discount = #{discount}
+			</if>
+			<if test="days != null">
+				and Days = #{days}
+			</if>
+			<if test="type != null">
+				and Type = #{type}
+			</if>
+			<if test="state != null">
+				and State = #{state}
+			</if>
+			<if test="preferential != null">
+				and Preferential = #{preferential}
+			</if>
+			<if test="callbackUrl != null">
+				and CallbackUrl = #{callbackUrl}
+			</if>
+			<if test="startTime != null">
+				and StartTime = #{startTime}
+			</if>
+			<if test="endTime != null">
+				and EndTime = #{endTime}
+			</if>
+			<if test="timeJson != null">
+				and TimeJson = #{timeJson}
+			</if>
+			<if test="creator != null">
+				and Creator = #{creator}
+			</if>
+			<if test="createTime != null">
+				and CreateTime = #{createTime}
+			</if>
+			<if test="checkUser != null">
+				and CheckUser = #{checkUser}
+			</if>
+			<if test="checkTime != null">
+				and CheckTime = #{checkTime}
+			</if>
+	</sql>
+
+
+
+	<sql id="selectWhere">
+		<if test="id != null">
+			and ID = #{id}
+		</if>
+		<if test="guid != null">
+			and GUID = #{guid}
+		</if>
+		<if test="organizationGuid != null">
+			and OrganizationGuid = #{organizationGuid}
+		</if>
+		<if test="name != null">
+			and Name LIKE CONCAT(CONCAT('%',#{name},'%'))
+		</if>
+		<if test="prefix != null">
+			and Prefix = #{prefix}
+		</if>
+		<if test="profile != null">
+			and Profile = #{profile}
+		</if>
+		<if test="addressCode != null">
+			and AddressCode like concat(#{addressCode},'%')
+		</if>
+		<if test="address != null">
+			and Address = #{address}
+		</if>
+		<if test="coordinate != null">
+			and Coordinate = #{coordinate}
+		</if>
+		<if test="resType != null">
+			and ResType = #{resType}
+		</if>
+		<if test="resTime != null">
+			and ResTime = #{resTime}
+		</if>
+		<if test="resArea != null">
+			and ResArea = #{resArea}
+		</if>
+		<if test="greenGrass != null">
+			and GreenGrass = #{greenGrass}
+		</if>
+		<if test="resData != null">
+			and ResData = #{resData}
+		</if>
+		<if test="designer != null">
+			and Designer = #{designer}
+		</if>
+		<if test="resLength != null">
+			and ResLength = #{resLength}
+		</if>
+		<if test="fairwayGrass != null">
+			and FairwayGrass = #{fairwayGrass}
+		</if>
+		<if test="fairwayDetails != null">
+			and FairwayDetails = #{fairwayDetails}
+		</if>
+		<if test="phone != null">
+			and Phone = #{phone}
+		</if>
+		<if test="content != null">
+			and Content = #{content}
+		</if>
+		<if test="img != null">
+			and Img = #{img}
+		</if>
+		<if test="price != null">
+			and Price = #{price}
+		</if>
+		<if test="discount != null">
+			and Discount = #{discount}
+		</if>
+		<if test="days != null">
+			and Days = #{days}
+		</if>
+		<if test="type != null">
+			and Type = #{type}
+		</if>
+		<if test="state != null">
+			and State = #{state}
+		</if>
+		<if test="preferential != null">
+			and Preferential = #{preferential}
+		</if>
+		<if test="callbackUrl != null">
+			and CallbackUrl = #{callbackUrl}
+		</if>
+		<if test="startTime != null">
+			and StartTime = #{startTime}
+		</if>
+		<if test="endTime != null">
+			and EndTime &gt;= #{endTime}
+		</if>
+		<if test="timeJson != null">
+			and TimeJson = #{timeJson}
+		</if>
+		<if test="creator != null">
+			and Creator = #{creator}
+		</if>
+		<if test="createTime != null">
+			and CreateTime = #{createTime}
+		</if>
+		<if test="checkUser != null">
+			and CheckUser = #{checkUser}
+		</if>
+		<if test="checkTime != null">
+			and CheckTime = #{checkTime}
+		</if>
+		<!--<if test="orderBy != null">
+			#{orderBy}
+		</if>-->
+	</sql>
+
+
+	<select id="selectReservationByGuid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List"/>
+		from reservationtab
+		<where>
+			guid = #{guid}
+		</where>
+	</select>
+
+	<select id="selectReservationList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		<include refid="Base_Column_List"/>
+		from reservationtab
+		<where>
+			<include refid="selectWhere"></include>
+		</where>
+	</select>
+</mapper>

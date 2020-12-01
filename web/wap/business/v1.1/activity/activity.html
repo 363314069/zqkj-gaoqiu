@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>九洲高尔夫活动报名</title>
+		<script type="text/javascript" src="./../../res/js/flexible.js"></script>
+		<script type="text/javascript" src="./../../res/js/jquery-1.8.3.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/cookie/js.cookie.min.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/mobile/layer.js"></script>
+		<script type="text/javascript" src="./../../res/js/layer/laydate/laydate.js"></script>
+		<script type="text/javascript" src="./../../res/js/zqkj/routing.js"></script>
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<link href="./../../res/fonts/font-zqkj-1.1/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="./../../res/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		
+		<link href="./../css/default-1.1.css?v=2" rel="stylesheet" type="text/css">
+		<script src="./../js/zqkj/common-1.1.js?v=1"></script>
+		<script src="./../js/zqkj/load-1.1.js"></script>
+		<script src="./../js/zqkj/wx_api-1.0.js"></script>
+		<!--
+		<script type="text/javascript" src="//api.map.baidu.com/api?v=3.0&ak=Eo0EMvydXBWKhzAX40eUjN7eOIx0ISxV"></script>
+		<script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=E7JBZ-5UO3R-NIJWJ-WXGP5-P2R5V-IKFZY"></script>
+		-->
+	</head>
+	<style>
+		.list{
+			height: calc(100% - 0.8rem);
+			overflow-y:auto;
+		}
+		.list > li{}
+		
+		.list li{text-align: left;}
+		.list li ul{
+			border: 1px solid #EEEEEE;
+			border-radius: .5rem;
+			margin: .2rem;
+			overflow: hidden;
+		}
+		.list li ul li{padding: 0 .4rem; line-height: .6rem; }
+		.list li ul li:nth-child(1){
+			text-align: left;
+			width: 3.8rem;
+			color: #FFFFFF;
+			background-color: #ff9531;
+		}
+		.list li ul li:nth-child(1) span:nth-child(2){margin-left: .2rem;}
+		.list li ul li:nth-child(n + 2){
+			overflow: hidden;
+			display: -webkit-flex;
+			display: flex;
+			align-items: center;
+			line-height: .5rem;
+			padding: .2rem;
+			border-top: 1px solid #EEEEEE;
+		}
+		.list li ul li:nth-child(n + 2) div:nth-child(1) p:nth-child(1){
+			display: -webkit-box;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 2;
+			overflow: hidden;
+		}
+		.list li ul li:nth-child(n + 2) div:nth-child(1){
+			width: calc(100% - 1.3rem);
+			padding-right: .2rem;
+		}
+		.list li ul li:nth-child(n + 2) div:nth-child(1) p:nth-child(2){
+			color: #ff0000;
+		}
+		.list li ul li:nth-child(n + 2) div:nth-child(2){
+			width: 1.3rem;
+			text-align: center;
+			background-color: #ff9531;
+			color: #FFFFFF;
+			line-height: 1rem;
+			height: 1rem;
+			vertical-align: bottom;
+			border-radius: .2rem;
+		}
+	</style>
+	<body>
+		<div class="main-head">
+			<ul class="top">
+				<li class="l"><a id="selectdate"></a></li>
+				<li class="c">
+					<div class="search">
+						<input type="search" id="searchkey" name="reservationname">
+						<i id="searchbtn">搜索</i>
+					</div>
+				</li>
+				<li class="r"></li>
+			</ul>
+		</div>
+		<div class="wrap">
+			<div id="main-nav"></div>
+			<ul class="main-title">
+				<li>活动报名</li>
+			</ul>
+			<ul class="list">
+				
+			</ul>
+		</div>
+		<div id="footer"></div>
+		<script type="text/html" id="list_li">
+			<li>
+				<div class="logo">
+					<img src="./images/head120.jpg">
+					<span name="times" class="times">9天4小时25分钟</span>
+				</div>
+				<ul class="item">
+					<li name="title" class="item1">780元曹妃湖2天1晚 无限畅打（不分平假日）</li>
+					<li class="btn">
+						<div class="prices">
+							<span name="price">¥780</span>
+							<span name="original" class="original">¥980</span>
+							<!--原价-->
+						</div>
+						<a name="btn">去抢购</a>
+					</li>
+				</ul>
+			</li>
+		</script>
+	</body>
+	<script type="text/javascript">
+		$(function() {
+			//输入框回车搜索
+			$("#searchkey").on('keypress', function(e) {
+				var keycode = e.keyCode;
+				var searchName = $(this).val();
+				if (keycode == '13') {
+					//e.preventDefault();
+					selectListActivity(0, searchName);
+				}
+			});
+			//搜索按钮
+			$("#searchbtn").click(function() {
+				var searchName = $("#searchkey").val();
+				selectListActivity(0, searchName);
+			});
+			selectListActivity(0, null);
+			
+			laydate.render({
+				elem: '#selectdate',
+				value: new Date(),
+				btns: ['now', 'now', 'confirm'], //clear、now、confirm
+				ready: function(date, index){
+					$(".laydate-btns-now").eq(0).html("全部");
+				},
+				done: function(value, date, endDate){
+					if(compareDate(value)){
+						//查询指定记录
+						selectListActivity($(".select").attr("selectVal"),$("#selectName").val(),getDate(value));
+					} else {
+						//查询全部
+						selectListActivity(0,$("#selectName").val());
+					}
+				}
+			});
+		});
+
+	function compareDate(date){
+		date = date.replace(/-/g, '/');    //结束时间   解决ios获取getTime 为NAN   ios需要  2020/03/30这样格式
+		date = new Date(date);
+		var curdate = new Date();
+		//console.log(((date.getTime() - curdate.getTime())/(24*3600*1000) + 1));
+		if(parseInt((date.getTime() - curdate.getTime())/(24*3600*1000) + 1) > 0){
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	//搜索按钮
+	function fuzzyQuery() {
+		$(".menu").find('li').each(function(){
+			$(this).removeClass("select");
+		});
+		$(".menu").find('li').eq(0).addClass("select");
+		selectListActivity(0,$("#selectName").val());
+	}
+
+	//计算出相差天数
+	function differTime(endTime) {
+		var date1= new Date();  //开始时间
+		var date2 = endTime.replace(/-/g, '/');    //结束时间   解决ios获取getTime 为NAN   ios需要  2020/03/30这样格式
+		var date3 = new Date(date2).getTime() - date1.getTime();   //时间差的毫秒数
+		//------------------------------
+		//计算出相差天数
+		var days=Math.floor(date3/(24*3600*1000))
+		//计算出小时数
+		var leave1=date3%(24*3600*1000)    //计算天数后剩余的毫秒数
+		var hours=Math.floor(leave1/(3600*1000))
+		//计算相差分钟数
+		var leave2=leave1%(3600*1000)        //计算小时数后剩余的毫秒数
+		var minutes=Math.floor(leave2/(60*1000))
+		return days+"天"+hours+"小时"+minutes+"分钟";
+	}
+
+
+
+
+	function selectListActivity(selectVal,name,date){
+		if(!date){
+			date = getDate(new Date());
+		}
+		$.ajax({
+			type : "POST",
+			url : T.serverurl + "/business/activity/selectlist",
+			method : "POST",
+			data : JSON.stringify({type:0,selectVal:selectVal,state:1,name:name,date:date,orderBy:"date"}),
+			headers : {token:T.token},
+			contentType : 'application/json;charset=utf-8',
+			success : function(r) {
+				if (r.code == 0) {
+					$(".list").empty();
+					var list = '';
+					//加载星期几
+					$.each(r.data, function(ii, objj){
+						var activityDate = formatDate(objj.date,"yyyyMMdd");
+						if(!$("#"+activityDate)[0]){
+							var li = $('<li>');
+							var ul = $('<ul id="'+activityDate+'">');
+							ul.append('<li><span>'+formatDate(objj.date)+'</span><span>'+week(objj.date)+'</span></li>');
+							li.append(ul);
+							$(".list").append(li);
+						}
+					});
+					$.each(r.data, function(i, obj){
+						if(selectVal == 0){
+							var activityDate = formatDate(obj.date,"yyyyMMdd");
+							var li = $('<li onclick="JumpDetailed(\''+obj.guid+'\')">');
+							var li_div = $('<div>');
+							li_div.append('<p>'+obj.name+'</p>');
+							li_div.append('<p>价格:<span>'+obj.price/100+'</span>元</p>');
+							li.append(li_div).append('<div>报名</div>');
+							$("#"+activityDate).append(li);
+						}else if(selectVal == 1){
+							var activityDate = formatDate(obj.date,"yyyyMMdd");
+							var li = $('<li onclick="JumpDetailed(\''+obj.guid+'\')">');
+							var li_div = $('<div>');
+							li_div.append('<p>'+obj.name+'</p>');
+							li_div.append('<p>价格:<span>'+obj.price/100+'</span>元</p>');
+							li.append(li_div).append('<div style="background-color: #B7B2B3">未开始</div>');
+							$("#"+activityDate).append(li);
+						}else if(selectVal == 2){
+							var activityDate = formatDate(obj.date,"yyyyMMdd");
+							var li = $('<li onclick="JumpDetailed(\''+obj.guid+'\')">');
+							var li_div = $('<div>');
+							li_div.append('<p>'+obj.name+'</p>');
+							li_div.append('<p>价格:<span>'+obj.price/100+'</span>元</p>');
+							li.append(li_div).append('<div style="background-color: #B7B2B3">已结束</div>');
+							$("#"+activityDate).append(li);
+						}
+					});
+					//分享加载
+					wxapi.setShare({
+						title:('一周高球活动精选'),
+						desc:('天天特惠，尽在九洲！'),
+						link:location.href,
+						imgUrl : 'http://wap.oneagles.com/wap/common/images/logo.png'
+					});
+				} else {
+					alertMsg(r);
+				}
+			}
+		});
+	}
+
+	function JumpDetailed(guid) {
+		jump.to("activity_info?guid="+guid);
+	}
+
+
+	//格式化日期字符串
+	function formatDate(date, format) {
+        date = date.replace(/-/g, '/');
+		if (!date) return;
+		if (!format) format = "yyyy-MM-dd";
+		switch(typeof date) {
+			case "string":
+				date = new Date(date.replace(/-/, "/"));
+				break;
+			case "number":
+				date = new Date(date.replace(/-/, "/"));
+				break;
+		}
+		if (!date instanceof Date) return;
+		var dict = {
+			"yyyy": date.getFullYear(),
+			"M": date.getMonth() + 1,
+			"d": date.getDate(),
+			"H": date.getHours(),
+			"m": date.getMinutes(),
+			"s": date.getSeconds(),
+			"MM": ("" + (date.getMonth() + 101)).substr(1),
+			"dd": ("" + (date.getDate() + 100)).substr(1),
+			"HH": ("" + (date.getHours() + 100)).substr(1),
+			"mm": ("" + (date.getMinutes() + 100)).substr(1),
+			"ss": ("" + (date.getSeconds() + 100)).substr(1)
+		};
+		return format.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, function() {
+			return dict[arguments[0]];
+		});
+	}
+
+	//根据日期计算星期几
+	function week(date) {
+		//var date = "2020-05-26 00:00:00";
+        date = date.replace(/-/g, '/');
+		var day = new Date(Date.parse(date));
+		var today = new Array('星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六');
+		var week = today[day.getDay()];
+		return week;
+	}
+
+	//获取明天的日期
+	function getDate(date){
+		//获取选择项的下标（今0 明1 后2）；
+		//一整天换算成毫秒是86400000；
+		var time = new Date(date).getTime() + parseInt(1)*86400000;
+		//将毫秒转换成日期（YYYY-MM-DD）
+		var date= new Date(time).toLocaleString().replace(/\//g,'-').split(" ")[0].toString();
+		return date;
+	}
+	</script>
+</html>

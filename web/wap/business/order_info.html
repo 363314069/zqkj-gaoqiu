@@ -1,0 +1,175 @@
+<html>
+	<head>
+		<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+		<meta http-equiv="Pragma" content="no-cache" />
+		<meta http-equiv="Expires" content="0" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta content="telephone=no" name="format-detection">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no,user-scalable=no" />
+		<title>订单信息</title>
+		<script type="text/javascript" src="js/flexible.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+		<script type="text/javascript" src="js/common.js?v=1"></script>
+		<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+		<script type="text/javascript" src="layer/laydate/laydate.js" ></script>
+		<link href="fonts/font-zqkj/iconfont.css" rel="stylesheet" type="text/css">
+		<link href="fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+		<link href="css/default.css" rel="stylesheet" type="text/css">
+		<script src="http://res.wx.qq.com/open/js/jweixin-1.6.0.js"></script>
+		<script src="js/coordtransform.js"></script>
+		<script src="js/wx_api.js?v=6"></script>
+		<style>
+			.wrap{
+				text-align: center;
+			}
+			#msgList{
+				background-color: #fff;
+				padding: .2rem .2rem .4rem .2rem;
+				text-align: left;
+				line-height: .6rem;
+				margin: 0 .5rem;
+				border-radius: .2rem;
+			}
+			#msgList p span{display: inline-block; width: 2rem; }
+			#msgList h2{text-align: center; padding: .3rem;font-size: .4rem;}
+			.back{
+				display: block;
+				background-color: #00a964;
+				color: #fff;
+				line-height: .8rem;
+				margin: .2rem .5rem;
+				border-radius: .2rem;
+			}
+		</style>
+</head>
+<body>
+	<div class="wrap">
+		<div>
+			<!--<div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>-->
+			<div id="msgList">
+				<h2>订单信息</h2>
+				<!--<img src="images/gzh.jpg">-->
+
+			</div>
+		</div>
+		<div>
+			<p>
+				<a class="back" href="javascript:closeWindow();">返回</a>
+				<!-- <a href="javascript:history.back();" class="weui-btn weui-btn_default">辅助操作</a> -->
+			</p>
+		</div>
+	</div>
+</body>
+<script src="../business/js/jquery.min.js"></script>
+<script src="../pay/js/jquery-weui.min.js"></script>
+<script type="text/javascript">
+    var orderGuid = getQueryString('orderGuid'); //判断是什么产品
+    footer.hide();
+    $.ajax({
+        type : "GET",
+        url : T.serverurl + "/pay/order/info",
+        headers : {token:T.token},
+        data : {"guid":orderGuid},
+        success : function(r) {
+            if (r.code == 0) {
+                $.ajax({
+                    type : "GET",
+                    url : T.serverurl + "/business/activity/info",
+                    headers : {token:T.token},
+                    data : {"guid":r.data.goodsGuid},
+                    success : function(ract) {
+                        if (ract.code == 0 && isNull(ract.data)) {
+                            $("#msgList").append('<p class="weui-msg__desc"><span>流水号：</span>'+r.data.serialNumber+'</p>');
+                            $("#msgList").append('<p class="weui-msg__desc"><span>产品名称：</span>'+ract.data.name+'</p>');
+                            $("#msgList").append('<p class="weui-msg__desc"><span>购买数量：</span>'+r.data.buySum+'</p>');
+                            $("#msgList").append('<p class="weui-msg__desc"><span>实付金额：</span>'+r.data.orderMoney/100+'</p>');
+                            $("#msgList").append('<p class="weui-msg__desc"><span>有效期：</span>'+ract.data.endTime+'</p>');
+                        }else{
+                            $("#msgList").append('<p class="weui-msg__desc"><span>流水号：</span>'+r.data.serialNumber+'</p>');
+                            $("#msgList").append('<p class="weui-msg__desc"><span>预定球场：</span>'+r.data.name+'</p>');
+                            $("#msgList").append('<p class="weui-msg__desc"><span>开球时间：</span>'+formatDate(r.data.date)+' '+r.data.time+'</p>');
+                            $("#msgList").append('<p class="weui-msg__desc"><span>击球人员：</span>'+r.data.remark+'</p>');
+                            $("#msgList").append('<p class="weui-msg__desc"><span>实付金额：</span>'+r.data.orderMoney/100+'</p>');
+							priceInclude(r.data.goodsGuid);
+                        }
+                    }
+                });
+            }
+        }
+    });
+
+    function closeWindow() {
+        location.href = "alone_order_list.html";
+    }
+
+    //加载费用包含
+    function priceInclude(introductionGuid) {
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/business/introduction/info",
+			headers : {token:T.token},
+			data : {"guid":introductionGuid},
+			success : function(r) {
+				if (r.code == 0) {
+					if(isNull(r.data.priceInclude)){
+						$.ajax({
+							type : "POST",
+							url : T.serverurl + "/security/param/listByGuids",
+							headers : {token:T.token},
+							traditional: true,
+							data : {"guids":r.data.priceInclude.split(",")},
+							success : function(rparam) {
+								if (rparam.code == 0 && isNull(rparam.data)) {
+									var paramList = "";
+									$.each(rparam.data,function (i, obj) {
+										if(i == 0){
+											paramList += obj.name;
+										}else{
+											paramList += "，" + obj.name;
+										}
+									});
+									$("#msgList").append('<p class="weui-msg__desc"><span id="paramList">费用包含：</span>'+paramList+'</p>');
+								}
+							}
+						});
+					}
+				}
+			}
+		});
+	}
+
+    //格式化日期字符串
+    function formatDate(date, format) {
+        if (!date) return;
+        if (!format) format = "yyyy-MM-dd";
+        switch(typeof date) {
+            case "string":
+                date = new Date(date.replace(/\-/g, '/'));
+                break;
+            case "number":
+                date = new Date(date);
+                break;
+        }
+        if (!date instanceof Date) return;
+        var dict = {
+            "yyyy": date.getFullYear(),
+            "M": date.getMonth() + 1,
+            "d": date.getDate(),
+            "H": date.getHours(),
+            "m": date.getMinutes(),
+            "s": date.getSeconds(),
+            "MM": ("" + (date.getMonth() + 101)).substr(1),
+            "dd": ("" + (date.getDate() + 100)).substr(1),
+            "HH": ("" + (date.getHours() + 100)).substr(1),
+            "mm": ("" + (date.getMinutes() + 100)).substr(1),
+            "ss": ("" + (date.getSeconds() + 100)).substr(1)
+        };
+        return format.replace(/(yyyy|MM?|dd?|HH?|ss?|mm?)/g, function() {
+            return dict[arguments[0]];
+        });
+    }
+</script>
+</html>

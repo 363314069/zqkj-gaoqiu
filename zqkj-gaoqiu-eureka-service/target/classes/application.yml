@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: YFB12-Eureka-Service
+
+server:
+  port: 8761 #启动端口
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: false   #false:不作为一个客户端注册到注册中心
+    fetchRegistry: false        #为true时，可以启动，但报异常：Cannot execute request on any known server
+    #serviceUrl:
+      #defaultZone: http://localhost:8761/eureka/
+      #defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+  server:
+    enable-self-preservation: true      # 设为false，关闭自我保护
+    eviction-interval-timer-in-ms: 60000

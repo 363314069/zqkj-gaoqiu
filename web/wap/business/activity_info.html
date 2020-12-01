@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>活动详情</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!--库-->
+    <link rel="stylesheet" type="text/css" href="css/amazeui.css">
+    <!--核心样式-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <style>
+        .con img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        .con {
+            width: 100%;
+        }
+
+        .con > p {
+            width: 100% !important;
+        }
+    </style><!-- 设置图片适应移动端 -->
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+    <script type="text/javascript" src="js/jquery.Spinner.js"></script>
+    <script type="text/javascript" src="js/amazeui.js"></script>
+    <script type="text/javascript" src="js/cookie/js.cookie.min.js"></script>
+    <script type="text/javascript" src="js/common.js"></script>
+<body>
+<div id="activity_detail">
+    <div class="cover">
+        <a title="" class="return" href="javascript:history.go(-1);"><i class="am-icon-angle-left"></i></a>
+    </div>
+    <div class="title">
+        <label id="name"></label>
+        <div class="sprice">
+            报名费：<font id="price"></font>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="time">
+        <div class="date">
+            <img src="images/time.png">
+            <p id="startTime"></p>
+            <div class="clear"></div>
+        </div>
+        <div class="date">
+            <img src="images/time.png">
+            <p id="endTime"></p>
+            <div class="clear"></div>
+        </div>
+        <ul>
+            <li class="phone">
+                <p>活动咨询：<span id="phone"></span></p>
+            </li>
+        </ul>
+    </div>
+    <div class="introduce">
+        <div class="detail">
+            <label>活动介绍:</label>
+            <div class="clear"></div>
+            <div class="con">
+
+            </div>
+        </div>
+    </div>
+    <!-----------加入购物车/购买----------->
+    <div id="buy_nav">
+        <a class="call" href="#"> <img src="images/call.png"/>
+            <p>电话咨询</p>
+        </a>
+        <a class="cur" href="#" onclick="apply()">立即报名</a>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="js/activity_info.js"></script>
+<script type="text/javascript" src="js/wx_jssdk.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".more").click(function () {
+            $(".all_text").toggle();
+        });
+    });
+</script>

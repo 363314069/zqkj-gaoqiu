@@ -1,0 +1,597 @@
+.animated {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+}
+
+.animated.infinite {
+  animation-iteration-count: infinite;
+}
+
+.animated.hinge {
+  animation-duration: 2s;
+}
+@keyframes slideInLeft {
+  from {
+    transform: translate3d(-100%, 0, 0);
+    visibility: visible;
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.slideInLeft {
+  animation-name: slideInLeft;
+}
+@keyframes slideInRight {
+  from {
+    transform: translate3d(100%, 0, 0);
+    visibility: visible;
+  }
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
+.slideInRight {
+  animation-name: slideInRight;
+}
+
+.yg-modal {
+	position: fixed;
+	z-index: 999;
+	top: 0;
+	width: 100%;
+	min-height: 100%;
+	overflow-y: scroll;
+	-webkit-transition: -webkit-transform .25s, opacity 1ms .25s;
+	transition: transform .25s, opacity 1ms .25s;
+	-webkit-transition-timing-function: cubic-bezier(.1, .5, .1, 1);
+	transition-timing-function: cubic-bezier(.1, .5, .1, 1);
+	-webkit-transform: translate3d(0, 100%, 0);
+	transform: translate3d(0, 100%, 0);
+	opacity: 0;
+	background-color: #fff;
+}
+
+.yg-modal.yg-active {
+	height: 100%;
+	-webkit-transition: -webkit-transform .25s;
+	transition: transform .25s;
+	-webkit-transition-timing-function: cubic-bezier(.1, .5, .1, 1);
+	transition-timing-function: cubic-bezier(.1, .5, .1, 1);
+	-webkit-transform: translate3d(0, 0, 0);
+	transform: translate3d(0, 0, 0);
+	opacity: 1;
+}
+/*日期 modal 样式*/
+.date-modal .header {
+	position: relative;
+	height: 45px;
+	overflow: hidden;
+	background-color: #18B4ED;
+	align: center;
+	text-align: center;
+	color: white;
+}
+
+.date-modal .header-left {
+	float: left;
+	text-align: center;
+	width: 60px;
+	height: 45px;
+	line-height: 45px;
+}
+
+.date-modal .header-center {
+	text-align: center;
+	margin: 0px 60px;
+	line-height: 45px;
+	font-size: 18px;
+}
+
+.date-modal .content {
+	background-color: white;
+	text-align: center;
+}
+
+.date-modal .content table {
+	width: 100%;
+	text-align: center;
+	padding: 0px;
+}
+
+.date-modal .content table thead tr:first-child {
+	height: 45px;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+}
+
+.date-modal .content table thead tr:nth-child(2) {
+	height: 35px;
+	background-color: #F6F6F6;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+}
+
+.date-modal .content table tbody tr {
+	height: 65px;
+}
+
+.date-modal	.content table tbody td {
+	width: 14%;
+}
+
+.date-modal .content table tbody td.weekend div:first-child {
+	color: #55C0EA;
+}
+.date-modal .content table tbody td.disabled div {
+	color: #CCCCCC;
+}
+
+.date-modal .content table tbody td.weekend.disabled div:first-child {
+	color: #CCCCCC;
+}
+
+.date-modal .content table tbody td.low-price div:nth-child(2) {
+	color: #FF6D00;
+}
+
+.date-modal .content table tbody td.low-price.disabled div:nth-child(2)
+	{
+	color: #CCCCCC;
+}
+.date-modal .content table tbody td.active {
+	background-color: #55C0EA;
+	color: white;
+	border-radius: 3px;
+}
+.date-modal .content table tbody td.weekend.active div:first-child {
+	color: white;
+}
+
+.date-modal	.content table tbody td div:first-child {
+	font-size: 16px;
+	margin: 0;
+	padding: 0;
+}
+
+.date-modal	.content table tbody td div:nth-child(2) {
+	color: #999999;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+}
+
+.date-modal .content table tbody td.active div {
+	color: white;
+}
+/*时间modal 样式*/
+.time-modal{background-color: #F5F5F5;}
+.time-modal .header {
+	position: relative;
+	height: 45px;
+	overflow: hidden;
+	background-color: #18B4ED;
+	align: center;
+	text-align: center;
+	color: white;
+}
+
+.time-modal .header-left {
+	float: left;
+	text-align: center;
+	width: 60px;
+	height: 45px;
+	line-height: 45px;
+}
+
+.time-modal .header-center {
+	text-align: center;
+	margin: 0px 60px;
+	line-height: 45px;
+	font-size: 18px;
+}
+
+.time-modal .content .tips{
+	padding: 0 13px;
+	height:40px;
+	line-height:40px;
+	text-align: left;
+	color: #666666;
+}
+.time-modal .content table{
+	width:100%;
+	background-color: white;
+}
+.time-modal .content table tr{
+	text-align:center;
+	height:70px;
+}
+.time-modal .content table td .time{
+	font-size: 18px;
+	color: #333333;
+}
+.time-modal .content table td .price{
+	padding:5px;
+	font-size: 14px;
+	color: #999999;
+}
+.time-modal .content table td.active{
+	border-radius:3px;
+	color: white;
+	background-color: #55C0EA;
+}
+.time-modal .content table td.active .price{
+	color: white;
+}
+
+
+
+/*城市 modal 样式*/
+.city-modal {
+	background-color: #F1F0F6;
+}
+
+.city-modal .header {
+	position: relative;
+	height: 45px;
+	overflow: hidden;
+	background-color: #18B4ED;
+	align: center;
+	text-align: center;
+	color: white;
+}
+
+.city-modal .header-left {
+	float: left;
+	width: 45px;
+	height: 45px;
+	text-align: left;
+}
+
+.city-modal .header-left a.back {
+	background: #18B4ED url('../img/ic_back@3x.png') center center no-repeat;
+	background-size: 12px 24px;
+	display: block;
+	width: 45px;
+	height: 45px;
+}
+
+.city-modal .header-center {
+	margin: auto 60px;;
+	height: 45px;
+	line-height: 45px;
+	font-size: 16px;
+	text-align: center;
+}
+
+.city-modal .header-center .nav-header {
+	border: 1px solid white;
+	border-radius: 3px;
+	margin: 5px auto;
+	line-height: 35px;
+	display: inline-block;
+}
+
+.city-modal .header-center .nav-header .item {
+	display: inline;
+	float: left;
+	width: 80px;
+	line-height: 33px;
+}
+
+.city-modal .header-center .nav-header .item.active {
+	background-color: white;
+	color: #069CDA;
+}
+
+.city-modal .content {
+	background-color: white;
+	text-align: center;
+}
+
+.city-modal .content .search {
+	padding: 5px;
+	background-color: #c8c8c8;
+}
+
+.city-modal .content .search input {
+	line-height: 21px;
+	width: 100%;
+	height: 40px;
+	padding: 10px 15px;
+	-webkit-user-select: text;
+	border: 1px solid rgba(0, 0, 0, .2);
+	border-radius: 3px;
+	outline: none;
+	background-color: #fff;
+	-webkit-appearance: none;
+	height: 40px;
+}
+
+.city-modal .content .location {
+	height: 40px;
+	line-height: 40px;
+	padding: 0px 13px;
+	text-align: left;
+}
+
+.city-modal .content .city-container {
+	width: 100%;
+	height: 100%;
+}
+
+.city-modal .content .city-container .tip {
+	background-color: #F1F0F6;
+	color: #999999;
+	text-align: left;
+	line-height: 40px;
+	padding: 0 13px;
+	font-size: 16px;
+}
+
+.city-modal .content .city-container .city-history {
+	background-color: #F1F0F6;
+	width: 100%;
+	font-size: 16px;
+	text-align: center;
+	margin: 0 1.25%;
+}
+
+.city-modal .content .city-container .city-nearby {
+	background-color: #F1F0F6;
+	width: 100%;
+	font-size: 16px;
+	text-align: center;
+	margin: 0 1.25%;
+}
+
+.city-modal .content .city-container .city-item.m-1 {
+	float: left;
+	background-color: white;
+	font-size:16px;
+	width: 30%;
+	margin: 6px 1.25%;
+}
+
+.city-modal .content .city-container .city-item.m-1 .city-name {
+	height: 40px;
+	line-height: 40px;
+	overflow: hidden;
+}
+
+.city-modal .content .city-container .city-item.m-1 img {
+	background: url("../img/ic_city_close@3x.png") center center no-repeat;
+	background-size: 18px 18px;
+	width: 18px;
+	height: 18px;
+	float: right;
+	margin-top: -45px;
+	margin-right: -5px;
+	border-radius: 9px;
+}
+
+.city-modal .content .city-container .province-item {
+	height: 45px;
+	line-height: 45px;
+	padding: 0 0px;
+	text-align: left;
+	font-size: 16px;
+	position: relative;
+}
+
+.city-modal .content .city-container  .province-item:not(:last-child)::after {
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+	height: 1px;
+	margin-left: 13px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	background-color: #E6E6E6;
+}
+
+.city-modal .content .city-container  .province-item .arrows {
+	width: 40px;
+	height: 45px;
+	line-height: 45px;
+	float: left;
+	background: url('../img/icon_down_gray@3x.png') center center no-repeat;
+	background-size: 18px 10px;
+}
+
+.city-modal .content .city-container  .province-item.active .arrows {
+	background: url('../img/icon_up_blue@3x.png') center center no-repeat;
+	background-size: 18px 10px;
+}
+
+.city-modal .content .city-container  .city-item.m-2 {
+	height: 45px;
+	line-height: 45px;
+	padding: 0 6px;
+	text-align: left;
+	font-size: 16px;
+	position: relative;
+	background-color: #EEEEEE;
+}
+
+.city-modal .content .city-container  .city-item.m-2:not(:last-child )::after{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+	height: 1px;
+	margin-left: 13px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	background-color: #E6E6E6;
+}
+
+.city-modal .content .city-container  .city-item.m-2 .arrows {
+	width: 40px;
+	height: 45px;
+	line-height: 45px;
+	float: left;
+}
+
+/*球场关键字搜索*/
+.search-course {background-color: #F5F5F5;}
+.search-course .course-preshow .circle-div{width:150px;height:150px;border-radius:75px;border:1px dashed #333333; margin-top: 100px;}
+.search-course .course-preshow .nosearch-div{margin-top:270px;text-align: center;color: #666666;font-size: 16px;}
+.hot-search{height: 44px;color: #999999;background-color:#F5F5F5;line-height: 44px;padding-left:13px;}
+.hot-search-content{background-color: white;padding:6px 13px 13px 13px;}
+.hot-search-content .key-item{display: inline-block;border: 1px solid #dddddd;line-height: 25px;padding:5px 13px;border-radius:5px;color: #333333;cursor: pointer;margin:5px 5px 0px 0px;}
+.history-search{height: 44px;color: #999999;background-color:#F5F5F5;line-height: 44px;padding-left:13px;}
+.history-search-content{padding:6px 13px 13px 13px;}
+.history-search-cell{position: relative;overflow: hidden;padding: 10px 3px;-webkit-touch-callout: none;cursor: pointer;background-color: #F5F5F5;}
+.history-search-cell:not(:last-child)::after{position: absolute;right: 0;bottom: 0;left: 0px;height: 1px;content: '';-webkit-transform: scaleY(.5);transform: scaleY(.5);background-color: #E6E6E6;}
+/*订单处理框*/
+.tee-modal {
+	margin-top:30%;
+}
+.tee-modal header{position: relative;}
+.tee-modal header::after{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+	height: 1px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	background-color: #E6E6E6;
+}
+.tee-modal .icon-close{
+background: url('../img/ic_close_gray_small@2x.png') center center no-repeat;background-size:14px 14px;display: inline-block;height: 45px;width: 40px;float: right;cursor: pointer;
+}
+.tee-modal .icon-back{
+background: url('../img/ic_back_blue_small@2x.png') center center no-repeat;background-size:8px 14px;display: inline-block;height: 45px;width: 30px;float: left;cursor: pointer;
+}
+.tee-modal .choice{
+line-height: 45px;color:#55c0ea;font-size: 16px;
+}
+.tee-modal .choice.text{
+color:#999999;margin-left:13px;
+}
+.tee-modal .container-2 .item{
+position: relative;height: 45px;line-height: 45px;padding: 0 13px;font-size: 14px;
+}
+.tee-modal .container-2 .item .time{
+color:#55c0ea;
+}
+.tee-modal .container-2 .item .course{
+margin-left: 5px;color:#55c0ea;
+}
+.tee-modal .container-2 .item .mans{
+margin-left: 20%;color: #999999;
+}
+.tee-modal .container-2 .item .price{
+display: inline-block;float:right;margin-top:6px;color: #ff6d00;margin-right: 10px;
+}
+.tee-modal .container-2 .item .price i{
+	display: block;font-size: 16px;line-height: 18px;
+}
+.tee-modal .container-2 .item .price i.only{
+	line-height: 30px;
+}
+.tee-modal .container-2 .item .price span{
+	display: block;font-size: 10px;padding:1px;line-height: 10px;height: 10px;border-radius:2px;text-align: right;
+}
+.tee-modal .container-2 .item::after{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+	height: 1px;
+	content: '';
+	margin-left:13px;
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	background-color: #E6E6E6;
+}
+
+.tee-modal .container-2 .item .btn-orange{
+  padding: 0 11px;
+  min-width: 55px;
+  display: inline-block;
+  text-align: center;
+  font-size: 14px;
+  background-color: #ff6d00;
+  color: white;
+  border-radius: 3px; 
+  float:right;
+  height:30px;
+  cursor:pointer; 
+  margin-top:7px;
+ }
+.tee-modal .container-1{height: 79%;}
+.tee-modal .container-1 .content{height: 90%;}
+.tee-modal .container-1 .content .teetime{
+	background-color: #F8F8F8;padding: 0 13px;font-size: 18px;line-height: 30px;
+}
+.tee-modal .container-1 .content .teetime label{
+	font-size: 16px;color: #999999;
+}
+.tee-modal .container-1 .content .teetime .week{
+	font-size: 14px;color: #999999;margin-left:5px;
+}
+.tee-modal .container-1 .content .teetime .time{
+	margin-left:5px;
+}
+.tee-modal .container-1 .content .teetime .course{
+	font-size: 14px;color: #999999;margin-left:5px;
+}
+.tee-modal .container-1 .intro{padding: 8px 13px;font-size: 14px;position: relative;}
+.tee-modal .container-1 .intro::after{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+	height: 1px;
+	content: '';
+	margin-left:13px;
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	background-color: #E6E6E6;
+}
+.tee-modal .container-1 .intro .wrap{position: relative;padding:3px 0;}
+.tee-modal .container-1 .intro .wrap label {
+	width: 60px;display: inline-block;color: #999999;position: absolute;left: 0px;text-align: right;
+}
+.tee-modal .container-1 .intro .wrap div{
+	margin-left:70px;display: inline-block;
+} 
+.tee-modal .container-1 .extend{padding: 8px 13px;font-size: 12px;line-height: 14px;position: relative;}
+.tee-modal .container-1 .extend::after{
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0px;
+	height: 1px;
+	content: '';
+	-webkit-transform: scaleY(.5);
+	transform: scaleY(.5);
+	background-color: #E6E6E6;
+}
+.tee-modal .container-1 .extend .wrap{position: relative;padding:5px 0;}
+.tee-modal .container-1 .extend .wrap label {
+	width: 60px;display: inline-block;color: #999999;position: absolute;left: 0px;text-align: right;
+}
+.tee-modal .container-1 .extend .wrap label i{
+	border: 1px solid #ff6d00;height:12px; padding: 1px;font-size: 10px;border-radius:2px;color: #f75549;float: right;
+}
+.tee-modal .container-1 .extend .wrap div{
+	margin-left:70px;display: inline-block;line-height: 14px;color: #999999;
+} 
+.tee-modal .container-1 .footer{
+	position:fixed;bottom:-5.2%;left:0;right:0;line-height: 45px;height: 45px;border-top: #E0E0E0;background-color: #F7F7F8;padding: 0 0 0 13px;
+}
+.tee-modal .container-1 .footer .status{font-size: 18px;display: inline-block;}
+.tee-modal .container-1 .footer .price{font-size: 18px;color: #ff6d00;display: inline-block;margin-left:10px;}
+.tee-modal .container-1 .footer .yunbi{font-size: 14px;color: #ff6d00;display: inline-block;margin-left:10px;}
+.tee-modal .container-1 .footer .btn{float: right;background-color: #ff6d00;width: 30%;color: white;text-align: center;}

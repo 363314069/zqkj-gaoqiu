@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- 没有查询后台会员卡，使用的是背景图片 -->
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta content="telephone=no" name="format-detection">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<title></title>
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<link href="iTunesArtwork@2x.png" sizes="114x114" rel="apple-touch-icon-precomposed">
+	<!-- 弹出层 -->
+	<link rel="stylesheet" type="text/css" href="css/popups.css">
+	<script type="text/javascript" src="layer/mobile/layer.js" ></script>
+	<style>
+		*{
+			margin: 0;
+			padding:0;
+		}
+		.vipcard{
+			position: relative;
+			width: 100%;
+			padding-bottom: 207.07%;
+			background: url("images/share/vipcard.jpg") 0 0 no-repeat;
+			background-size: contain;
+		}
+		.submit {
+			text-align: center;
+			position: absolute;
+			bottom: 50px;
+			width: 100%;
+			cursor: pointer;
+
+
+		}
+		.submit button{
+			padding: 10px 50px;
+			border-radius: 20px;
+			background: #2d5f04;
+			cursor: pointer;
+			color: #ffffff;
+			border: 0;
+			outline: none;
+
+		}
+		.phone {
+			width: 60px;
+			height: 60px;
+			background: url('images/share/phone.png')  0 0 no-repeat;
+			background-size:contain;
+			position: fixed;
+			bottom: 20%;
+			right: 10px;
+			cursor: pointer;
+		}
+		.vipcard{
+			max-width: 100%;
+		}
+	@media screen and (min-width: 600px){
+		.submit {
+			bottom: 150px;
+		}
+		.submit button{
+			padding: 20px 100px;
+		 	font-size: 16px;
+
+		}
+		}
+	</style>
+</head>
+<body>
+<div onclick="" class="vipcard">
+	<div onclick="" class="submit">
+		<button onclick="submitOrdersInfo()">
+			点击购买
+		</button>
+	</div>
+	<a href="tel:18910262098"><div class="phone"></div></a>
+</div>
+<!-- 弹出层   start -->
+<div class="box">
+	<div id="dialogBg"></div>
+	<div  id="dialog" class="">
+		<div class="dialogTop">
+			<a href="javascript:;" class="claseDialogBtn">关闭</a>
+		</div>
+		<form id="ajaxForm" class="login-wrap">
+			<ul>
+				<li>
+					<label for="">姓名 :</label>
+					<input type="text" id="name" class="name">
+				</li>
+				<li>
+					<label for="">差点 :</label>
+					<input type="text" id="chad" class="pass">
+				</li>
+				<li>
+					<label for="">手机 :</label>
+					<input type="text" id="phoe" class="mobile">
+				</li>
+				<li>
+					<label for="">验证码 :</label>
+					<input type="text" name="" class="code" id="code">
+					<!--<input type="button" value="获取验证码" class="verify">-->
+					<input class="verify" id="dynamic" type="button" onclick="authCode()" value="获取验证码"></input>
+				</li>
+				<li>
+					<label for=""></label>
+					<input type="button" onclick="submitUser()" value="提交">
+				</li>
+			</ul>
+		</form>
+	</div>
+</div>
+<!-- 弹出层   end -->
+</body>
+</html>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery.Spinner.js"></script>
+<script type="text/javascript" src="js/amazeui.js"></script>
+<script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+<script type="text/javascript" src="js/common.js"></script>
+
+<link rel="stylesheet" href="../pay/css/weui.min.css">
+<link rel="stylesheet" href="../pay/css/pay.css">
+<link rel="stylesheet" href="../pay/css/wepayui.min.css">
+<link rel="stylesheet" href="../pay/css/jquery-weui.min.css">
+<script type="text/javascript" src="../pay/layer/layer.js"></script>
+<script type="text/javascript" src="../pay/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../pay/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript">
+    var activityGuid = getQueryString("guid");
+    //弹出层   start
+    var w,h;
+    function getSrceenWH(){
+        w = $(window).width();
+        h = $(window).height();
+        $('#dialogBg').width(w).height(h);
+    }
+    window.onresize = function(){
+        getSrceenWH();
+    };
+    $(window).resize();
+    //弹出层   end
+
+    $(document).ready(function(){
+        $(".more").click(function(){
+            $(".all_text").toggle();
+        });
+
+        //弹出层   start
+        getSrceenWH();
+
+        //关闭弹窗
+        $('.claseDialogBtn').click(function(){
+            $('#dialogBg').hide();
+            $('#dialog').hide();
+        });
+        //弹出层   end
+    });
+
+
+	$(function () {
+		//sourceGuid:产品guid   根据产品guid和用户guid查询本人是否有会员卡，如果有进行跳转查看自己的会员卡
+		$.ajax({
+			type : "GET",
+			url : T.serverurl + "/security/vip/selectuservip",
+			headers : {token:T.token},
+			data : {type:0,sourceGuid:activityGuid},
+			success : function(r) {
+				console.log(r);
+				if (r.code == 0) {
+					$.each(r.data, function(i, obj) {
+						location.href = "vipcardinfo.html?guid="+obj.guid;
+					});
+				}
+			}
+		});
+	});
+
+    //判断手机号是否为空
+    function submitOrdersInfo() {
+        $.ajax({
+            type : "GET",
+            url : T.serverepay + "/security/user/selectUserMessage",
+            headers : {token:T.token},
+            success : function(res) {
+                if (res.code == 0) {
+                    var data = res.data;
+                    if(!isNull(data.phone)){
+                        //手机号为空 进入到完善页面
+                        $('#dialogBg').fadeIn(100);
+                        $('#dialog').removeAttr('class').addClass('animated').fadeIn();
+                    }else{
+                        //不为空直接提交订单
+                        submitOrders();
+                    }
+                } else {
+                    location.reload();
+                }
+            }
+        });
+    }
+
+    //提交订单
+    function submitOrders() {
+        $.showLoading("正在加载...");
+        $.ajax({
+            type : "POST",
+            url : T.serverepay + "/pay/order/addorder",
+            headers : {token:T.token},
+            data : {goodsGuid:activityGuid,sum:1},
+            success : function(res) {
+                $.hideLoading();
+                console.log(res);
+                if (res.code == 0) {
+                    if(isNull(res.data) && res.data.orderMoney == 0){
+                        alert("恭喜您，领取成功。请关注“九洲高尔夫”公众号预定使用！");
+                        location.href = "alone_order_list.html";
+                    }else{
+                        //location.href = "sure_order2.html?guid="+activityGuid+"&orderGuid="+res.data.guid;
+                        if (res.code == 0) {
+                            var data = $.parseJSON(res.msg);
+                            if (typeof WeixinJSBridge == "undefined") {
+                                if (document.addEventListener) {
+                                    document.addEventListener('WeixinJSBridgeReady',
+                                        onBridgeReady(data), false);
+                                } else if (document.attachEvent) {
+                                    document.attachEvent('WeixinJSBridgeReady',
+                                        onBridgeReady(data));
+                                    document.attachEvent('onWeixinJSBridgeReady',
+                                        onBridgeReady(data));
+                                }
+                            } else {
+                                onBridgeReady(data);
+                            }
+                        } else {
+                            if (res.code == 2) {
+                                layer.alert(res.msg);
+                            } else {
+                                layer.msg("error：" + res.msg, {
+                                    shift : 6
+                                });
+                            }
+                        }
+                    }
+                } else if (res.code == 500) {
+                    alert("提交订单失败！请重试");
+                }else{
+                    alert(res.msg);
+                }
+            }
+        });
+    }
+
+    //完善信息
+    function submitUser(){
+        $.ajax({
+            type : "POST",
+            url : T.serverebusiness + "/security/wxoauth/register",
+            headers : {token:T.token},
+			/*dataType: "json",
+			 contentType : 'application/json;charset=utf-8',*/
+            async: false,
+            data : {name:$("#name").val(),chad:$("#chad").val(),phone:$("#phoe").val(),authCode:$("#code").val()},
+            success : function(r) {
+                $('#dialogBg').hide();
+                $('#dialog').hide();
+                if (r.code == 0) {
+                    submitOrders();
+                } else if(r.code == 500){
+                    alert("提交失败！");
+                }else{
+                    alert(r.msg);
+                }
+            }
+        });
+    }
+</script>
+<script type="text/javascript" src="../pay/js/common-pay.js"></script>

@@ -1,0 +1,487 @@
+package com.zqkj.service.impl;
+
+import cn.hutool.json.JSONArray;
+import cn.hutool.json.JSONObject;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.qcloudsms.SmsSingleSender;
+import com.github.qcloudsms.SmsSingleSenderResult;
+import com.zqkj.bean.SmsBean;
+import com.zqkj.dao.mapper.ActivityDao;
+import com.zqkj.entity.ActivityEntity;
+import com.zqkj.entity.ActivitycouponsEntity;
+import com.zqkj.entity.ActivityextendEntity;
+import com.zqkj.entity.TeamEntity;
+import com.zqkj.remote.service.OrderService;
+import com.zqkj.remote.service.UserService;
+import com.zqkj.remote.service.WxService;
+import com.zqkj.service.ActivityService;
+import com.zqkj.service.ActivitycouponsService;
+import com.zqkj.service.ActivityextendService;
+import com.zqkj.utils.Content;
+import com.zqkj.utils.PageUtil;
+import com.zqkj.utils.R;
+import com.zqkj.utils.StringUtil;
+import com.zqkj.utils.wxtemplate.PushMessage;
+import com.zqkj.utils.wxtemplate.WechatTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
+
+import javax.servlet.http.HttpServletRequest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.TreeMap;
+
+
+/**
+ * 活动表
+ */
+@Service("activityService")
+public class ActivityServiceImpl extends BaseServiceImpl<ActivityDao, ActivityEntity> implements ActivityService {
+
+    @Autowired
+    private WxService wxService;
+
+    @Autowired
+    private HttpServletRequest request;
+
+    @Autowired
+    private UserService userRemote;
+
+    @Autowired
+    private SmsBean smsBean;
+
+    @Autowired
+    private ActivitycouponsService activitycouponsService;
+
+    @Autowired
+    private OrderService orderService;
+
+    @Autowired
+    private ActivityextendService activityextendService;
+
+
+    @Override
+    public Integer saveActivity(ActivityEntity entity) {
+        //判断产品类型，设置对应的回调，目前直接绑定，后期改为参数表中获取
+        if(entity.getType() == 1){
+            if(entity.getProductType() == 1){
+                entity.setCallbackUrl("http://wap.oneagles.com/security/vip/invitecode?areaCode=86004417");//购买会员卡，绑定用户会员卡业务
+            }else if(entity.getProductType() == 2){
+                entity.setCallbackUrl("http://wap.oneagles.com/business/activity/notificaCallback?sign=sign");//普通抢购直接回调没有其他业务，通用回调
+            }else if(entity.getProductType() == 3){
+                entity.setCallbackUrl("http://wap.oneagles.com/business/couponsuser/activitycallback?sign=sign");//购买优惠券产品回调业务
+            }
+        }else if(entity.getType() == 0){
+            entity.setCallbackUrl("http://wap.oneagles.com/business/activity/notificaActivityCallback?sign=sign");//活动回调业务
+        }else if(entity.getType() == 3){
+            entity.setCallbackUrl("http://wap.oneagles.com/business/activity/notificaMemberAreaCallback?sign=sign");//会员产品回调业务
+        }else if(entity.getType() == 5){
+            entity.setCallbackUrl("http://wap.oneagles.com/business/activity/notificaActivityCallback?sign=sign");//球队活动回调业务
+        }
+
+        Integer count = insertSelective(entity);
+        if(count > 0){
+            //判断是否是优惠券产品
+            if(entity.getProductType() == 3 && entity.getActivitycouponsEntityList() != null && entity.getActivitycouponsEntityList().size() > 0){
+                //是优惠券产品，把产品和优惠券进行关联
+                for(ActivitycouponsEntity ss : entity.getActivitycouponsEntityList()){
+                    ss.setActivityGuid(entity.getGuid());
+                }
+                activitycouponsService.insertList(entity.getActivitycouponsEntityList());
+            }
+            //判断是否是球队活动
+            if(entity.getTeamEntityList() != null && entity.getTeamEntityList().size() > 0){
+                if(entity.getType() == 5 || entity.getType() == 0){
+                    //插入扩展表关联球队guid
+                    for(TeamEntity teamEntity : entity.getTeamEntityList()){
+                        ActivityextendEntity activityextendEntity = new ActivityextendEntity();
+                        activityextendEntity.setActivitytabGUID(entity.getGuid());
+                        activityextendEntity.setRelationGuid(teamEntity.getGuid());
+                        activityextendEntity.setType(1);
+                        activityextendEntity.setState(1);
+                        activityextendService.insertSelective(activityextendEntity);
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    @Override
+    public Integer updateActivity(ActivityEntity entity) {
+        //判断产品类型，设置对应的回调，目前直接绑定，后期改为参数表中获取
+        if(entity.getType() == 1){
+            if(entity.getProductType() == 1){
+                entity.setCallbackUrl("http://wap.oneagles.com/security/vip/invitecode?areaCode=86004417");//购买会员卡，绑定用户会员卡业务
+            }else if(entity.getProductType() == 2){
+                entity.setCallbackUrl("http://wap.oneagles.com/business/activity/notificaCallback?sign=sign");//普通抢购直接回调没有其他业务，通用回调
+            }else if(entity.getProductType() == 3){
+                entity.setCallbackUrl("http://wap.oneagles.com/business/couponsuser/activitycallback?sign=sign");//购买优惠券产品回调业务
+            }
+        }else if(entity.getType() == 0){
+            entity.setCallbackUrl("http://wap.oneagles.com/business/activity/notificaActivityCallback?sign=sign");//活动回调业务
+        }else if(entity.getType() == 3){
+            entity.setCallbackUrl("http://wap.oneagles.com/business/activity/notificaMemberAreaCallback?sign=sign");//会员产品回调业务
+        }else if(entity.getType() == 5){
+            entity.setCallbackUrl("http://wap.oneagles.com/business/activity/notificaActivityCallback?sign=sign");//球队活动回调业务
+        }
+
+        Integer count = updateByPrimaryKeySelective(entity);
+        if(count > 0){
+            //判断是否是优惠券产品
+            if(entity.getProductType() == 3){
+                //删除他所有关联的优惠券重新插入
+                Example example = new Example(activitycouponsService.getClazz());
+                Example.Criteria criteria = example.createCriteria();
+                criteria.andEqualTo("activityGuid", entity.getGuid());
+                activitycouponsService.deleteByExample(example);
+
+                //是优惠券产品，把产品和优惠券进行关联
+                for(ActivitycouponsEntity ss : entity.getActivitycouponsEntityList()){
+                    ss.setActivityGuid(entity.getGuid());
+                }
+                if(entity.getActivitycouponsEntityList() != null && entity.getActivitycouponsEntityList().size() > 0){
+                    activitycouponsService.insertList(entity.getActivitycouponsEntityList());
+                }
+            }
+            //判断是否是球队活动
+            if(entity.getType() == 5 || entity.getType() == 0){
+                ActivityextendEntity delEntity = new ActivityextendEntity();
+                delEntity.setActivitytabGUID(entity.getGuid());
+                activityextendService.delete(delEntity);
+                if(entity.getTeamEntityList() != null && entity.getTeamEntityList().size() > 0){
+                    //插入扩展表关联球队guid
+                    for(TeamEntity teamEntity : entity.getTeamEntityList()){
+                        ActivityextendEntity activityextendEntity = new ActivityextendEntity();
+                        activityextendEntity.setActivitytabGUID(entity.getGuid());
+                        activityextendEntity.setRelationGuid(teamEntity.getGuid());
+                        activityextendEntity.setType(1);
+                        activityextendEntity.setState(1);
+                        activityextendService.insertSelective(activityextendEntity);
+                    }
+                }
+            }
+        }
+        return count;
+    }
+
+    @Override
+    public List<ActivityEntity> selectList(ActivityEntity entity) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(new Date());
+        if(entity.getSelectVal() == 0){
+            //正在抢购中
+            entity.setStartTime(date);
+            entity.setEndTime(date);
+        }else if(entity.getSelectVal() == 1){
+            //抢购未开始
+            entity.setStartTime(date);
+        }else if(entity.getSelectVal() == 2){
+            //抢购已结束
+            entity.setEndTime(date);
+        }
+        return dao.selectList(entity);
+    }
+
+    @Override
+    public R notificationCallback(String activityGuid,String userGuid,String orderNumber,String serialNumber,Integer sum) {
+        try{
+            ActivityEntity activityEntity = selectOneByGuid(activityGuid);
+            //微信公众号消息推送
+            String user = userRemote.selectOne(userGuid);   //获取用户信息
+            cn.hutool.json.JSONObject userJson = new cn.hutool.json.JSONObject(user);
+            String openId = "";
+            String phone = "";
+            String userName = "";
+            if(userJson.getInt("code") == 0){
+                cn.hutool.json.JSONObject userData = new cn.hutool.json.JSONObject(userJson.getStr("data"));
+                openId = userData.getStr("openid");
+                phone = userData.getStr("phone");
+                userName = userData.getStr("name");
+            }
+
+            JSONObject accessTokenJson = new JSONObject(wxService.getAccessToken());    //获取accessToken
+            String accessToken = accessTokenJson.getStr("data");
+
+            //设置消息模板
+            TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+            //根据具体模板参数组装
+            params.put("first", WechatTemplate.item("恭喜您，抢购成功！！", "#000000"));
+            params.put("keyword1", WechatTemplate.item(activityEntity.getName(), "#000000"));
+            params.put("keyword2", WechatTemplate.item(serialNumber, "#000000"));
+            params.put("remark", WechatTemplate.item("恭喜您抢购成功"+sum+"套，打球抵扣券将于产品抢购结束后，统一发送到平台的个人中心，如有疑问请拨打客服电话010—85708330。", "#000000"));
+            WechatTemplate wechatTemplate = new WechatTemplate();
+            wechatTemplate.setTemplate_id("-Yj4kPdx1LBWRZVJ58XzeQz5qYkE687ialpqw3dBMKQ");   //微信模板id
+            wechatTemplate.setTouser(openId); //openId
+            wechatTemplate.setUrl(request.getScheme()+"://"+ request.getServerName() + "/wap/business/alone_order_list.html");
+            wechatTemplate.setData(params);
+            String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+            System.out.println("执行成功");
+            //oEHsgw37cbGxPa18O_ILA3e-C3wM   燕姐
+            //oEHsgwzCt5KsqjcFjMF5OOrXsM4Q   晖哥
+            noticeLeader(activityEntity.getName(),serialNumber,accessToken,userName,sum,"oEHsgw37cbGxPa18O_ILA3e-C3wM");
+            noticeLeader(activityEntity.getName(),serialNumber,accessToken,userName,sum,"oEHsgwzCt5KsqjcFjMF5OOrXsM4Q");
+
+            smsBean.setTemplateId(555606);// 短信模板 ID，需要在短信应用中申请
+            String[] phoneNumbers = {phone};//电话
+            //smsBean.setTemplateId(551307);// 短信模板 ID，需要在短信应用中申请
+
+            /*String activityName = activityEntity.getName();
+            if(activityName.length() > 9){
+                activityName = activityName.substring(0, 8)+"……";
+            }*/
+            String[] smsParams = {sum+"套："+activityEntity.getName(),activityEntity.getPhone()};//短信内容
+            SmsSingleSender ssender = new SmsSingleSender(smsBean.getAppid(), smsBean.getAppkey());
+            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
+                    smsBean.getTemplateId(), smsParams, smsBean.getSmsSign(), "", "");
+            System.out.println(result);
+            cn.hutool.json.JSONObject json = new cn.hutool.json.JSONObject(result.toString());
+            if(json.getInt("result") == 0) {
+                return R.ok().putData(activityEntity);
+            }else{
+                return R.error(Content.STATUS_CODE_5007);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return R.error(Content.STATUS_CODE_5007,"出现异常！");
+        }
+    }
+
+    @Override
+    public R notificaActivityCallback(String activityGuid, String userGuid, String orderNumber, String serialNumber, Integer sum, String orderGuid) {
+        try{
+            ActivityEntity activityEntity = selectOneByGuid(activityGuid);
+            //微信公众号消息推送
+            String user = userRemote.selectOne(userGuid);   //获取用户信息
+            cn.hutool.json.JSONObject userJson = new cn.hutool.json.JSONObject(user);
+            String openId = "";
+            String phone = "";
+            String userName = "";
+            if(userJson.getInt("code") == 0){
+                cn.hutool.json.JSONObject userData = new cn.hutool.json.JSONObject(userJson.getStr("data"));
+                openId = userData.getStr("openid");
+                phone = userData.getStr("phone");
+                userName = userData.getStr("name");
+            }
+
+            //查询订单信息
+            String order =  orderService.selectOne(orderGuid);
+            cn.hutool.json.JSONObject orderJson = new cn.hutool.json.JSONObject(order);
+            String orderRemark = "";
+            if(orderJson.getInt("code") == 0){
+                cn.hutool.json.JSONObject orderData = new cn.hutool.json.JSONObject(orderJson.getStr("data"));
+                orderRemark = orderData.getStr("remark");
+            }
+            JSONObject accessTokenJson = new JSONObject(wxService.getAccessToken());    //获取accessToken
+            String accessToken = accessTokenJson.getStr("data");
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse(activityEntity.getDate());
+            String activityDate = sdf.format(date);
+
+            //设置消息模板
+            TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+            //根据具体模板参数组装
+            params.put("first", WechatTemplate.item("恭喜您成功报名！！", "#000000"));
+            params.put("keyword1", WechatTemplate.item(activityEntity.getName(), "#000000"));
+            params.put("keyword2", WechatTemplate.item(activityDate, "#000000"));
+            params.put("remark", WechatTemplate.item("有关活动信息请及时联系客服进行确认", "#000000"));
+            WechatTemplate wechatTemplate = new WechatTemplate();
+            wechatTemplate.setTemplate_id("VIYfduQ6yCw0wBffGCNgdhrBVbtx7U2xcQy43ntwNmk");   //微信模板id   报名成功通知
+            wechatTemplate.setTouser(openId); //openId
+            wechatTemplate.setUrl(request.getScheme()+"://"+ request.getServerName() + "/wap/business/alone_order_list.html");
+            wechatTemplate.setData(params);
+            String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+            System.out.println("执行成功");
+            //oEHsgw37cbGxPa18O_ILA3e-C3wM   燕姐
+            //oEHsgwzCt5KsqjcFjMF5OOrXsM4Q   晖哥
+            noticeActivityLeader(activityEntity.getName(),serialNumber,accessToken,userName,sum,"oEHsgw37cbGxPa18O_ILA3e-C3wM",activityDate,orderRemark,orderGuid);
+            noticeActivityLeader(activityEntity.getName(),serialNumber,accessToken,userName,sum,"oEHsgwzCt5KsqjcFjMF5OOrXsM4Q",activityDate,orderRemark,orderGuid);
+
+            /*smsBean.setTemplateId(555606);// 短信模板 ID，需要在短信应用中申请
+            String[] phoneNumbers = {phone};//电话
+            String[] smsParams = {sum+"套："+activityEntity.getName(),activityEntity.getPhone()};//短信内容
+            SmsSingleSender ssender = new SmsSingleSender(smsBean.getAppid(), smsBean.getAppkey());
+            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
+                    smsBean.getTemplateId(), smsParams, smsBean.getSmsSign(), "", "");
+            System.out.println(result);
+            cn.hutool.json.JSONObject json = new cn.hutool.json.JSONObject(result.toString());
+            if(json.getInt("result") == 0) {
+                return R.ok().putData(activityEntity);
+            }else{
+                return R.error(Content.STATUS_CODE_5007);
+            }*/
+            return R.ok().putData(activityEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+            return R.error(Content.STATUS_CODE_5007,"出现异常！");
+        }
+    }
+
+    @Override
+    public R notificaMemberAreaCallback(String activityGuid, String userGuid, String orderNumber, String serialNumber, Integer sum) {
+        try{
+            ActivityEntity activityEntity = selectOneByGuid(activityGuid);
+            //微信公众号消息推送
+            String user = userRemote.selectOne(userGuid);   //获取用户信息
+            cn.hutool.json.JSONObject userJson = new cn.hutool.json.JSONObject(user);
+            String openId = "";
+            String phone = "";
+            String userName = "";
+            if(userJson.getInt("code") == 0){
+                cn.hutool.json.JSONObject userData = new cn.hutool.json.JSONObject(userJson.getStr("data"));
+                openId = userData.getStr("openid");
+                phone = userData.getStr("phone");
+                userName = userData.getStr("name");
+            }
+
+            JSONObject accessTokenJson = new JSONObject(wxService.getAccessToken());    //获取accessToken
+            String accessToken = accessTokenJson.getStr("data");
+
+            //设置消息模板
+            TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+            Integer price = (activityEntity.getPrice() * sum);
+            //根据具体模板参数组装
+            params.put("first", WechatTemplate.item("恭喜您购买成功"+activityEntity.getName()+"产品！！", "#000000"));
+            params.put("keyword1", WechatTemplate.item(serialNumber, "#000000"));
+            params.put("keyword2", WechatTemplate.item(price.toString(), "#000000"));
+            params.put("remark", WechatTemplate.item("恭喜您购买成功"+activityEntity.getName()+"产品", "#000000"));
+            WechatTemplate wechatTemplate = new WechatTemplate();
+            wechatTemplate.setTemplate_id("rNEfYkyabXxwsQAuDqhOLESSdN0U2oWbnRXUPJU76OI");   //微信模板id   会员产品购买成功通知
+            wechatTemplate.setTouser(openId); //openId
+            wechatTemplate.setUrl(request.getScheme()+"://"+ request.getServerName() + "/wap/business/alone_order_list.html");
+            wechatTemplate.setData(params);
+            String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+            System.out.println("执行成功");
+            //oEHsgw37cbGxPa18O_ILA3e-C3wM   燕姐
+            //oEHsgwzCt5KsqjcFjMF5OOrXsM4Q   晖哥
+            noticeMemberAreaLeader(activityEntity.getName(),serialNumber,accessToken,userName,sum,"oEHsgw37cbGxPa18O_ILA3e-C3wM",activityEntity.getStartTime(),price);
+            noticeMemberAreaLeader(activityEntity.getName(),serialNumber,accessToken,userName,sum,"oEHsgwzCt5KsqjcFjMF5OOrXsM4Q",activityEntity.getStartTime(),price);
+
+            /*smsBean.setTemplateId(555606);// 短信模板 ID，需要在短信应用中申请
+            String[] phoneNumbers = {phone};//电话
+            String[] smsParams = {sum+"套："+activityEntity.getName(),activityEntity.getPhone()};//短信内容
+            SmsSingleSender ssender = new SmsSingleSender(smsBean.getAppid(), smsBean.getAppkey());
+            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
+                    smsBean.getTemplateId(), smsParams, smsBean.getSmsSign(), "", "");
+            System.out.println(result);
+            cn.hutool.json.JSONObject json = new cn.hutool.json.JSONObject(result.toString());
+            if(json.getInt("result") == 0) {
+                return R.ok().putData(activityEntity);
+            }else{
+                return R.error(Content.STATUS_CODE_5007);
+            }*/
+            return R.ok().putData(activityEntity);
+        }catch (Exception e){
+            e.printStackTrace();
+            return R.error(Content.STATUS_CODE_5007,"出现异常！");
+        }
+    }
+
+    @Override
+    public PageUtil<ActivityEntity> selectListPage(PageUtil<ActivityEntity> pageUtil, ActivityEntity record) {
+        if(pageUtil.getPage() == 0){
+            pageUtil.setPage(1);
+        }
+        record.setLimit(pageUtil.getLimit());
+        record.setPage(((pageUtil.getPage()-1)*pageUtil.getLimit()));
+        Page<ActivityEntity> page = PageHelper.startPage(pageUtil.getPage(), pageUtil.getLimit(), pageUtil.getCount() == 0);
+        if(!StringUtil.isEmpty(pageUtil.getOrderBy())){
+            page.setOrderBy(pageUtil.getOrderBy());
+        }
+        List<ActivityEntity> list = dao.selectListPage(record);
+        int count = dao.selectListPageCount(record);
+        pageUtil = new PageUtil<ActivityEntity>(page, page.getTotal(), page.getPageSize(), page.getPageNum());
+        pageUtil.setCount(count);
+        pageUtil.setList(list);
+        return pageUtil;
+    }
+
+    @Override
+    public List<ActivityEntity> selectGroupBuyingList(ActivityEntity entity) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(new Date());
+        entity.setEndTime(date);
+        entity.setType(4);
+        entity.setState(1);
+        entity.setSelectVal(2);
+        return dao.selectList(entity);
+    }
+
+    //抢购通知
+    public String noticeLeader(String productsName,String serialNumber,String accessToken,String userName,Integer sum,String openId){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(new Date());
+        //设置消息模板
+        TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+        //根据具体模板参数组装
+        params.put("first", WechatTemplate.item("用户抢购成功！！", "#000000"));
+        params.put("keyword1", WechatTemplate.item(productsName, "#000000"));
+        params.put("keyword2", WechatTemplate.item(serialNumber, "#000000"));
+        params.put("remark", WechatTemplate.item(userName+"在"+date+"成功抢购了"+sum+"套："+productsName, "#000000"));
+        WechatTemplate wechatTemplate = new WechatTemplate();
+        wechatTemplate.setTemplate_id("-Yj4kPdx1LBWRZVJ58XzeQz5qYkE687ialpqw3dBMKQ");   //微信模板id
+        wechatTemplate.setTouser(openId); //openId
+        wechatTemplate.setUrl("#");
+        wechatTemplate.setData(params);
+        String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+        return code;
+    }
+
+    //活动通知
+    public String noticeActivityLeader(String productsName,String serialNumber,String accessToken,String userName,Integer sum,String openId,String productsTime,String orderRemark,String orderGuid){
+        //查询订单扩展信息（活动报名人记录）
+        String orderExtend =  orderService.selectOneExtend(orderGuid);
+        cn.hutool.json.JSONObject orderExtendJson = new cn.hutool.json.JSONObject(orderExtend);
+        String signUser = "";
+        if(orderExtendJson.getInt("code") == 0){
+            cn.hutool.json.JSONObject orderExtendJsonData = new cn.hutool.json.JSONObject(orderExtendJson.getStr("data"));
+            JSONArray userArr = orderExtendJsonData.getJSONArray("extStr");
+            for(int i=0;i<userArr.size();i++){
+                JSONObject users = userArr.getJSONObject(i);
+                signUser += users.getStr("name") +"："+ users.getStr("phone")+"  ";
+            }
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(new Date());
+        //设置消息模板
+        TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+        //根据具体模板参数组装
+        params.put("first", WechatTemplate.item(userName+"报名成功"+productsName+"活动！！", "#000000"));
+        params.put("keyword1", WechatTemplate.item(productsName, "#000000"));
+        params.put("keyword2", WechatTemplate.item(productsTime, "#000000"));
+        params.put("remark", WechatTemplate.item(userName+"在"+date+"报名"+sum+"位："+signUser+"，备注："+orderRemark ,"#000000"));
+        WechatTemplate wechatTemplate = new WechatTemplate();
+        wechatTemplate.setTemplate_id("VIYfduQ6yCw0wBffGCNgdhrBVbtx7U2xcQy43ntwNmk");   //微信模板id
+        wechatTemplate.setTouser(openId); //openId
+        wechatTemplate.setUrl("#");
+        wechatTemplate.setData(params);
+        String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+        return code;
+    }
+
+    //会员产品通知
+    public String noticeMemberAreaLeader(String productsName,String serialNumber,String accessToken,String userName,Integer sum,String openId,String productsTime,Integer price){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = sdf.format(new Date());
+        //设置消息模板
+        TreeMap<String, TreeMap<String, String>> params = new TreeMap<String, TreeMap<String, String>>();
+        //根据具体模板参数组装
+        params.put("first", WechatTemplate.item(userName+"购买成功"+productsName+"产品！！", "#000000"));
+        params.put("keyword1", WechatTemplate.item(serialNumber, "#000000"));
+        params.put("keyword2", WechatTemplate.item(price.toString(), "#000000"));
+
+        WechatTemplate wechatTemplate = new WechatTemplate();
+        wechatTemplate.setTemplate_id("VIYfduQ6yCw0wBffGCNgdhrBVbtx7U2xcQy43ntwNmk");   //微信模板id
+        wechatTemplate.setTouser(openId); //openId
+        wechatTemplate.setUrl("#");
+        wechatTemplate.setData(params);
+        String code = PushMessage.send_template_message(wechatTemplate,accessToken);
+        return code;
+    }
+    //oEHsgw37cbGxPa18O_ILA3e-C3wM
+    //oEHsgwzCt5KsqjcFjMF5OOrXsM4Q
+}

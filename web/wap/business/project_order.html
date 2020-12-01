@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商品订单</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta content="telephone=no" name="format-detection">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+    <!--库-->
+    <link rel="stylesheet" type="text/css" href="css/amazeui.css">
+    <!--核心样式-->
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <style type="text/css">
+        .orderNumber {
+            max-width: 70%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/jquery.Spinner.js"></script>
+    <script type="text/javascript" src="js/amazeui.js"></script>
+    <script type="text/javascript" src="js/cookie/js.cookie.min.js" ></script>
+    <script type="text/javascript" src="js/common.js"></script>
+<body>
+<!-----------公共版头----------->
+<div id="header">
+    <a class="return" href="javascript:history.go(-1);"><i class="am-icon-angle-left"></i></a>
+    <span>商品订单</span>
+</div>
+<!----------------我的订单------------------>
+<div id="trip_order">
+    <div class="nav">
+    </div>
+    <ul id="ullist">
+
+    </ul>
+</div>
+<!--footer-->
+<div class="foot_h"></div>
+<div id="footer">
+    <div class="first">
+        <ul class="am-avg-sm-2">
+            <li>
+                <a title=""  href="index.html">
+                    <img src="images/icon-footer1-a.png"/>
+                    <p>首页</p>
+                </a>
+            </li>
+            <li>
+                <a title="" href="activity_list.html">
+                    <img alt="" src="images/icon-footer2-a.png"/>
+                    <p>活动</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="beautiful">
+        <a title=""  href="#">
+            <img alt="" src="images/icon-footer3-a.png"/>
+        </a>
+    </div>
+    <div class="last">
+        <ul class="am-avg-sm-2">
+            <li>
+                <a title="" href="snapUp_list.html">
+                    <img alt="" src="images/icon-footer4-a.png"/>
+                    <p>抢购</p>
+                </a>
+            </li>
+            <li class="active">
+                <a title="" href="user_center.html">
+                    <img alt="" src="images/icon-footer05-a.png"/>
+                    <p>我的</p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
+<link rel="stylesheet" href="../pay/css/weui.min.css">
+<link rel="stylesheet" href="../pay/css/pay.css">
+<link rel="stylesheet" href="../pay/css/jquery-weui.min.css">
+<script type="text/javascript" src="js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="../pay/js/jquery-weui.min.js"></script>
+<script type="text/javascript" src="../pay/layer/layer.js"></script>
+<script type="text/javascript" src="../pay/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        var api = {
+            info:{url:T.serverepay + "/pay/order/info", type:"get"},
+            list:{url:T.serverepay + "/pay/order/selectlist", type:"post"},
+            page:{url:T.serverepay + "/pay/order/page", type:"post"},
+            selectOne:{url:T.serverebusiness + "/business/activity/info", type:"post"}
+        };
+
+        $.ajax({
+            type : "POST",
+            url : api.list.url,
+            method : api.list.type,
+            async: false,
+            headers : {token:T.token},
+            data : {"orderBy" : "createTime desc"},
+            success : function(r) {
+                if (r.code == 0 && isNull(r.data)) {
+                    var list = '';
+                    $.each(r.data, function(i, obj){
+                        if(obj.type != 2) {
+                            list += '<li class="cont">' +
+                                '<div class="order_number">' +
+                                '<p class="orderNumber">' + obj.name + '</p>';
+                            if (obj.state == 0) {
+                                list += '<span>待支付</span>';
+                            } else {
+                                list += '<span style="color:green">付款成功</span>';
+                            }
+                            if (isNull(obj.date) && isNull(obj.time)) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: T.serverurl + "/business/introduction/info",
+                                    data: {guid: obj.goodsGuid},
+                                    async: false,
+                                    headers: {token: T.token},
+                                    success: function (r) {
+                                        if (r.code == 0 && isNull(r.data)) {
+                                            list += '</div><div class="box" >';
+                                            list += '<a class="project" title="" href="#">';
+                                            list += '<div class="pic">' +
+                                                '<img src="' + T.serverurl + r.data.img + '">' +
+                                                '</div>' +
+                                                '<div class="project_cont">' +
+                                                '<p>' + r.data.name + '</p>' +
+                                                '</div>' +
+                                                '<div class="price">' +
+                                                '<label>￥' + obj.orderMoney / 100 + '</label>' +
+                                                '<div class="clear"></div>' +
+                                                '</div>' +
+                                                '</a>';
+                                            if (obj.state == 0) {
+                                                list += '<div class="button">' +
+                                                    /*'<a class="gray_hollow" href="#">取消订单</a>'+*/
+                                                    '<a class="orange_bg" href="javascript:introductionPay(\'' + obj.guid + '\')">付款</a>' +
+                                                    '<div class="clear"></div>' +
+                                                    '</div>';
+                                            } else {
+                                                if (obj.businConfi == 2) {
+                                                    list += '<div class="button">' +
+                                                        /*'<a class="gray_hollow" href="#">取消订单</a>'+*/
+                                                        //'<a class="orange_bg" href="order_process.1.html?guid='+obj.guid+'">付款</a>'+
+                                                        '<a class="orange_bg" href="#">商家已确认</a>' +
+                                                        '<div class="clear"></div>' +
+                                                        '</div>';
+                                                } else if (obj.businConfi == 1) {
+                                                    list += '<div class="button">' +
+                                                        /*'<a class="gray_hollow" href="#">取消订单</a>'+*/
+                                                        '<a class="orange_bg" style="background:#948a7f" href="#">商家待确认</a>' +
+                                                        '<div class="clear"></div>' +
+                                                        '</div>';
+                                                } else if (obj.businConfi == 3) {
+                                                    list += '<div class="button">' +
+                                                        /*'<a class="gray_hollow" href="#">取消订单</a>'+*/
+                                                        '<a class="orange_bg" style="background:#948a7f" href="#">商家已拒绝</a>' +
+                                                        '<div class="clear"></div>' +
+                                                        '</div>';
+                                                }
+                                            }
+                                        }
+                                    }
+                                });
+                            } else {
+                                $.ajax({
+                                    type: "POST",
+                                    url: api.selectOne.url,
+                                    method: api.selectOne.type,
+                                    data: {guid: obj.goodsGuid},
+                                    async: false,
+                                    headers: {token: T.token},
+                                    success: function (r) {
+                                        if(isNull(r.data)){
+                                            var activity = r.data;
+                                            list += '</div><div class="box" >';
+                                            if (activity.type == 0) {
+                                                list += '<a class="project" title="" href="reserve.html?guid=' + activity.guid + '&orderGuid=' + obj.guid + '">';
+                                            } else if (activity.type == 1) {
+                                                list += '<a class="project" title="" href="reserve.html?guid=' + activity.guid + '&orderGuid=' + obj.guid + '">';
+                                            } else {
+                                                list += '<a class="project" title="" href="#">';
+                                            }
+                                            list += '<div class="pic">' +
+                                                '<img src="' + T.serverebusiness + activity.img + '"/>' +
+                                                '</div>' +
+                                                '<div class="project_cont">' +
+                                                '<p>' + activity.name + '</p>' +
+                                                '</div>' +
+                                                '<div class="price">' +
+                                                '<label>￥' + activity.price / 100 + '</label>' +
+                                                '<div class="clear"></div>' +
+                                                '</div>' +
+                                                '</a>';
+                                            if (obj.state == 0) {
+                                                list += '<div class="button">' +
+                                                    /*'<a class="gray_hollow" href="#">取消订单</a>'+*/
+                                                    '<a class="orange_bg" href="javascript:queryUserMessage(\'' + obj.guid + '\')">付款</a>' +
+                                                    '<div class="clear"></div>' +
+                                                    '</div>';
+                                            } else if (obj.state == 1) {
+                                                //查询预订表，该订单是否进行使用
+                                                $.ajax({
+                                                    type: "POST",
+                                                    url: T.serverebusiness + "/business/reserve/selectbyorder",
+                                                    data: {orderGuid: obj.guid},
+                                                    async: false,//同步
+                                                    headers: {token: T.token},
+                                                    success: function (r) {
+                                                        //如果等于空，则该订单未使用
+                                                        if (!isNull(r.data)) {
+                                                            list += '<div class="button" style="color:green">' +
+                                                                '<a class="orange_bg" style="background:green;border: 1px solid green;" href="reserve.html?guid=' + activity.guid + '&orderGuid=' + obj.guid + '">预定</a>' +
+                                                                '<div class="clear"></div>' +
+                                                                '</div>';
+                                                        } else {
+                                                            list += '<div class="button" style="color:#FFE66F">' +
+                                                                '<a class="orange_bg" style="background:#FFE66F;border: 1px solid #FFE66F;">预订成功</a>' +
+                                                                '<div class="clear"></div>' +
+                                                                '</div>';
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                            list += '</div></li>';
+                        }
+                    });
+                    $("#ullist").append(list);
+                } else {
+                    alert(r.msg);
+                }
+            }
+        });
+    });
+
+
+
+    //订场订单支付
+    function introductionPay(orderGuid) {
+        $.showLoading("正在加载...");
+        $.ajax({
+            type : "POST",
+            url : T.serverepay + "/pay/order/payintroductionorder",
+            headers : {token:T.token},
+            data : {orderGuid:orderGuid},
+            success : function(res) {
+                $.hideLoading();
+                if (res.code == 0) {
+                    var data = $.parseJSON(res.msg);
+                    if (typeof WeixinJSBridge == "undefined") {
+                        if (document.addEventListener) {
+                            document.addEventListener('WeixinJSBridgeReady',
+                                onBridgeReady(data), false);
+                        } else if (document.attachEvent) {
+                            document.attachEvent('WeixinJSBridgeReady',
+                                onBridgeReady(data));
+                            document.attachEvent('onWeixinJSBridgeReady',
+                                onBridgeReady(data));
+                        }
+                    } else {
+                        onBridgeReady(data);
+                    }
+                } else if (res.code == 500) {
+                    alert("提交订单失败！请重试");
+                }else{
+                    alert(res.msg);
+                }
+            }
+        });
+    }
+</script>
+<script type="text/javascript" src="../pay/js/common-pay.js"></script>
